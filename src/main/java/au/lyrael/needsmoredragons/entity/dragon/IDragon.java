@@ -3,9 +3,6 @@ package au.lyrael.needsmoredragons.entity.dragon;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 
-/**
- * Created by Lyrael on 23/03/2016.
- */
 public interface IDragon {
     /**
      * @param itemStack Item stack to test for edibility.
@@ -41,20 +38,20 @@ public interface IDragon {
      * @return True if consuming {@code itemStack} will cause the animal to fall in love,
      * thus becoming available for breeding.
      */
-    boolean isBreedingItem(ItemStack itemStack);
+    boolean isDragonBreedingItem(ItemStack itemStack);
 
     /**
      * @param potentialMate an animal which the dragon might want to mate with.
      * @return True if the dragon can mate with {@code potentialMate}
      */
-    boolean canMateWith(EntityAnimal potentialMate);
+    boolean canDragonMateWith(EntityAnimal potentialMate);
 
     /**
      * @return True if the dragon is shaking off water.
      */
-    boolean isShaking();
+    boolean isDragonShaking();
 
-    boolean isAngry();
+    boolean isDragonAngry();
 
-    boolean isTamed();
+    boolean isDragonTamed();
 }

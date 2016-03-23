@@ -75,6 +75,6 @@ public class DragonAIBeg extends EntityAIBase
     private boolean hasPlayerGotBoneInHand(EntityPlayer player)
     {
         ItemStack itemstack = player.inventory.getCurrentItem();
-        return itemstack == null ? false : (!this.theDragon.isTamed() && itemstack.getItem() == Items.bone ? true : this.theDragon.isBreedingItem(itemstack));
+        return itemstack == null ? false : (!this.theDragon.isTamed() && itemstack.getItem() == Items.bone ? true : this.theDragon.isDragonBreedingItem(itemstack));
     }
 }

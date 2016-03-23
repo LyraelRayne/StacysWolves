@@ -30,7 +30,7 @@ public class RenderDragon extends RenderLiving {
      * Queries whether should render the specified pass or not.
      */
     protected int shouldRenderPass(IRenderableDragon dragon, int pass, float maybeTime) {
-        if (pass == 0 && dragon.isShaking()) {
+        if (pass == 0 && dragon.isDragonShaking()) {
             float f1 = dragon.getBrightness(maybeTime) * dragon.getShadingWhileShaking(maybeTime);
             bindDragonTexture(dragon);
             GL11.glColor3f(f1, f1, f1);
@@ -57,7 +57,7 @@ public class RenderDragon extends RenderLiving {
         IDragonTextureSet textureSet = textureCache.get(entityName);
 
         if (textureSet != null) {
-            return entity.isTamed() ? textureSet.getTame() : (entity.isAngry() ? textureSet.getAngry() : textureSet.getBase());
+            return entity.isDragonTamed() ? textureSet.getTame() : (entity.isDragonAngry() ? textureSet.getAngry() : textureSet.getBase());
         } else {
             LOGGER.warn("Can't load texture set for [{}]", entityName);
             return null;

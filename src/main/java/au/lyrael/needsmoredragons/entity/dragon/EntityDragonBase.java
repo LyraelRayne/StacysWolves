@@ -349,7 +349,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
                 }
             }
 
-            if (this.func_152114_e(player) && !this.worldObj.isRemote && !this.isBreedingItem(itemstack)) {
+            if (this.func_152114_e(player) && !this.worldObj.isRemote && !this.isDragonBreedingItem(itemstack)) {
                 toggleSitting();
             }
         } else if (itemstack != null && this.likes(itemstack) && !this.isAngry()) {
@@ -438,12 +438,18 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
         return this.isAngry() ? 1.5393804F : (this.isTamed() ? (0.55F - (20.0F - this.dataWatcher.getWatchableObjectFloat(18)) * 0.02F) * (float) Math.PI : ((float) Math.PI / 5F));
     }
 
+    @Override
+    public boolean isBreedingItem(ItemStack itemStack)
+    {
+        return isDragonBreedingItem(itemStack);
+    }
+
     /**
      * Checks if the parameter is an item which this animal can be fed to breed it (wheat, carrots or seeds depending on
      * the animal type)
      */
     @Override
-    public boolean isBreedingItem(ItemStack itemStack) {
+    public boolean isDragonBreedingItem(ItemStack itemStack) {
         return itemStack == null ? false : (!(itemStack.getItem() instanceof ItemFood) ? false : ((ItemFood) itemStack.getItem()).isWolfsFavoriteMeat());
     }
 
@@ -506,10 +512,19 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
     }
 
     /**
+     * Another method that's here because I want a non-obfuscated name for my method.
+     * @param potentialMate
+     * @return
+     */
+    public boolean canMateWith(EntityAnimal potentialMate) {
+        return canDragonMateWith(potentialMate);
+    }
+
+    /**
      * Returns true if the mob is currently able to mate with the specified mob.
      */
     @Override
-    public boolean canMateWith(EntityAnimal potentialMate) {
+    public boolean canDragonMateWith(EntityAnimal potentialMate) {
         // Dragons cannot mate with themselves.
         return potentialMate != this &&
                 // Can only breed tamed dragons
@@ -597,6 +612,36 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
     @Override
     public boolean isTemptedBy(ItemStack itemStack) {
         return likes(itemStack);
+    }
+
+    /**
+     * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
+     *
+     * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
+     */
+    @Override
+    public boolean isDragonShaking() {
+        return isShaking();
+    }
+
+    /**
+     * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
+     *
+     * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
+     */
+    @Override
+    public boolean isDragonAngry() {
+        return isAngry();
+    }
+
+    /**
+     * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
+     *
+     * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
+     */
+    @Override
+    public boolean isDragonTamed() {
+        return isTamed();
     }
 
 }
