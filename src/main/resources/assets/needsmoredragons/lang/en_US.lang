@@ -1,0 +1,14 @@
+# Name: en_US.lang
+# Author: LyraelRayne
+# Credits: LyraelRayne
+# Type (Language): English (US)
+
+# - General Localization
+itemGroup.needsmoredragons=Needs More Dragons
+
+# Entity Localization
+entity.needsmoredragons.EntityFireDragon.name=Fire Dragon
+
+# - Item Localization
+item.needsmoredragons:something.name=The Thing!
+item.needsmoredragons:something.tooltip=It's a thing
