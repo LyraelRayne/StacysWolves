@@ -2,6 +2,7 @@ package au.lyrael.needsmoredragons;
 
 import au.lyrael.needsmoredragons.config.ConfigurationEventHandler;
 import au.lyrael.needsmoredragons.registry.DragonRegistry;
+import au.lyrael.needsmoredragons.utility.MetadataHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModMetadata;
@@ -50,7 +51,8 @@ public class NeedsMoreDragons {
         final ConfigurationEventHandler configurationEventHandler = new ConfigurationEventHandler();
         configurationEventHandler.preInit(event);
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
-
+        
+        metadata = MetadataHelper.transformMetadata(metadata);
 
         proxy.preInit(event);
 
