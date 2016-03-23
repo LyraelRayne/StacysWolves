@@ -2,6 +2,7 @@ package au.lyrael.needsmoredragons;
 
 import au.lyrael.needsmoredragons.config.ConfigurationEventHandler;
 import au.lyrael.needsmoredragons.registry.DragonRegistry;
+import au.lyrael.needsmoredragons.utility.MetadataHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModMetadata;
@@ -24,6 +25,14 @@ public class NeedsMoreDragons {
     public static final String MOD_ID = "needsmoredragons";
     public static final String MOD_NAME = "Needs Moar Dragons";
     public static final String VERSION  = "1.0-1.7.10";
+    /* 
+        Added all lines of the MetadataHelper class here as references to keep it in one place but if wanted, 
+        replace them with non reference values in the MetadataHelper class.
+    */
+    public static final String DESC = "Cool Story Bro..... but it Needs Moar Dragons!";
+    public static final String URL = ""; // PUT CURSEFORGE PROJECT URL HERE!
+    public static final String CREDITS = "Credits to the MinecraftForge team for making this mod possible!";
+    public static final String LOGO_PATH = ""; // PUT LOGO PATH HERE!
     public static final String CLIENT_PROXY_CLASS = "au.lyrael.needsmoredragons.ClientProxy";
     public static final String COMMON_PROXY_CLASS = "au.lyrael.needsmoredragons.ClientProxy";
     public static int modEntityID = 0;
@@ -50,7 +59,8 @@ public class NeedsMoreDragons {
         final ConfigurationEventHandler configurationEventHandler = new ConfigurationEventHandler();
         configurationEventHandler.preInit(event);
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
-
+        
+        metadata = MetadataHelper.transformMetadata(metadata);
 
         proxy.preInit(event);
 
