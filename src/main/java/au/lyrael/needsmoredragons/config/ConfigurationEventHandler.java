@@ -18,7 +18,7 @@ public class ConfigurationEventHandler {
 
     public void preInit(FMLPreInitializationEvent event) {
         configurationDir = event.getModConfigurationDirectory();
-        mainConfigurationFile = new File(configurationDir, "/coolstorybro/main.cfg");
+        mainConfigurationFile = new File(configurationDir, MOD_ID + "/main.cfg");
         configuration = new Configuration(mainConfigurationFile, true);
         getLoader().loadConfiguration(configuration);
     }
