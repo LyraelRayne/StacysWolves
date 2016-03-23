@@ -10,7 +10,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
@@ -19,16 +18,14 @@ import org.apache.logging.log4j.Logger;
 
 import static au.lyrael.needsmoredragons.NeedsMoreDragons.*;
 
-@Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION, acceptedMinecraftVersions = "[1.7.10]")
+@Mod(modid = MOD_ID, name = MOD_NAME, version = VERSION, acceptedMinecraftVersions = ACCEPTED_MC_VERSIONS)
 public class NeedsMoreDragons {
 
     public static final String MOD_ID = "needsmoredragons";
     public static final String MOD_NAME = "Needs Moar Dragons";
-    public static final String VERSION  = "1.0-1.7.10";
-    /* 
-        Added all lines of the MetadataHelper class here as references to keep it in one place but if wanted, 
-        replace them with non reference values in the MetadataHelper class.
-    */
+    public static final String MC_VERSION = "1.7.10";
+    public static final String VERSION  = "1.0-" + MC_VERSION;
+    public static final String ACCEPTED_MC_VERSIONS = "[" + MC_VERSION + "]";
     public static final String DESC = "Cool Story Bro..... but it Needs Moar Dragons!";
     public static final String URL = ""; // PUT CURSEFORGE PROJECT URL HERE!
     public static final String CREDITS = "Credits to the MinecraftForge team for making this mod possible!";
