@@ -444,10 +444,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
      */
     @Override
     public boolean canEat(ItemStack itemStack) {
-        final Class<? extends Item> itemType = itemStack.getItem().getClass();
-        for (ItemStack food : getEdibleItems()) {
-            if (food.getItem().getClass().isAssignableFrom(itemType))
-                return true;
+        if (itemStack != null) {
+            final Class<? extends Item> itemType = itemStack.getItem().getClass();
+            for (ItemStack food : getEdibleItems()) {
+                if (food.getItem().getClass().isAssignableFrom(itemType))
+                    return true;
+            }
         }
         return false;
     }
