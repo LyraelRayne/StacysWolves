@@ -1,6 +1,6 @@
 package au.lyrael.needsmoredragons;
 
-import au.lyrael.needsmoredragons.client.entity.model.ModelMyWolf;
+import au.lyrael.needsmoredragons.client.entity.model.ModelDragon;
 import au.lyrael.needsmoredragons.client.render.RenderDragon;
 import au.lyrael.needsmoredragons.entity.dragon.EntityDragonBase;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -12,7 +12,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         RenderingRegistry.registerEntityRenderingHandler(EntityDragonBase.class,
-                new RenderDragon(new ModelMyWolf(), new ModelMyWolf(), 0.5F));
+                new RenderDragon(new ModelDragon(), new ModelDragon(), 0.5F));
     }
 
 
