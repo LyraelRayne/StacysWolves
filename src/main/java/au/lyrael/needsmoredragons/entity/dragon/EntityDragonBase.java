@@ -43,7 +43,6 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
      */
     private float timeWolfIsShaking;
     private float prevTimeWolfIsShaking;
-    private static final String __OBFID = "CL_00001654";
     private final List<ItemStack> edibleItems = new ArrayList<>();
 
     public EntityDragonBase(World world) {
