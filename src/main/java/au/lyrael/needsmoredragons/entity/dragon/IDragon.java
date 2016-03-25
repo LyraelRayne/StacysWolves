@@ -1,9 +1,10 @@
 package au.lyrael.needsmoredragons.entity.dragon;
 
+import au.lyrael.needsmoredragons.entity.ai.ITemptable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 
-public interface IDragon {
+public interface IDragon extends ITemptable {
     /**
      * @param itemStack Item stack to test for edibility.
      * @return True if the dragon is able to eat {@code itemStack}.
@@ -17,15 +18,6 @@ public interface IDragon {
      * @return True if {@code itemStack} is a favourite item of dragon's.
      */
     boolean likes(ItemStack itemStack);
-
-    /**
-     * Tests whether the dragon is tempted by {@code itemStack}. If tempted the dragon will follow players holding
-     * the item. Used to prime the {@link net.minecraft.entity.ai.EntityAITempt} AI routines.
-     *
-     * @param itemStack Item stack to test.
-     * @return True if the dragon is tempted by this item.
-     */
-    boolean isTemptedBy(ItemStack itemStack);
 
     /**
      * @param itemstack An item stack to be fed to the dragon
