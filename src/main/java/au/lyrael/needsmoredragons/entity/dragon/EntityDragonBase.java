@@ -1,22 +1,19 @@
 package au.lyrael.needsmoredragons.entity.dragon;
 
 import au.lyrael.needsmoredragons.client.render.IRenderableDragon;
-import au.lyrael.needsmoredragons.entity.ai.DragonAIBeg;
+import au.lyrael.needsmoredragons.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
+import au.lyrael.needsmoredragons.entity.ai.EntityAIDragonSit;
+import au.lyrael.needsmoredragons.entity.ai.EntityAIDragonTempt;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
@@ -31,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class EntityDragonBase extends EntityTameable implements IDragon, IRenderableDragon {
+
     private float field_70926_e;
     private float field_70924_f;
     /**
@@ -43,8 +41,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
      */
     private float timeWolfIsShaking;
     private float prevTimeWolfIsShaking;
-    private static final String __OBFID = "CL_00001654";
     private final List<ItemStack> edibleItems = new ArrayList<>();
+    private EntityAIDragonTempt aiTempt;
+
 
     public EntityDragonBase(World world) {
         super(world);
@@ -52,18 +51,22 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
+        this.tasks.addTask(3, this.aiTempt = new EntityAIDragonTempt(this, 0.6D, true));
+        this.tasks.addTask(4, new EntityAIAvoidEntity(this, EntityPlayer.class, 9.0F, 0.8D, 1.33D));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
-        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        this.tasks.addTask(6, new EntityAIMate(this, 1.0D));
-        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(8, new DragonAIBeg(this, 8.0F));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 5.0F));
+        this.tasks.addTask(6, new EntityAIDragonSit(this, 1.33D));
+        this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.3F));
+        this.tasks.addTask(9, new EntityAIMate(this, 0.8D));
         this.tasks.addTask(9, new EntityAILookIdle(this));
+        this.tasks.addTask(10, new EntityAIWander(this, 0.8D));
+        this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 200, false));
+        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 200, false));
+        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCreeper.class, 200, false));
         this.setTamed(false);
     }
 
@@ -194,6 +197,46 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
             this.prevTimeWolfIsShaking = 0.0F;
             this.worldObj.setEntityState(this, (byte) 8);
         }
+
+        if (scaresCreepers())
+            scareCreepers();
+
+    }
+
+    protected void scareCreepers() {
+        final float scareRange = 30F;
+
+        final IEntitySelector targetSelector = new IEntitySelector() {
+            /**
+             * Return whether the specified entity is applicable to this filter.
+             */
+            public boolean isEntityApplicable(Entity subject) {
+                return EntityCreeper.class.isAssignableFrom(subject.getClass()) && subject.isEntityAlive() && getEntitySenses().canSee(subject);
+            }
+        };
+
+        List<EntityCreature> creepersInRange = getWorldObj().selectEntitiesWithinAABB(EntityCreeper.class,
+                boundingBox.expand(scareRange, 3.0D, scareRange), targetSelector);
+
+        for (EntityCreature entityCreature : creepersInRange) {
+            if (!isAlreadyScared(entityCreature)) {
+                entityCreature.tasks.addTask(0, new EntityAIAvoidEntityIfEntityIsTamed(entityCreature, this.getClass(), scareRange, 1.0D, 1.2D));
+            }
+        }
+    }
+
+    protected boolean isAlreadyScared(EntityCreature entityCreature) {
+        final List<EntityAITasks.EntityAITaskEntry> taskEntries = entityCreature.tasks.taskEntries;
+        for (EntityAITasks.EntityAITaskEntry taskEntry : taskEntries) {
+            if (taskEntry.action instanceof EntityAIAvoidEntityIfEntityIsTamed) {
+                return ((EntityAIAvoidEntityIfEntityIsTamed) taskEntry.action).getCreatureToAvoid().equals(this.getClass());
+            }
+        }
+        return false;
+    }
+
+    protected boolean scaresCreepers() {
+        return isTamed() && true;
     }
 
     /**
@@ -352,7 +395,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
             if (this.func_152114_e(player) && !this.worldObj.isRemote && !this.isDragonBreedingItem(itemstack)) {
                 toggleSitting();
             }
-        } else if (itemstack != null && this.likes(itemstack) && !this.isAngry()) {
+
+        } else if (this.aiTempt.isRunning() && itemstack != null && this.likes(itemstack) && !this.isAngry()) {
             consumeHeldItem(player, itemstack);
             becomeTamedBy(player);
             return true;
@@ -405,10 +449,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
      */
     @Override
     public boolean canEat(ItemStack itemStack) {
-        final Class<? extends Item> itemType = itemStack.getItem().getClass();
-        for (ItemStack food : getEdibleItems()) {
-            if (food.getItem().getClass().isAssignableFrom(itemType))
-                return true;
+        if (itemStack != null) {
+            final Class<? extends Item> itemType = itemStack.getItem().getClass();
+            for (ItemStack food : getEdibleItems()) {
+                if (food.getItem().getClass().isAssignableFrom(itemType))
+                    return true;
+            }
         }
         return false;
     }
@@ -439,8 +485,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack itemStack)
-    {
+    public boolean isBreedingItem(ItemStack itemStack) {
         return isDragonBreedingItem(itemStack);
     }
 
@@ -481,20 +526,20 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
             this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -3)));
         }
     }
-
-    /**
-     * Return this wolf's collar color.
-     */
-    public int getCollarColor() {
-        return this.dataWatcher.getWatchableObjectByte(20) & 15;
-    }
-
-    /**
-     * Set this wolf's collar color.
-     */
-    public void setCollarColor(int color) {
-        this.dataWatcher.updateObject(20, Byte.valueOf((byte) (color & 15)));
-    }
+//
+//    /**
+//     * Return this wolf's collar color.
+//     */
+//    public int getCollarColor() {
+//        return this.dataWatcher.getWatchableObjectByte(20) & 15;
+//    }
+//
+//    /**
+//     * Set this wolf's collar color.
+//     */
+//    public void setCollarColor(int color) {
+//        this.dataWatcher.updateObject(20, Byte.valueOf((byte) (color & 15)));
+//    }
 
     @Override
     public abstract EntityDragonBase createChild(EntityAgeable parent);
@@ -513,6 +558,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
 
     /**
      * Another method that's here because I want a non-obfuscated name for my method.
+     *
      * @param potentialMate
      * @return
      */
@@ -614,9 +660,29 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
         return likes(itemStack);
     }
 
+    @Override
+    public boolean normallyAvoidsWater() {
+        return true;
+    }
+
+    @Override
+    public boolean alwaysAvoidsWater() {
+        return false;
+    }
+
+    @Override
+    public EntityLiving asEntityLiving() {
+        return this;
+    }
+
+    @Override
+    public World getWorldObj() {
+        return this.worldObj;
+    }
+
     /**
      * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
-     *
+     * <p>
      * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
      */
     @Override
@@ -626,7 +692,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
 
     /**
      * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
-     *
+     * <p>
      * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
      */
     @Override
@@ -636,7 +702,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IDragon
 
     /**
      * NOTE: This method basically exists because I wanted a method on the dragon interface to be used by other stuff.
-     *
+     * <p>
      * Don't replace it with isShaking because the obfuscator renames it and causes AbstractMethodExceptions.
      */
     @Override

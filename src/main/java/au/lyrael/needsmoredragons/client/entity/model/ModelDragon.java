@@ -11,7 +11,7 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class ModelMyWolf extends ModelBase {
+public class ModelDragon extends ModelBase {
     /**
      * main box for the wolf head
      */
@@ -44,9 +44,8 @@ public class ModelMyWolf extends ModelBase {
      * The wolf's mane
      */
     ModelRenderer wolfMane;
-    private static final String __OBFID = "CL_00000868";
 
-    public ModelMyWolf() {
+    public ModelDragon() {
         float f = 0.0F;
         float f1 = 13.5F;
         this.wolfHeadMain = new ModelRenderer(this, 0, 0);

@@ -15,7 +15,6 @@ public class DragonAIBeg extends EntityAIBase
     private World worldObject;
     private float minPlayerDistance;
     private int durationRemaining;
-    private static final String __OBFID = "CL_00001576";
 
     public DragonAIBeg(EntityDragonBase dragon, float range)
     {
