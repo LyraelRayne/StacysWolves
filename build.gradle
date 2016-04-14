@@ -18,8 +18,8 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.10-1.0.0"
-group = "au.lyrael.needsmoredragons" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "NeedsMoreDragons"
+group = "au.lyrael.stacywolves" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Stacy'sWolvesMod"
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
