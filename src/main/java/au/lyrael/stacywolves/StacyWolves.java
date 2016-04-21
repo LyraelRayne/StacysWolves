@@ -31,7 +31,7 @@ public class StacyWolves {
     public static final String CREDITS = "Credits to the MinecraftForge team for making this mod possible!";
     public static final String LOGO_PATH = ""; // PUT LOGO PATH HERE!
     public static final String CLIENT_PROXY_CLASS = "au.lyrael.stacywolves.ClientProxy";
-    public static final String COMMON_PROXY_CLASS = "au.lyrael.stacywolves.ClientProxy";
+    public static final String COMMON_PROXY_CLASS = "au.lyrael.stacywolves.CommonProxy";
     public static int modEntityID = 0;
 
     @Mod.Instance(MOD_ID)
@@ -43,7 +43,7 @@ public class StacyWolves {
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = COMMON_PROXY_CLASS)
     public static CommonProxy proxy;
 
-    public static CreativeTabs CREATIVE_TAB = new CreativeTabNeedsMoreDragons(CreativeTabs.getNextID(), MOD_ID);
+    public static CreativeTabs CREATIVE_TAB = new CreativeTabStacyWolves(CreativeTabs.getNextID(), MOD_ID);
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static Configuration configuration;
 

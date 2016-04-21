@@ -5,8 +5,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-public class CreativeTabNeedsMoreDragons extends CreativeTabs {
-    public CreativeTabNeedsMoreDragons(int ID, String langName) {
+public class CreativeTabStacyWolves extends CreativeTabs {
+    public CreativeTabStacyWolves(int ID, String langName) {
         super(ID, langName);
     }
 

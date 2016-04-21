@@ -4,11 +4,11 @@
 # Type (Language): English (US)
 
 # - General Localization
-itemGroup.needsmoredragons=Needs More Dragons
+itemGroup.stacywolves=Stacy's Wolves
 
 # Entity Localization
-entity.needsmoredragons.EntityFireDragon.name=Fire Dragon
+entity.stacywolves.EntityFireDragon.name=Fire Dragon
 
 # - Item Localization
-item.needsmoredragons:something.name=The Thing!
-item.needsmoredragons:something.tooltip=It's a thing
+item.stacywolves:something.name=The Thing!
+item.stacywolves:something.tooltip=It's a thing
