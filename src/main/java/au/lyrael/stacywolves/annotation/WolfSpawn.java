@@ -30,5 +30,15 @@ public @interface WolfSpawn {
      * Biome types to spawn wolves of this type in. A biome must have all types in order to qualify.
      * (For example HOT, DRY would mean that desert would qualify but Jungle would not.
      */
-    BiomeDictionary.Type[] biomeType();
+    BiomeDictionary.Type[] biomeTypes() default {};
+
+    /**
+     * Biome types to exclude wolves of this type from. Useful if you want a meta biome type but want to exclude a particular type.
+     */
+    BiomeDictionary.Type[] biomeTypeBlacklist() default {};
+
+    /**
+     * List of specific biome names to exclude spawns from.
+     */
+    String[] biomeBlacklist() default {};
 }

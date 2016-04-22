@@ -69,12 +69,17 @@ public class WolfRegistry {
         final WolfMetadata metadata = getMetadataFor(WolfClass);
         final List<WolfSpawn> WolfSpawns = Arrays.asList(metadata.spawns());
 
-        for (WolfSpawn WolfSpawn : WolfSpawns) {
-            final List<BiomeGenBase> biomes = getMatchingBiomes(Arrays.asList(WolfSpawn.biomeType()));
+        for (WolfSpawn wolfSpawnAnnotation : WolfSpawns) {
+            final List<BiomeGenBase> biomes = getMatchingBiomes(Arrays.asList(wolfSpawnAnnotation.biomeTypes()));
+            biomes.removeAll(getMatchingBiomes(Arrays.asList(wolfSpawnAnnotation.biomeTypeBlacklist())));
+            final List<String> biomeBlacklist = Arrays.asList(wolfSpawnAnnotation.biomeBlacklist());
+
             for (BiomeGenBase biome : biomes) {
-                final Integer probability = WolfSpawn.probability();
-                EntityRegistry.addSpawn(toModEntityName(entityName), WolfSpawn.probability(), WolfSpawn.min(), WolfSpawn.max(), EnumCreatureType.creature, biome);
-                LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, WolfSpawn.min(), WolfSpawn.max());
+                if(!biomeBlacklist.contains(biome.biomeName)) {
+                    final Integer probability = wolfSpawnAnnotation.probability();
+                    EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), EnumCreatureType.creature, biome);
+                    LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
+                }
             }
         }
     }

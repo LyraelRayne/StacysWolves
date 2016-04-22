@@ -13,8 +13,8 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityFireWolf", primaryColour = 0xFF0000, secondaryColour = 0xFFFF00,
         spawns = {
-                @WolfSpawn(biomeType = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeType = PLAINS, probability = 20, min = 1, max = 1),
+                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
         })
 public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
 
