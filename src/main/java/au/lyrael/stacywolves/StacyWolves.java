@@ -28,7 +28,7 @@ public class StacyWolves {
     public static final String ACCEPTED_MC_VERSIONS = "[" + MC_VERSION + "]";
     public static final String DESC = "Cool Story Bro..... but it Needs Moar Wolves!";
     public static final String URL = ""; // PUT CURSEFORGE PROJECT URL HERE!
-    public static final String CREDITS = "Credits to the MinecraftForge team for making this mod possible!";
+    public static final String CREDITS = "LyraelRayne and AKTheKnight for code. Artwork by Jaspanda and Nathan_Oneday of Walschaerts Build Team.";
     public static final String LOGO_PATH = ""; // PUT LOGO PATH HERE!
     public static final String CLIENT_PROXY_CLASS = "au.lyrael.stacywolves.ClientProxy";
     public static final String COMMON_PROXY_CLASS = "au.lyrael.stacywolves.CommonProxy";
