@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityWaterWolf", primaryColour = 0x0000FF, secondaryColour = 0xFF00FF,
+@WolfMetadata(name = "EntityWaterWolf", primaryColour = 0xDDD9DA, secondaryColour = 0x91C5B7,
         spawns = {
                 @WolfSpawn(biomeTypes = WET, probability = 5, min = 1, max = 4),
                 @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
@@ -21,6 +21,8 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityWaterWolf(World worldObj) {
         super(worldObj);
         addEdibleItem(ItemRegistry.getWolfFood("water_bone"));
+        this.addEdibleItem(new ItemStack(Items.beef));
+        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

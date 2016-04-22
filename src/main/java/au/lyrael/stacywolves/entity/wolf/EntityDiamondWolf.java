@@ -5,23 +5,22 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityEarthWolf", primaryColour = 0xB8845B, secondaryColour = 0x583C28,
+@WolfMetadata(name = "EntityDiamondWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x5DECF5,
         spawns = {
                 @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = HILLS, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = {HILLS, COLD}, probability = 5, min = 1, max = 2),
         })
-public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
+public class EntityDiamondWolf extends EntityWolfBase implements IRenderableWolf {
 
-    public EntityEarthWolf(World worldObj) {
+    public EntityDiamondWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("earth_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("diamond_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }
@@ -36,7 +35,7 @@ public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {
-        EntityWolfBase child = new EntityEarthWolf(this.worldObj);
+        EntityWolfBase child = new EntityDiamondWolf(this.worldObj);
         String s = this.func_152113_b();
 
         if (s != null && s.trim().length() > 0) {
@@ -49,6 +48,6 @@ public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public String getTextureFolderName() {
-        return "earth";
+        return "diamond";
     }
 }

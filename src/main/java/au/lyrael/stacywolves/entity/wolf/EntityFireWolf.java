@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityFireWolf", primaryColour = 0xFF0000, secondaryColour = 0xFFFF00,
+@WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04,
         spawns = {
                 @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
                 @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
@@ -21,6 +21,8 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityFireWolf(World worldObj) {
         super(worldObj);
         addEdibleItem(ItemRegistry.getWolfFood("fire_bone"));
+        this.addEdibleItem(new ItemStack(Items.beef));
+        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

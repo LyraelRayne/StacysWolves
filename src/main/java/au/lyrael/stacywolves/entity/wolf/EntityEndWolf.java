@@ -5,23 +5,23 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraftforge.common.BiomeDictionary.Type.HILLS;
+import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
 
-@WolfMetadata(name = "EntityEarthWolf", primaryColour = 0xB8845B, secondaryColour = 0x583C28,
+@WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89,
         spawns = {
                 @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
                 @WolfSpawn(biomeTypes = HILLS, probability = 5, min = 1, max = 2),
         })
-public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
+public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
 
-    public EntityEarthWolf(World worldObj) {
+    public EntityEndWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("earth_bone"));
+        addEdibleItem(ItemRegistry.getWolfFood("end_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }
@@ -36,7 +36,7 @@ public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {
-        EntityWolfBase child = new EntityEarthWolf(this.worldObj);
+        EntityWolfBase child = new EntityEndWolf(this.worldObj);
         String s = this.func_152113_b();
 
         if (s != null && s.trim().length() > 0) {
@@ -49,6 +49,6 @@ public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public String getTextureFolderName() {
-        return "earth";
+        return "end";
     }
 }

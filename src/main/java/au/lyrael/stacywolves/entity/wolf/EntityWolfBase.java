@@ -43,6 +43,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     private float timeWolfIsShaking;
     private float prevTimeWolfIsShaking;
     private final List<ItemStack> edibleItems = new ArrayList<>();
+    private final List<ItemStack> likedItems = new ArrayList<>();
     private EntityAIWolfTempt aiTempt;
 
 
@@ -490,6 +491,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return false;
     }
 
+    protected List<ItemStack> getLikedItems() {
+        return new ArrayList<>(this.likedItems);
+    }
+
+    protected void addLikedItem(ItemStack tamingItem) {
+        this.likedItems.add(tamingItem);
+    }
+
     protected List<ItemStack> getEdibleItems() {
         return new ArrayList<>(this.edibleItems);
     }
@@ -683,7 +692,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public boolean likes(ItemStack itemStack) {
-        return canEat(itemStack);
+        if (itemStack != null) {
+            final Class<? extends Item> itemType = itemStack.getItem().getClass();
+            for (ItemStack food : getLikedItems()) {
+                if (food.getItem().getClass().isAssignableFrom(itemType))
+                    return true;
+            }
+        }
+        return false;
     }
 
     @Override

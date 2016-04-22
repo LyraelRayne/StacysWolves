@@ -3,7 +3,6 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
-import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
@@ -12,7 +11,7 @@ import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityAirWolf", primaryColour = 0x00FFFF, secondaryColour = 0x0000FF,
+@WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,
         spawns = {
                 @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
                 @WolfSpawn(biomeTypes = {HILLS, COLD}, probability = 5, min = 1, max = 2),
@@ -21,7 +20,9 @@ public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityAirWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("air_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("air_bone"));
+        this.addEdibleItem(new ItemStack(Items.beef));
+        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override
