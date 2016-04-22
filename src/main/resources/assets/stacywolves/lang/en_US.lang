@@ -7,7 +7,7 @@
 itemGroup.stacywolves=Stacy's Wolves
 
 # Entity Localization
-entity.stacywolves.EntityAirWolf.name=Air Wolf
+entity.stacywolves.EntityAirWolf.name=Cloud Wolf
 entity.stacywolves.EntityBirchWolf.name=Birch Wolf
 entity.stacywolves.EntityCakeWolf.name=Cake Wolf
 entity.stacywolves.EntityDesertWolf.name=Desert Wolf
@@ -16,7 +16,7 @@ entity.stacywolves.EntityEarthWolf.name=Earth Wolf
 entity.stacywolves.EntityEmeraldWolf.name=Emerald Wolf
 entity.stacywolves.EntityEndWolf.name=End Wolf
 entity.stacywolves.EntityEnderWolf.name=Ender Wolf
-entity.stacywolves.EntityFireWolf.name=Fire Wolf
+entity.stacywolves.EntityFireWolf.name=Blaze Wolf
 entity.stacywolves.EntityFlowerWolf.name=Flower Wolf
 entity.stacywolves.EntityGoldWolf.name=Gold Wolf
 entity.stacywolves.EntityIceWolf.name=Ice Wolf
@@ -27,32 +27,32 @@ entity.stacywolves.EntityNetherWolf.name=Nether Wolf
 entity.stacywolves.EntityPrismarineWolf.name=Prismarine Wolf
 entity.stacywolves.EntityRedstoneWolf.name=Redstone Wolf
 entity.stacywolves.EntitySavannahWolf.name=Savannah Wolf
-entity.stacywolves.EntitySkeletonWolf.name=Skeleton Wolf
-entity.stacywolves.EntityWaterWolf.name=Water Wolf
+entity.stacywolves.EntitySkeletonWolf.name=Bone Wolf
+entity.stacywolves.EntityWaterWolf.name=Ocean Wolf
 entity.stacywolves.EntityZombieWolf.name=Zombie Wolf
 
 # - Item Localization
-item.stacywolves.wolf_food_air_bone.name=Air Bone
+item.stacywolves.wolf_food_air_bone.name=Cloud Bone
 item.stacywolves.wolf_food_birch_bone.name=Birch Bone
 item.stacywolves.wolf_food_cake_bone.name=Cake Bone
-item.stacywolves.wolf_food_desert_bone.name=Desert Bone
+item.stacywolves.wolf_food_desert_bone.name=Cactus Bone
 item.stacywolves.wolf_food_diamond_bone.name=Diamond Bone
 item.stacywolves.wolf_food_earth_bone.name=Earth Bone
 item.stacywolves.wolf_food_emerald_bone.name=Emerald Bone
 item.stacywolves.wolf_food_end_bone.name=End Bone
 item.stacywolves.wolf_food_ender_bone.name=Ender Bone
-item.stacywolves.wolf_food_fire_bone.name=Fire Bone
-item.stacywolves.wolf_food_flower_bone.name=Flower Bone
+item.stacywolves.wolf_food_fire_bone.name=Blaze Bone
+item.stacywolves.wolf_food_flower_bone.name=Bone Bouquet
 item.stacywolves.wolf_food_gold_bone.name=Gold Bone
-item.stacywolves.wolf_food_ice_bone.name=Ice Bone
+item.stacywolves.wolf_food_ice_bone.name=Snow Bone
 item.stacywolves.wolf_food_iron_bone.name=Iron Bone
 item.stacywolves.wolf_food_mesa_bone.name=Mesa Bone
-item.stacywolves.wolf_food_mushroom_bone.name=Mushroom Bone
-item.stacywolves.wolf_food_nether_bone.name=Nether Bone
-item.stacywolves.wolf_food_prismarine_bone.name=Prismarine Bone
-item.stacywolves.wolf_food_redstone_bone.name=Redstone Bone
+item.stacywolves.wolf_food_mushroom_bone.name=Boneshroom
+item.stacywolves.wolf_food_nether_bone.name=Magma Bone
+item.stacywolves.wolf_food_prismarine_bone.name=Prismatic Bone
+item.stacywolves.wolf_food_redstone_bone.name=Redbone
 item.stacywolves.wolf_food_savannah_bone.name=Savannah Bone
-item.stacywolves.wolf_food_skeleton_bone.name=Skeleton Bone
-item.stacywolves.wolf_food_water_bone.name=Water Bone
-item.stacywolves.wolf_food_zombie_bone.name=Zombie Bone
+item.stacywolves.wolf_food_skeleton_bone.name=Bony Bone
+item.stacywolves.wolf_food_water_bone.name=Ocean Bone
+item.stacywolves.wolf_food_zombie_bone.name=Zombone
 
