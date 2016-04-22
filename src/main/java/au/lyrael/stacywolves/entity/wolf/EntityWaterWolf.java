@@ -3,6 +3,7 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,7 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityWaterWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(new ItemStack(Items.cooked_fished));
+        addEdibleItem(ItemRegistry.getWolfFood("water_bone"));
     }
 
     @Override

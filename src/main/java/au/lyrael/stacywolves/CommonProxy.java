@@ -2,9 +2,11 @@ package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
+import au.lyrael.stacywolves.item.ItemWolfFood;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,11 +26,12 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
 
         registerWolfEntities(event);
+        GameRegistry.registerItem(new ItemWolfFood(), ItemWolfFood.UNLOCALIZED_NAME);
     }
 
     private void registerWolfEntities(FMLPreInitializationEvent event) {
         final Set<ASMDataTable.ASMData> wolfMetadatas = event.getAsmData().getAll(WolfMetadata.class.getName());
-        LOGGER.trace("Found [{}] wolf metadata entries. Registering Wolfs!", wolfMetadatas.size());
+        LOGGER.trace("Found [{}] wolf metadata entries. Registering Wolves!", wolfMetadatas.size());
         for (ASMDataTable.ASMData annotation : wolfMetadatas) {
             try {
                 final Class<?> annotatedClass = getWolfClass(annotation);

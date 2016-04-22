@@ -3,6 +3,8 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,7 +21,7 @@ public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityAirWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(new ItemStack(Items.feather));
+        addEdibleItem(ItemRegistry.getWolfFood("air_bone"));
     }
 
     @Override
