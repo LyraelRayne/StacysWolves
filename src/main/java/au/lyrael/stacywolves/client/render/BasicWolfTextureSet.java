@@ -37,6 +37,6 @@ public class BasicWolfTextureSet implements IWolfTextureSet {
         base = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf.png");
         angry = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_angry.png");
         tame = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_tame.png");
-        collar = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_collar.png");
+        collar = new ResourceLocation(MOD_ID, textureBasePath + "/wolf_collar.png");
     }
 }
