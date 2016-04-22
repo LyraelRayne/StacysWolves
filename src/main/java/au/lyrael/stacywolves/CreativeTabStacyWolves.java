@@ -1,5 +1,6 @@
 package au.lyrael.stacywolves;
 
+import au.lyrael.stacywolves.registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,7 +14,7 @@ public class CreativeTabStacyWolves extends CreativeTabs {
     @Override
     @SideOnly(Side.CLIENT)
     public Item getTabIconItem() {
-        return (Item) Item.itemRegistry.getObject("dragon_egg");
+        return ItemRegistry.getWolfFood("diamond_bone").getItem();
     }
 
 }

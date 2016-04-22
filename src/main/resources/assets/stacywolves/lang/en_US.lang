@@ -7,7 +7,7 @@
 itemGroup.stacywolves=Stacy's Wolves
 
 # Entity Localization
-entity.stacywolves.EntityFireDragon.name=Fire Dragon
+entity.stacywolves.EntityFireWolf.name=Fire Wolf
 
 # - Item Localization
 item.stacywolves:something.name=The Thing!

@@ -14,17 +14,17 @@ import net.minecraft.world.World;
  */
 public class EntityAIWolfSit extends EntityAIBase {
     private final EntityTameable entity;
-    private final double dragonMoveSpeed;
+    private final double wolfMoveSpeed;
     private int executionTime;
     private int distanceMoved;
     private int field_151490_e;
-    private int dragonXPos;
-    private int dragonYPos;
-    private int dragonZPos;
+    private int wolfXPos;
+    private int wolfYPos;
+    private int wolfZPos;
 
     public EntityAIWolfSit(EntityTameable entity, double moveSpeed) {
         this.entity = entity;
-        this.dragonMoveSpeed = moveSpeed;
+        this.wolfMoveSpeed = moveSpeed;
         this.setMutexBits(5);
     }
 
@@ -39,14 +39,14 @@ public class EntityAIWolfSit extends EntityAIBase {
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     public boolean continueExecuting() {
-        return this.executionTime <= this.field_151490_e && this.distanceMoved <= 60 && this.shouldSitOn(this.entity.worldObj, this.dragonXPos, this.dragonYPos, this.dragonZPos);
+        return this.executionTime <= this.field_151490_e && this.distanceMoved <= 60 && this.shouldSitOn(this.entity.worldObj, this.wolfXPos, this.wolfYPos, this.wolfZPos);
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        this.entity.getNavigator().tryMoveToXYZ((double) ((float) this.dragonXPos) + 0.5D, (double) (this.dragonYPos + 1), (double) ((float) this.dragonZPos) + 0.5D, this.dragonMoveSpeed);
+        this.entity.getNavigator().tryMoveToXYZ((double) ((float) this.wolfXPos) + 0.5D, (double) (this.wolfYPos + 1), (double) ((float) this.wolfZPos) + 0.5D, this.wolfMoveSpeed);
         this.executionTime = 0;
         this.distanceMoved = 0;
         this.field_151490_e = this.entity.getRNG().nextInt(this.entity.getRNG().nextInt(1200) + 1200) + 1200;
@@ -68,9 +68,9 @@ public class EntityAIWolfSit extends EntityAIBase {
 
         getRegularEntitySitAI(this.entity).setSitting(false);
 
-        if (this.entity.getDistanceSq((double) this.dragonXPos, (double) (this.dragonYPos + 1), (double) this.dragonZPos) > 1.0D) {
+        if (this.entity.getDistanceSq((double) this.wolfXPos, (double) (this.wolfYPos + 1), (double) this.wolfZPos) > 1.0D) {
             this.entity.setSitting(false);
-            this.entity.getNavigator().tryMoveToXYZ((double) ((float) this.dragonXPos) + 0.5D, (double) (this.dragonYPos + 1), (double) ((float) this.dragonZPos) + 0.5D, this.dragonMoveSpeed);
+            this.entity.getNavigator().tryMoveToXYZ((double) ((float) this.wolfXPos) + 0.5D, (double) (this.wolfYPos + 1), (double) ((float) this.wolfZPos) + 0.5D, this.wolfMoveSpeed);
             ++this.distanceMoved;
         } else if (!this.entity.isSitting()) {
             this.entity.setSitting(true);
@@ -93,9 +93,9 @@ public class EntityAIWolfSit extends EntityAIBase {
                     double d1 = this.entity.getDistanceSq((double) j, (double) i, (double) k);
 
                     if (d1 < d0) {
-                        this.dragonXPos = j;
-                        this.dragonYPos = i;
-                        this.dragonZPos = k;
+                        this.wolfXPos = j;
+                        this.wolfYPos = i;
+                        this.wolfZPos = k;
                         d0 = d1;
                     }
                 }

@@ -604,7 +604,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     public boolean canWolfMateWith(EntityAnimal potentialMate) {
         // Wolves cannot mate with themselves.
         return potentialMate != this &&
-                // Can only breed tamed dragons
+                // Can only breed tamed wolves
                 this.isTamed() &&
                 // Can only mate with eligible species.
                 canMateWithSpecies(potentialMate) &&
