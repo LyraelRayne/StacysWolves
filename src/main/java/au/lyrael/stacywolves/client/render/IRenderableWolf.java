@@ -15,4 +15,6 @@ public interface IRenderableWolf extends IWolf {
 
     float getShadingWhileShaking(float maybeTime);
 
+    int getCollarColor();
+
 }

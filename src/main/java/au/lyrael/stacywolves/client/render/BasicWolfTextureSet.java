@@ -11,6 +11,7 @@ public class BasicWolfTextureSet implements IWolfTextureSet {
     private ResourceLocation base;
     private ResourceLocation angry;
     private ResourceLocation tame;
+    private ResourceLocation collar;
 
     @Override
     public ResourceLocation getBase() {
@@ -27,12 +28,15 @@ public class BasicWolfTextureSet implements IWolfTextureSet {
         return tame;
     }
 
-    //TODO Make textures different for different states if needed. Otherwise remove different textures.
+    @Override
+    public ResourceLocation getCollar() {
+        return collar;
+    }
+
     public BasicWolfTextureSet(String folderName) {
-        base = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/base.png");
-        angry = base;
-        tame = base;
-//        angry = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/angry.png");
-//        tame = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/tame.png");
+        base = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf.png");
+        angry = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_angry.png");
+        tame = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_tame.png");
+        collar = new ResourceLocation(MOD_ID, textureBasePath + "/" + folderName + "/" + folderName + "_wolf_collar.png");
     }
 }

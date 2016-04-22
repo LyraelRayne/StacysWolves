@@ -9,4 +9,5 @@ public interface IWolfTextureSet {
     ResourceLocation getBase();
     ResourceLocation getAngry();
     ResourceLocation getTame();
+    ResourceLocation getCollar();
 }

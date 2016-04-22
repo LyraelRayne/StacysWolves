@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,17 +33,31 @@ public class RenderWolf extends RenderLiving {
     protected int shouldRenderPass(IRenderableWolf wolf, int pass, float maybeTime) {
         if (pass == 0 && wolf.isWolfShaking()) {
             float f1 = wolf.getBrightness(maybeTime) * wolf.getShadingWhileShaking(maybeTime);
-            bindWolfTexture(wolf);
+            bindTexture(this.getEntityTexture(wolf));
             GL11.glColor3f(f1, f1, f1);
             return 1;
-        } else {
+        } else if(pass == 1 && wolf.isWolfTamed()) {
+            bindTexture(this.getCollarTexture(wolf));
+            int color = wolf.getCollarColor();
+            GL11.glColor3f(EntitySheep.fleeceColorTable[color][0], EntitySheep.fleeceColorTable[color][1], EntitySheep.fleeceColorTable[color][2]);
+            return 1;
+        }
+        else{
             return -1;
         }
     }
 
-    private void bindWolfTexture(IRenderableWolf wolf) {
-        final ResourceLocation entityTexture = this.getEntityTexture(wolf);
-        bindTexture(entityTexture);
+    private ResourceLocation getCollarTexture(IRenderableWolf entity) {
+        final String entityName = WOLF_REGISTRY.getEntityNameFor(entity);
+
+        IWolfTextureSet textureSet = getTextureSet(entity, entityName);
+
+        if (textureSet != null) {
+            return textureSet.getCollar();
+        } else {
+            LOGGER.warn("Can't load texture set for [{}]", entityName);
+            return null;
+        }
     }
 
     /**
@@ -51,10 +66,7 @@ public class RenderWolf extends RenderLiving {
     protected ResourceLocation getEntityTexture(IRenderableWolf entity) {
         final String entityName = WOLF_REGISTRY.getEntityNameFor(entity);
 
-        if (!textureCache.containsKey(entityName))
-            textureCache.put(entityName, createNewTextureSet(entity));
-
-        IWolfTextureSet textureSet = textureCache.get(entityName);
+        IWolfTextureSet textureSet = getTextureSet(entity, entityName);
 
         if (textureSet != null) {
             return entity.isWolfTamed() ? textureSet.getTame() : (entity.isWolfAngry() ? textureSet.getAngry() : textureSet.getBase());
@@ -62,6 +74,13 @@ public class RenderWolf extends RenderLiving {
             LOGGER.warn("Can't load texture set for [{}]", entityName);
             return null;
         }
+    }
+
+    private IWolfTextureSet getTextureSet(IRenderableWolf entity, String entityName) {
+        if (!textureCache.containsKey(entityName))
+            textureCache.put(entityName, createNewTextureSet(entity));
+
+        return textureCache.get(entityName);
     }
 
     private IWolfTextureSet createNewTextureSet(IRenderableWolf entity) {

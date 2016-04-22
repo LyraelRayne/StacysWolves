@@ -16,6 +16,7 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -135,6 +136,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setBoolean("Angry", this.isAngry());
+        nbt.setByte("CollarColor", (byte) this.getCollarColor());
     }
 
     /**
@@ -144,6 +146,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         this.setAngry(nbt.getBoolean("Angry"));
+        if (nbt.hasKey("CollarColor", 99)) {
+            this.setCollarColor(nbt.getByte("CollarColor"));
+        }
     }
 
     /**
@@ -181,6 +186,20 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     protected Item getDropItem() {
         return Item.getItemById(-1);
+    }
+
+    /**
+     * Return this wolf's collar color.
+     */
+    public int getCollarColor() {
+        return this.dataWatcher.getWatchableObjectByte(20) & 15;
+    }
+
+    /**
+     * Set this wolf's collar color.
+     */
+    public void setCollarColor(int p_82185_1_) {
+        this.dataWatcher.updateObject(20, Byte.valueOf((byte) (p_82185_1_ & 15)));
     }
 
     /**
@@ -387,6 +406,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
                     if (this.dataWatcher.getWatchableObjectFloat(18) < 20.0F) {
                         consumeHeldItem(player, itemstack);
                         this.heal(getHealAmount(itemstack));
+                        return true;
+                    }
+                } else if (itemstack.getItem() == Items.dye) {
+                    int color = BlockColored.func_150032_b(itemstack.getItemDamage());
+
+                    if (color != this.getCollarColor()) {
+                        this.setCollarColor(color);
+
+                        if (!player.capabilities.isCreativeMode && --itemstack.stackSize <= 0) {
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                        }
+
                         return true;
                     }
                 }
