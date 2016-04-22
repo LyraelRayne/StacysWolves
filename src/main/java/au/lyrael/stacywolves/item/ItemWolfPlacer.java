@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves.item;
 
 
+import au.lyrael.stacywolves.utility.LanguageHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -200,7 +201,7 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
     // Doing this override means that there is no localization for language
     // unless you specifically check for localization here and convert
     public String getItemStackDisplayName(ItemStack par1ItemStack) {
-        return "Spawn " + entityToSpawnName;
+        return "Spawn " + LanguageHelper.getLocalization("entity." + MOD_ID + "." + this.entityToSpawnName + ".name");
     }
 
 

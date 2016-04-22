@@ -48,6 +48,7 @@ public class LanguageHelper {
      * @return A preprocessed localized string. If your current language dosen't have a localized string, it defaults to en_US.
      */
     public static String getLocalization(String key) {
+        key = key.replace(":", ".");
         String localization = getLocalization(key, true);
 
         if (preprocesssed.containsKey(key)) {
@@ -72,6 +73,7 @@ public class LanguageHelper {
     }
 
     private static String getLocalization(String key, boolean fallback) {
+        key = key.replace(":", ".");
         String localization = StatCollector.translateToLocal(key);
         if (localization.equals(key) && fallback) {
             localization = StatCollector.translateToFallback(key);

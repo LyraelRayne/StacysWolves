@@ -26,11 +26,11 @@ public class ItemStacyWolves extends Item {
 
     @Override
     public String getUnlocalizedName() {
-        return String.format("item.%s%s", MOD_ID + ":", unwrapUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
     }
 
     public String getUnlocalizedName(ItemStack itemStack) {
-        return String.format("item.%s%s", MOD_ID + ":", unwrapUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
     }
 
     @Override
