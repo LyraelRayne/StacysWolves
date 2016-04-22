@@ -7,6 +7,7 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.HILLS;
@@ -51,4 +52,26 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     public String getTextureFolderName() {
         return "ender";
     }
+
+    @Override
+    public void onLivingUpdate() {
+        if (!this.worldObj.isRemote) {
+            if (this.isWet()) {
+                this.attackEntityFrom(DamageSource.drown, 1.0F);
+            }
+        } else {
+            for (int loop = 0; loop < 2; ++loop)
+            {
+                this.worldObj.spawnParticle("portal",
+                        this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width,
+                        this.posY + this.rand.nextDouble() * (double)this.height - 0.25D,
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width,
+                        (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+            }
+
+        }
+
+        super.onLivingUpdate();
+    }
+
 }
