@@ -74,6 +74,6 @@ public class WolfAIBeg extends EntityAIBase
     private boolean hasPlayerGotBoneInHand(EntityPlayer player)
     {
         ItemStack itemstack = player.inventory.getCurrentItem();
-        return itemstack == null ? false : (!this.theWolf.isTamed() && itemstack.getItem() == Items.bone ? true : this.theWolf.isWolfBreedingItem(itemstack));
+        return itemstack == null ? false : (!this.theWolf.isTamed() && this.theWolf.isWolfBreedingItem(itemstack));
     }
 }

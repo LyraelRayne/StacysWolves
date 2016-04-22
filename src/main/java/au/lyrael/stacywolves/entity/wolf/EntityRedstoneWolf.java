@@ -20,7 +20,7 @@ public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWol
 
     public EntityRedstoneWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("redstone_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("redstone_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }

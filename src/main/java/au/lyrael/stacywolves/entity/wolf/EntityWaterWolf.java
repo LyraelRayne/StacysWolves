@@ -20,7 +20,7 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityWaterWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("water_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("water_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }

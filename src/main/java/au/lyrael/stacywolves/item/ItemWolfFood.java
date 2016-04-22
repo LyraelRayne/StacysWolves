@@ -10,13 +10,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 
 public class ItemWolfFood extends ItemStacyWolves {
 
@@ -136,6 +134,15 @@ public class ItemWolfFood extends ItemStacyWolves {
         } else {
             return super.getUnlocalizedName(stack);
         }
+    }
+
+    public static boolean foodsMatch(ItemStack a, ItemStack b)
+    {
+        if(!(a.getItem() instanceof ItemWolfFood && b.getItem() instanceof ItemWolfFood))
+            return false;
+
+        return a.getTagCompound().getString(ID_TAG).equals(b.getTagCompound().getString(ID_TAG));
+
     }
 
 }

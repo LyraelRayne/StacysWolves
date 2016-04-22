@@ -2,8 +2,9 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
-import au.lyrael.stacywolves.entity.ai.EntityAIWolfSit;
 import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
+import au.lyrael.stacywolves.entity.ai.WolfAIBeg;
+import au.lyrael.stacywolves.item.ItemWolfFood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -53,15 +54,15 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.6D, true));
-        this.tasks.addTask(4, new EntityAIAvoidEntity(this, EntityPlayer.class, 9.0F, 0.8D, 1.33D));
+        this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.6D, false));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
         this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 5.0F));
-        this.tasks.addTask(6, new EntityAIWolfSit(this, 1.33D));
-        this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.3F));
-        this.tasks.addTask(9, new EntityAIMate(this, 0.8D));
+        this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
+        this.tasks.addTask(8, new WolfAIBeg(this, 8.0F));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(9, new EntityAIMate(this, 1.0D));
         this.tasks.addTask(9, new EntityAILookIdle(this));
-        this.tasks.addTask(10, new EntityAIWander(this, 0.8D));
+        this.tasks.addTask(10, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
@@ -69,6 +70,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 200, false));
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 200, false));
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCreeper.class, 200, false));
+
         this.setTamed(false);
     }
 
@@ -428,7 +430,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
                 toggleSitting();
             }
 
-        } else if (this.aiTempt.isRunning() && itemstack != null && this.likes(itemstack) && !this.isAngry()) {
+        } else if (itemstack != null && this.likes(itemstack) && !this.isAngry()) {
             consumeHeldItem(player, itemstack);
             becomeTamedBy(player);
             return true;
@@ -495,8 +497,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return new ArrayList<>(this.likedItems);
     }
 
-    protected void addLikedItem(ItemStack tamingItem) {
-        this.likedItems.add(tamingItem);
+    protected void addLikedItem(ItemStack likedItem) {
+        this.likedItems.add(likedItem);
     }
 
     protected List<ItemStack> getEdibleItems() {
@@ -693,10 +695,19 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public boolean likes(ItemStack itemStack) {
         if (itemStack != null) {
-            final Class<? extends Item> itemType = itemStack.getItem().getClass();
-            for (ItemStack food : getLikedItems()) {
-                if (food.getItem().getClass().isAssignableFrom(itemType))
-                    return true;
+
+            if (itemStack.getItem() instanceof ItemWolfFood) {
+                for (ItemStack food : getLikedItems()) {
+                    if ((ItemWolfFood.foodsMatch(itemStack, food)))
+                        return true;
+                }
+            } else {
+                final Class<? extends Item> itemType = itemStack.getItem().getClass();
+                for (ItemStack food : getLikedItems()) {
+                    // Same item type and either has no subtypes or the metadata value matches
+                    if (food.getItem().getClass().isAssignableFrom(itemType) && itemStack.getHasSubtypes() == false || itemStack.getItemDamage() == food.getItemDamage())
+                        return true;
+                }
             }
         }
         return false;

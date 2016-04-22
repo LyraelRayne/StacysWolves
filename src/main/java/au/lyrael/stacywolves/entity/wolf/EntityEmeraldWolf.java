@@ -21,7 +21,7 @@ public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf
 
     public EntityEmeraldWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("emerald_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("emerald_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }

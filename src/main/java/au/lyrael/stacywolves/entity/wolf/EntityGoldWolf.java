@@ -20,7 +20,7 @@ public class EntityGoldWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityGoldWolf(World worldObj) {
         super(worldObj);
-        addEdibleItem(ItemRegistry.getWolfFood("gold_bone"));
+        addLikedItem(ItemRegistry.getWolfFood("gold_bone"));
         this.addEdibleItem(new ItemStack(Items.beef));
         this.addEdibleItem(new ItemStack(Items.chicken));
     }
