@@ -9,13 +9,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.HILLS;
-import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
+import static net.minecraftforge.common.BiomeDictionary.Type.END;
 
 @WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = HILLS, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = END, probability = 5, min = 1, max = 2),
         })
 public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
 

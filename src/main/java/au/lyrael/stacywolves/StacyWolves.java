@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.config.ConfigurationEventHandler;
+import au.lyrael.stacywolves.event.SpawnEventHandler;
 import au.lyrael.stacywolves.registry.WolfRegistry;
 import au.lyrael.stacywolves.utility.MetadataHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -11,6 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -56,6 +58,7 @@ public class StacyWolves {
         final ConfigurationEventHandler configurationEventHandler = new ConfigurationEventHandler();
         configurationEventHandler.preInit(event);
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
+        MinecraftForge.EVENT_BUS.register(new SpawnEventHandler());
         
         metadata = MetadataHelper.transformMetadata(metadata);
 

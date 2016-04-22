@@ -5,7 +5,7 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -14,8 +14,9 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityEarthWolf", primaryColour = 0xB8845B, secondaryColour = 0x583C28,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = HILLS, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 10, min = 1, max = 4, creatureType = EnumCreatureType.creature),
+                @WolfSpawn(biomeTypes = FOREST, probability = 10, min = 1, max = 4, creatureType = EnumCreatureType.creature),
+                @WolfSpawn(biomeTypes = HILLS, probability = 10, min = 1, max = 4, creatureType = EnumCreatureType.creature),
         })
 public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 

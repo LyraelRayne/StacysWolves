@@ -9,12 +9,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraft.entity.EnumCreatureType.waterCreature;
+import static net.minecraftforge.common.BiomeDictionary.Type.BEACH;
+import static net.minecraftforge.common.BiomeDictionary.Type.OCEAN;
 
 @WolfMetadata(name = "EntityWaterWolf", primaryColour = 0xDDD9DA, secondaryColour = 0x91C5B7,
         spawns = {
-                @WolfSpawn(biomeTypes = WET, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
+                @WolfSpawn(biomeTypes = OCEAN, probability = 5, min = 1, max = 4, creatureType = waterCreature),
+                @WolfSpawn(biomeTypes = BEACH, probability = 5, min = 1, max = 4, creatureType = waterCreature),
         })
 public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 

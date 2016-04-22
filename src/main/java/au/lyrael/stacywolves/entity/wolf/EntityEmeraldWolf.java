@@ -9,13 +9,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.HILLS;
-import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityEmeraldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x17DD62,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = HILLS, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = MOUNTAIN, probability = 5, min = 1, max = 2),
         })
 public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -50,5 +49,10 @@ public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf
     @Override
     public String getTextureFolderName() {
         return "emerald";
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+        return !canSeeTheSky(world, x, y, z);
     }
 }

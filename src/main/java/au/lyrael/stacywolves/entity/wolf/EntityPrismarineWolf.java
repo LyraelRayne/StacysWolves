@@ -1,7 +1,6 @@
 package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
-import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -9,13 +8,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
-
 @WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F,
-        spawns = {
-                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-        })
+        spawns = {})
 public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityPrismarineWolf(World worldObj) {

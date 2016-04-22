@@ -7,14 +7,18 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
+import static net.minecraft.entity.EnumCreatureType.creature;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityCakeWolf", primaryColour = 0xB35922, secondaryColour = 0xE41717,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = {HILLS, COLD}, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = {PLAINS}, probability = 2, min = 1, max = 2, creatureType = creature),
+                @WolfSpawn(biomeTypes = {SAVANNA}, probability = 2, min = 1, max = 2, creatureType = creature),
+                @WolfSpawn(biomeTypes = {SANDY, HOT, DRY}, probability = 2, min = 1, max = 2, creatureType = creature),
         })
 public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -31,6 +35,16 @@ public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf {
             return 2F;
         else
             return 0F;
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+
+        Village nearestVillage = this.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 16);
+        if (nearestVillage == null)
+            return false;
+        else
+            return super.canSpawnHereAndNow(world, x, y, z);
     }
 
     @Override

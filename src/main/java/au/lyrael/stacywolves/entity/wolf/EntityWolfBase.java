@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
 import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
 import au.lyrael.stacywolves.entity.ai.WolfAIBeg;
@@ -24,12 +25,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf {
+import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+
+public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable {
 
     private float field_70926_e;
     private float field_70924_f;
@@ -47,6 +54,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     private final List<ItemStack> likedItems = new ArrayList<>();
     private EntityAIWolfTempt aiTempt;
 
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public EntityWolfBase(World world) {
         super(world);
@@ -267,6 +275,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (!this.worldObj.isRemote && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
+            this.setDead();
+            return;
+        }
         this.field_70924_f = this.field_70926_e;
 
         if (this.isBegging()) {
@@ -664,6 +676,17 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     protected boolean canDespawn() {
         return !this.isTamed() && this.ticksExisted > 2400;
     }
+
+    @Override
+    public boolean getCanSpawnHere() {
+        return super.getCanSpawnHere();
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+        return canSeeTheSky(world, x, y, z) && world.isDaytime();
+    }
+
 
     /**
      * Used by the owner hurt by target AI in determining whether the wolf should attack their owner's attacker.

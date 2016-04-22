@@ -9,12 +9,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityRedstoneWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x8F0303,
         spawns = {
-                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 4, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = FOREST, probability = 4, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = HILLS, probability = 4, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = SANDY, probability = 4, min = 1, max = 4),
         })
 public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -49,5 +52,10 @@ public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWol
     @Override
     public String getTextureFolderName() {
         return "redstone";
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+        return !canSeeTheSky(world, x, y, z) && y < 15;
     }
 }

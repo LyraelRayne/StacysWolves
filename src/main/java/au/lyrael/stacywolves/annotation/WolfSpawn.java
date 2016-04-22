@@ -1,5 +1,6 @@
 package au.lyrael.stacywolves.annotation;
 
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.lang.annotation.ElementType;
@@ -41,4 +42,9 @@ public @interface WolfSpawn {
      * List of specific biome names to exclude spawns from.
      */
     String[] biomeBlacklist() default {};
+
+    /**
+     * Type of spawn list to add to.
+     */
+    EnumCreatureType creatureType() default EnumCreatureType.monster;
 }

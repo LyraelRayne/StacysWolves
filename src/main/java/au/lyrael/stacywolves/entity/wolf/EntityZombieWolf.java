@@ -9,13 +9,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
-import static net.minecraftforge.common.BiomeDictionary.Type.WET;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityZombieWolf", primaryColour = 0x04AEAE, secondaryColour = 0x447230,
         spawns = {
-                @WolfSpawn(biomeTypes = WET, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 10, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = FOREST, probability = 10, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = HILLS, probability = 10, min = 1, max = 4),
         })
 public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -50,5 +51,28 @@ public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf 
     @Override
     public String getTextureFolderName() {
         return "zombie";
+    }
+
+    @Override
+    public void onLivingUpdate() {
+
+        if (!this.worldObj.isRemote && this.worldObj.isDaytime() && !this.isChild()) {
+            float f = this.getBrightness(1.0F);
+
+            if (f > 0.5F && this.getRNG().nextFloat() * 30.0F < (f - 0.4F) * 2.0F &&
+                    canSeeTheSky(getWorldObj(), posX, posY, posZ)) {
+                this.setFire(8);
+            }
+        }
+
+        super.onLivingUpdate();
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+        if (world.isDaytime())
+            return false;
+        else
+            return true;
     }
 }

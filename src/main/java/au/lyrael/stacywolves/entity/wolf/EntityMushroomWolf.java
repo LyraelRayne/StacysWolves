@@ -9,12 +9,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraftforge.common.BiomeDictionary.Type.MUSHROOM;
 
 @WolfMetadata(name = "EntityMushroomWolf", primaryColour = 0xB11917, secondaryColour = 0xD5D5D5,
         spawns = {
-                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
+                @WolfSpawn(biomeTypes = {MUSHROOM}, probability = 5, min = 1, max = 4),
         })
 public class EntityMushroomWolf extends EntityWolfBase implements IRenderableWolf {
 

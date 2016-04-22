@@ -9,12 +9,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraftforge.common.BiomeDictionary.Type.HILLS;
+import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = {HILLS, COLD}, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = {MOUNTAIN, HILLS}, probability = 5, min = 1, max = 2),
         })
 public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -49,5 +49,13 @@ public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
     @Override
     public String getTextureFolderName() {
         return "air";
+    }
+
+    @Override
+    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+        if (y < 95)
+            return false;
+        else
+            return super.canSpawnHereAndNow(world, x, y, z);
     }
 }

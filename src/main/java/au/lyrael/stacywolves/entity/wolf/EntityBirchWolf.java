@@ -9,12 +9,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static net.minecraft.entity.EnumCreatureType.creature;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityBirchWolf", primaryColour = 0x2F332C, secondaryColour = 0xEEEEE9,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 20, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = {HILLS, COLD}, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = {FOREST}, biomeTypeBlacklist = {CONIFEROUS, DENSE}, probability = 10, min = 1, max = 2, creatureType = creature),
         })
 public class EntityBirchWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -50,4 +50,5 @@ public class EntityBirchWolf extends EntityWolfBase implements IRenderableWolf {
     public String getTextureFolderName() {
         return "birch";
     }
+
 }
