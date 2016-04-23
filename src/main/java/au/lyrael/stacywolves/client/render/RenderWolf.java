@@ -32,7 +32,7 @@ public class RenderWolf extends RenderLiving {
      */
     protected int shouldRenderPass(IRenderableWolf wolf, int pass, float maybeTime) {
         if (pass == 0 && wolf.isWolfShaking()) {
-            float f1 = wolf.getBrightness(maybeTime) * wolf.getShadingWhileShaking(maybeTime);
+            float f1 = wolf.getWolfBrightness(maybeTime) * wolf.getShadingWhileShaking(maybeTime);
             bindTexture(this.getEntityTexture(wolf));
             GL11.glColor3f(f1, f1, f1);
             return 1;

@@ -11,7 +11,7 @@ public interface IRenderableWolf extends IWolf {
 
     float getTailRotation();
 
-    float getBrightness(float maybeTime);
+    float getWolfBrightness(float maybeTime);
 
     float getShadingWhileShaking(float maybeTime);
 

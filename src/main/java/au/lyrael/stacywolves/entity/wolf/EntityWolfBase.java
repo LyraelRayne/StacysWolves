@@ -150,6 +150,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         nbt.setByte("CollarColor", (byte) this.getCollarColor());
     }
 
+    @Override
+    public float getWolfBrightness(float maybeTime) {
+        return getBrightness(maybeTime);
+    }
+
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
