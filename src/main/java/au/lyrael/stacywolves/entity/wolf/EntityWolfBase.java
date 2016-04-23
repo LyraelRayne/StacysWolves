@@ -733,7 +733,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
                 final Class<? extends Item> itemType = itemStack.getItem().getClass();
                 for (ItemStack food : getLikedItems()) {
                     // Same item type and either has no subtypes or the metadata value matches
-                    if (food.getItem().getClass().isAssignableFrom(itemType) && itemStack.getHasSubtypes() == false || itemStack.getItemDamage() == food.getItemDamage())
+                    if (food.getItem().getClass().isAssignableFrom(itemType) && (itemStack.getHasSubtypes() == false || itemStack.getItemDamage() == food.getItemDamage()))
                         return true;
                 }
             }
