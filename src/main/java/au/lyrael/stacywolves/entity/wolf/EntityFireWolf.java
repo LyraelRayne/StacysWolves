@@ -22,17 +22,17 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
         if (!this.worldObj.isRemote) {
             hurtIfWet();
         } else {
-            for (int i = 0; i < 1; ++i) {
+            for (int count = 0; count < 2; ++count) {
                 this.worldObj.spawnParticle("smoke",
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        this.posY + this.rand.nextDouble() * (double) this.height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+                        this.posY + this.rand.nextDouble() * (double) this.height + 0.3,
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width*3, 0.0D, 0.0D, 0.0D);
             }
-            if(this.getRNG().nextInt(100) < 10)
-            {
+
+            for (int count = 0; count < 2; count++) {
                 this.worldObj.spawnParticle("flame",
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        this.posY + this.rand.nextDouble() * (double) this.height,
+                        this.posY + this.rand.nextDouble() * (double) this.height + 0.3,
                         this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
             }
         }
