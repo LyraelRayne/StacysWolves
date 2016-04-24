@@ -22,9 +22,7 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
     @Override
     public void onLivingUpdate() {
         if (!this.worldObj.isRemote) {
-            if (this.isWet()) {
-                this.attackEntityFrom(DamageSource.drown, 1.0F);
-            }
+            hurtIfWet();
         } else {
             for (int i = 0; i < 1; ++i) {
                 this.worldObj.spawnParticle("smoke",

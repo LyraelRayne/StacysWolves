@@ -9,7 +9,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityZombieWolf", primaryColour = 0x04AEAE, secondaryColour = 0x447230,
@@ -55,14 +54,8 @@ public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf 
 
     @Override
     public void onLivingUpdate() {
-
-        if (!this.worldObj.isRemote && this.worldObj.isDaytime() && !this.isChild()) {
-            float f = this.getBrightness(1.0F);
-
-            if (f > 0.5F && this.getRNG().nextFloat() * 30.0F < (f - 0.4F) * 2.0F &&
-                    canSeeTheSky(getWorldObj(), posX, posY, posZ)) {
-                this.setFire(8);
-            }
+        if (!this.worldObj.isRemote) {
+            this.burnIfInSunlight();
         }
 
         super.onLivingUpdate();

@@ -674,6 +674,23 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return potentialMate.getClass() == this.getClass();
     }
 
+    protected void burnIfInSunlight() {
+        if (!this.isWolfTamed() && this.worldObj.isDaytime() && !this.isChild()) {
+            float f = this.getBrightness(1.0F);
+
+            if (f > 0.5F && this.getRNG().nextFloat() * 30.0F < (f - 0.4F) * 2.0F &&
+                    canSeeTheSky(getWorldObj(), posX, posY, posZ)) {
+                this.setFire(8);
+            }
+        }
+    }
+
+    protected void hurtIfWet() {
+        if (!this.isWolfTamed() == this.isWet()) {
+            this.attackEntityFrom(DamageSource.drown, 1.0F);
+        }
+    }
+
     /**
      * Determines if an entity can be despawned, used on idle far away entities
      */
