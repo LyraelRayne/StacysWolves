@@ -3,9 +3,11 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
+import au.lyrael.stacywolves.entity.ai.EntityAIWolfMate;
 import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
 import au.lyrael.stacywolves.entity.ai.WolfAIBeg;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.registry.ItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -71,7 +73,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(8, new WolfAIBeg(this, 8.0F));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(9, new EntityAIMate(this, 1.0D));
+        this.tasks.addTask(9, new EntityAIWolfMate(this, 1.0D));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.tasks.addTask(10, new EntityAIWander(this, 1.0D));
         this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
@@ -283,7 +285,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (!this.worldObj.isRemote && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
+        if (!this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
             this.setDead();
             return;
         }
@@ -557,7 +559,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
      */
     @Override
     public boolean isWolfBreedingItem(ItemStack itemStack) {
-        return itemStack == null ? false : (!(itemStack.getItem() instanceof ItemFood) ? false : ((ItemFood) itemStack.getItem()).isWolfsFavoriteMeat());
+        // Return false if wolf isn't tamed as that's the only way to prevent untamed wolves from falling in love.
+        return isTamed() && ItemWolfFood.foodsMatch(ItemRegistry.getWolfFood("meaty_bone"), itemStack);
     }
 
 
@@ -674,7 +677,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
      * @return True if {@code potentialMate}'s species is the same as mine.
      */
     protected boolean canMateWithSpecies(EntityAnimal potentialMate) {
-        return potentialMate.getClass() == this.getClass();
+        return EntityWolfBase.class.isAssignableFrom(potentialMate.getClass());
     }
 
     protected void burnIfInSunlight() {

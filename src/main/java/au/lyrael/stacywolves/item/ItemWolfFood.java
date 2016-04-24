@@ -65,6 +65,7 @@ public class ItemWolfFood extends ItemStacyWolves {
         createSubItem(this, "skeleton_bone", new ItemStack(Items.dye, 1, 15));
         createSubItem(this, "water_bone", new ItemStack(Items.water_bucket));
         createSubItem(this, "zombie_bone", new ItemStack(Items.rotten_flesh));
+        createSubItem(this,"meaty_bone", new ItemStack(Items.beef));
     }
 
     @Override
@@ -135,7 +136,7 @@ public class ItemWolfFood extends ItemStacyWolves {
     }
 
     public static boolean foodsMatch(ItemStack a, ItemStack b) {
-        if (!(a.getItem() instanceof ItemWolfFood && b.getItem() instanceof ItemWolfFood))
+        if (a == null || b == null || !(a.getItem() instanceof ItemWolfFood && b.getItem() instanceof ItemWolfFood))
             return false;
 
         return a.getTagCompound().getString(ID_TAG).equals(b.getTagCompound().getString(ID_TAG));
