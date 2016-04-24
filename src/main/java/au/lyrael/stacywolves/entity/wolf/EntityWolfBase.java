@@ -689,7 +689,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     }
 
     protected void hurtIfWet() {
-        if (!this.isWolfTamed() == this.isWet()) {
+        if (!this.isWolfTamed() && this.isWet()) {
             this.attackEntityFrom(DamageSource.drown, 1.0F);
         }
     }
