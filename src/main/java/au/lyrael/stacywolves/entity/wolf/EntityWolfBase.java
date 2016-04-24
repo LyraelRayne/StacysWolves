@@ -443,17 +443,23 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
                         return true;
                     }
+                } else {
+                    if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote && !this.isWolfBreedingItem(itemstack)) {
+                        toggleSitting();
+                    }
                 }
             } else if (this.likes(itemstack) && !this.isAngry()) {
                 consumeHeldItem(player, itemstack);
                 becomeTamedBy(player);
                 return true;
             }
+        } else {
+            if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote) {
+                toggleSitting();
+            }
         }
 
-        if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote && !this.isWolfBreedingItem(itemstack)) {
-            toggleSitting();
-        }
+
 
         return super.interact(player);
     }
