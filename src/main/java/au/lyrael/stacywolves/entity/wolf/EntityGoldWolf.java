@@ -10,12 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
-import static net.minecraftforge.common.BiomeDictionary.Type.DRY;
-import static net.minecraftforge.common.BiomeDictionary.Type.HOT;
+import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityGoldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0xF8AF2B,
         spawns = {
-                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 2, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = FOREST, probability = 2, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = HILLS, probability = 2, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = SANDY, probability = 2, min = 1, max = 4),
         })
 public class EntityGoldWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -53,7 +55,7 @@ public class EntityGoldWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
-        return !canSeeTheSky(world, x, y, z) && y < 30;
+    public boolean getCanSpawnHere() {
+        return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.posY < 30 && creatureCanSpawnHere();
     }
 }

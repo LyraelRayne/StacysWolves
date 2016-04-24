@@ -32,10 +32,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable {
 
@@ -700,6 +702,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return !this.isTamed() && this.ticksExisted > 2400;
     }
 
+    protected boolean isStandingOn(Block... blockTypes) {
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+
+        return Arrays.asList(blockTypes).contains(this.worldObj.getBlock(i, j - 1, k));
+    }
 
     @Override
     public boolean getCanSpawnHere()
@@ -710,10 +719,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @SuppressWarnings("unused")
     protected boolean animalCanSpawnHere()
     {
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.boundingBox.minY);
-        int k = MathHelper.floor_double(this.posZ);
-        return this.worldObj.getBlock(i, j - 1, k) == Blocks.grass && this.worldObj.getFullBlockLightValue(i, j, k) > 8 && creatureCanSpawnHere();
+        return isStandingOn(Blocks.grass)
+                && getFullBlockLightValue(getWorldObj(), posX, posY - 1, posZ) > 8
+                && creatureCanSpawnHere();
     }
 
     protected boolean creatureCanSpawnHere()
@@ -730,7 +738,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+    public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
+    {
+        return 0.5F;
+    }
+
+    @Override
+    public boolean canSpawnNow(World world, float x, float y, float z) {
         return canSeeTheSky(world, x, y, z) && world.isDaytime();
     }
 

@@ -12,5 +12,5 @@ public interface ISpawnable {
      * @param z
      * @return false if the spawn is to be prevented. True if it is not.
      */
-    boolean canSpawnHereAndNow(World world, float x, float y, float z);
+    boolean canSpawnNow(World world, float x, float y, float z);
 }

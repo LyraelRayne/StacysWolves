@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.config.ConfigurationEventHandler;
+import au.lyrael.stacywolves.event.MapGenEventHandler;
 import au.lyrael.stacywolves.event.SpawnEventHandler;
 import au.lyrael.stacywolves.registry.WolfRegistry;
 import au.lyrael.stacywolves.utility.MetadataHelper;
@@ -59,6 +60,7 @@ public class StacyWolves {
         configurationEventHandler.preInit(event);
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
         MinecraftForge.EVENT_BUS.register(new SpawnEventHandler());
+        MinecraftForge.TERRAIN_GEN_BUS.register(new MapGenEventHandler());
         
         metadata = MetadataHelper.transformMetadata(metadata);
 

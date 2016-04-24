@@ -80,7 +80,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+    public boolean canSpawnNow(World world, float x, float y, float z) {
         return !world.isDaytime();
     }
 

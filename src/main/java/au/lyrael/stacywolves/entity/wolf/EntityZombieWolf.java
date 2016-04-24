@@ -13,9 +13,9 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityZombieWolf", primaryColour = 0x04AEAE, secondaryColour = 0x447230,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 10, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = FOREST, probability = 10, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = HILLS, probability = 10, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = PLAINS, probability = 6, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = FOREST, probability = 6, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = HILLS, probability = 6, min = 1, max = 4),
         })
 public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -62,7 +62,7 @@ public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf 
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+    public boolean canSpawnNow(World world, float x, float y, float z) {
         return !world.isDaytime();
     }
 }

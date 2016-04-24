@@ -38,13 +38,16 @@ public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+    public boolean getCanSpawnHere() {
+        Village nearestVillage = getWorldObj().villageCollectionObj.findNearestVillage(
+                MathHelper.floor_double(this.posX),
+                MathHelper.floor_double(this.posY),
+                MathHelper.floor_double(this.posZ), 8);
 
-        Village nearestVillage = this.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 16);
         if (nearestVillage == null)
             return false;
         else
-            return super.canSpawnHereAndNow(world, x, y, z);
+            return creatureCanSpawnHere();
     }
 
     @Override

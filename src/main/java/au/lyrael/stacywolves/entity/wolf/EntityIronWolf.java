@@ -55,7 +55,7 @@ public class EntityIronWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
-        return !canSeeTheSky(world, x, y, z);
+    public boolean getCanSpawnHere() {
+        return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && creatureCanSpawnHere();
     }
 }

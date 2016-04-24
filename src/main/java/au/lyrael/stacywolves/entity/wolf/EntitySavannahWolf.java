@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
 import static net.minecraftforge.common.BiomeDictionary.Type.SAVANNA;
 
 @WolfMetadata(name = "EntitySavannahWolf", primaryColour = 0xE4D7B0, secondaryColour = 0xB0B252,
@@ -50,17 +51,5 @@ public class EntitySavannahWolf extends EntityWolfBase implements IRenderableWol
     @Override
     public String getTextureFolderName() {
         return "savannah";
-    }
-
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
-    @Override
-    public boolean getCanSpawnHere()
-    {
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.boundingBox.minY);
-        int k = MathHelper.floor_double(this.posZ);
-        return this.worldObj.getBlock(i, j - 1, k) == Blocks.grass && this.worldObj.getFullBlockLightValue(i, j, k) > 8 && super.getCanSpawnHere();
     }
 }

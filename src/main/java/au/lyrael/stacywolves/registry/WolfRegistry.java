@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.registry;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.entity.wolf.EntityFireWolf;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfPlacer;
 import au.lyrael.stacywolves.utility.MetadataUtility;
@@ -57,16 +58,16 @@ public class WolfRegistry {
     }
 
     public void registerForSpawning(String entityName) {
-        final Class<? extends IWolf> WolfClass = getClassFor(entityName);
+        final Class<? extends IWolf> wolfClass = getClassFor(entityName);
 
-        if (WolfClass == null) {
+        if (wolfClass == null) {
             LOGGER.warn("Attempted to register [{}] for spawning but it doesn't exist in the registry.", entityName);
             return;
         }
 
         // Assume that because we looked the class up from the registry that it was in fact properly registered and
         // has metadata.
-        final WolfMetadata metadata = getMetadataFor(WolfClass);
+        final WolfMetadata metadata = getMetadataFor(wolfClass);
         final List<WolfSpawn> WolfSpawns = Arrays.asList(metadata.spawns());
 
         for (WolfSpawn wolfSpawnAnnotation : WolfSpawns) {

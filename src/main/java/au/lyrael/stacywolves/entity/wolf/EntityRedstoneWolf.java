@@ -55,7 +55,7 @@ public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWol
     }
 
     @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
-        return !canSeeTheSky(world, x, y, z) && y < 15;
+    public boolean getCanSpawnHere() {
+        return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.posY < 15 && creatureCanSpawnHere();
     }
 }

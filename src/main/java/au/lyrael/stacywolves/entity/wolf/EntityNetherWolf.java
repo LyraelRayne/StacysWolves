@@ -7,6 +7,7 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
@@ -46,7 +47,18 @@ public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf 
     }
 
     @Override
+    public boolean getCanSpawnHere()
+    {
+        return livingCanSpawnHere();
+    }
+
+    @Override
     public String getTextureFolderName() {
         return "nether";
+    }
+
+    @Override
+    public boolean canSpawnNow(World world, float x, float y, float z) {
+        return true;
     }
 }

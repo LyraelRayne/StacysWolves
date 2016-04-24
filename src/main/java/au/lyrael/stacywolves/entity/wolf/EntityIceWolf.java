@@ -8,12 +8,14 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.COLD;
+import static net.minecraftforge.common.BiomeDictionary.Type.END;
 
 @WolfMetadata(name = "EntityIceWolf", primaryColour = 0xEDFEFE, secondaryColour = 0x9EBAE7,
         spawns = {
-                @WolfSpawn(biomeTypes = {COLD}, probability = 5, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = {COLD}, biomeTypeBlacklist = {END}, probability = 5, min = 1, max = 4),
         })
 public class EntityIceWolf extends EntityWolfBase implements IRenderableWolf {
 

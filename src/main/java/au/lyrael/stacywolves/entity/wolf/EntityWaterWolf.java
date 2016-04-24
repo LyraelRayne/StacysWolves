@@ -5,14 +5,10 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
-import static net.minecraft.entity.EnumCreatureType.waterCreature;
 import static net.minecraftforge.common.BiomeDictionary.Type.BEACH;
 import static net.minecraftforge.common.BiomeDictionary.Type.OCEAN;
 
@@ -52,7 +48,7 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
       @Override
-    public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
+    public boolean canSpawnNow(World world, float x, float y, float z) {
         return world.isDaytime();
     }
 

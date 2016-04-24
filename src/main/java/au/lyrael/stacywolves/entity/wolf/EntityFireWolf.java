@@ -1,21 +1,19 @@
 package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
-import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04,
         spawns = {
-                @WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = {NETHER}, probability = 10, min = 1, max = 4),
+                // Spawns in nether fortress. Added in a special event handler MapGenEventHandler
+                //@WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
+                //@WolfSpawn(biomeTypes = {NETHER}, probability = 10, min = 1, max = 4),
         })
 public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -71,7 +69,17 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
+    public boolean getCanSpawnHere() {
+        return isStandingOn(Blocks.nether_brick) && creatureCanSpawnHere();
+    }
+
+    @Override
     public String getTextureFolderName() {
         return "fire";
+    }
+
+    @Override
+    public boolean canSpawnNow(World world, float x, float y, float z) {
+        return true;
     }
 }

@@ -10,4 +10,8 @@ public class WorldHelper {
                 MathHelper.floor_double(y),
                 MathHelper.floor_double(z));
     }
+
+    public static int getFullBlockLightValue(World world, double x, double y, double z) {
+        return world.getFullBlockLightValue(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z));
+    }
 }
