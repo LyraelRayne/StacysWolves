@@ -30,7 +30,7 @@ public class StacyWolves {
     public static final String VERSION  = "1.0.1-" + MC_VERSION;
     public static final String ACCEPTED_MC_VERSIONS = "[" + MC_VERSION + "]";
     public static final String DESC = "Cool Story Bro..... but it Needs Moar Wolves!";
-    public static final String URL = ""; // PUT CURSEFORGE PROJECT URL HERE!
+    public static final String URL = "http://mods.curse.com/mc-mods/minecraft/244308-stacys-wolves";
     public static final String CREDITS = "LyraelRayne and AKTheKnight for code. Artwork by Jaspanda and Nathan_Oneday of Walschaerts Build Team.";
     public static final String LOGO_PATH = ""; // PUT LOGO PATH HERE!
     public static final String CLIENT_PROXY_CLASS = "au.lyrael.stacywolves.ClientProxy";
