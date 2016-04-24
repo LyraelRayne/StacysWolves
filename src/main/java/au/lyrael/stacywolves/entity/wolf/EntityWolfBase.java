@@ -78,7 +78,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 200, false));
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 200, false));
-        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCreeper.class, 200, false));
+        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityChicken.class, 200, false));
 
         this.setTamed(false);
     }
