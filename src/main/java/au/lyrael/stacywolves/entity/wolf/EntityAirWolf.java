@@ -14,7 +14,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,
         spawns = {
-                @WolfSpawn(biomeTypes = {MOUNTAIN, HILLS}, probability = 5, min = 1, max = 2),
+                @WolfSpawn(biomeTypes = {MOUNTAIN, HILLS}, probability = 10, min = 1, max = 2),
         })
 public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 

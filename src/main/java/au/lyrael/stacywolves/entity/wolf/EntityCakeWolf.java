@@ -16,9 +16,9 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityCakeWolf", primaryColour = 0xB35922, secondaryColour = 0xE41717,
         spawns = {
-                @WolfSpawn(biomeTypes = {PLAINS}, probability = 2, min = 1, max = 2, creatureType = creature),
-                @WolfSpawn(biomeTypes = {SAVANNA}, probability = 2, min = 1, max = 2, creatureType = creature),
-                @WolfSpawn(biomeTypes = {SANDY, HOT, DRY}, probability = 2, min = 1, max = 2, creatureType = creature),
+                @WolfSpawn(biomeTypes = {PLAINS}, probability = 1, min = 1, max = 2, creatureType = creature),
+                @WolfSpawn(biomeTypes = {SAVANNA}, probability = 1, min = 1, max = 2, creatureType = creature),
+                @WolfSpawn(biomeTypes = {SANDY, HOT, DRY}, probability = 1, min = 1, max = 2, creatureType = creature),
         })
 public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf {
 

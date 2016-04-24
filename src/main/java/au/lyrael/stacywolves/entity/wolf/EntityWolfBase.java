@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -59,7 +60,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     public EntityWolfBase(World world) {
         super(world);
         this.setSize(0.6F, 0.8F);
-        this.getNavigator().setAvoidsWater(true);
+        this.getNavigator().setAvoidsWater(this.normallyAvoidsWater());
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit);
         this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.6D, false));
@@ -699,9 +700,33 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return !this.isTamed() && this.ticksExisted > 2400;
     }
 
+
     @Override
-    public boolean getCanSpawnHere() {
-        return super.getCanSpawnHere();
+    public boolean getCanSpawnHere()
+    {
+        return creatureCanSpawnHere();
+    }
+
+    @SuppressWarnings("unused")
+    protected boolean animalCanSpawnHere()
+    {
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return this.worldObj.getBlock(i, j - 1, k) == Blocks.grass && this.worldObj.getFullBlockLightValue(i, j, k) > 8 && creatureCanSpawnHere();
+    }
+
+    protected boolean creatureCanSpawnHere()
+    {
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        return livingCanSpawnHere() && this.getBlockPathWeight(i, j, k) >= 0.0F;
+    }
+
+    protected boolean livingCanSpawnHere()
+    {
+        return this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
     @Override

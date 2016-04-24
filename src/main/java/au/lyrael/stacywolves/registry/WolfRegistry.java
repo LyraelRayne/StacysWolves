@@ -77,7 +77,7 @@ public class WolfRegistry {
             for (BiomeGenBase biome : biomes) {
                 if(!biomeBlacklist.contains(biome.biomeName)) {
                     final Integer probability = wolfSpawnAnnotation.probability();
-                    EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), EnumCreatureType.monster, biome);
+                    EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
                     LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
                 }
             }

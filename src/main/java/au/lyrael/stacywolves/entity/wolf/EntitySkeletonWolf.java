@@ -63,9 +63,6 @@ public class EntitySkeletonWolf extends EntityWolfBase implements IRenderableWol
 
     @Override
     public boolean canSpawnHereAndNow(World world, float x, float y, float z) {
-        if (world.isDaytime())
-            return false;
-        else
-            return true;
+        return !world.isDaytime();
     }
 }
