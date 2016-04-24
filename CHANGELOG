@@ -1,0 +1,16 @@
+1.0.0 - Initial Release
+
+1.0.1 - Bug Fixes, Breeding and Spawn Overhaul
+    * Completely changed spawn mechanics to be more reliable.
+    * Fixed some incorrect spawn zones.
+    * Tweaked most wolves' spawn probability.
+    * All wolves now spawn as "monster" type because the others weren't spawning at all.
+    * Made it so wolves can spawn on non-grass blocks.
+    * Blaze Wolves have decided to be 200% more firey and to live in Nether Fortresses.
+    * Tamed wolves are no longer damaged by fire or sunlight.
+    * Wolves now attack chickens, not creepers. No more 'splodey wolves.
+    * Added Meaty Bone for breeding wolves. Different kinds of wolves will now breed with one another.
+    * Wolves no longer sit if the player tries to feed them food but they weren't hungry.
+    * Wolves are now healed for significantly more when fed.
+    * Can no longer tame wolves with any old vanilla item.
+    * Added tooltips to the various kinds of bones which (not so subtly) hint at which kind of wolf might like them.
