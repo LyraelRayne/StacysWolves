@@ -25,24 +25,9 @@ public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public float getHealAmount(ItemStack itemstack) {
-        if (canEat(itemstack))
-            return 2F;
-        else
-            return 0F;
-    }
-
-    @Override
     public EntityWolfBase createChild(EntityAgeable parent) {
         EntityWolfBase child = new EntityEndWolf(this.worldObj);
-        String s = this.func_152113_b();
-
-        if (s != null && s.trim().length() > 0) {
-            child.func_152115_b(s);
-            child.setTamed(true);
-        }
-
-        return child;
+        return createChild(parent, child);
     }
 
     @Override

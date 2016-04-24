@@ -23,7 +23,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -40,6 +39,7 @@ import java.util.List;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
+import static com.ibm.icu.impl.duration.impl.DataRecord.EGender.F;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable {
 
@@ -423,11 +423,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public boolean interact(EntityPlayer player) {
         ItemStack itemstack = player.inventory.getCurrentItem();
-
-        if (this.isTamed()) {
-            if (itemstack != null) {
+        if (itemstack != null) {
+            if (this.isTamed()) {
                 if (canEat(itemstack)) {
-
                     if (this.dataWatcher.getWatchableObjectFloat(18) < 20.0F) {
                         consumeHeldItem(player, itemstack);
                         this.heal(getHealAmount(itemstack));
@@ -446,16 +444,15 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
                         return true;
                     }
                 }
+            } else if (this.likes(itemstack) && !this.isAngry()) {
+                consumeHeldItem(player, itemstack);
+                becomeTamedBy(player);
+                return true;
             }
+        }
 
-            if (this.func_152114_e(player) && !this.worldObj.isRemote && !this.isWolfBreedingItem(itemstack)) {
-                toggleSitting();
-            }
-
-        } else if (itemstack != null && this.likes(itemstack) && !this.isAngry()) {
-            consumeHeldItem(player, itemstack);
-            becomeTamedBy(player);
-            return true;
+        if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote && !this.isWolfBreedingItem(itemstack)) {
+            toggleSitting();
         }
 
         return super.interact(player);
@@ -506,13 +503,20 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public boolean canEat(ItemStack itemStack) {
         if (itemStack != null) {
-            final Class<? extends Item> itemType = itemStack.getItem().getClass();
             for (ItemStack food : getEdibleItems()) {
-                if (food.getItem().getClass().isAssignableFrom(itemType))
+                if (food.getItem() == itemStack.getItem() && food.getItemDamage() == itemStack.getItemDamage())
                     return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public float getHealAmount(ItemStack itemstack) {
+        if (canEat(itemstack))
+            return 8F;
+        else
+            return 0F;
     }
 
     protected List<ItemStack> getLikedItems() {
@@ -608,6 +612,19 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public abstract EntityWolfBase createChild(EntityAgeable parent);
+
+    protected EntityWolfBase createChild(EntityAgeable parent, EntityWolfBase child) {
+        String owner = this.func_152113_b();
+
+        parent.getRNG();
+
+        if (owner != null && owner.trim().length() > 0) {
+            child.func_152115_b(owner);
+            child.setTamed(true);
+        }
+
+        return child;
+    }
 
     public void setBegging(boolean isBegging) {
         if (isBegging) {
@@ -714,35 +731,30 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     }
 
     @Override
-    public boolean getCanSpawnHere()
-    {
+    public boolean getCanSpawnHere() {
         return creatureCanSpawnHere();
     }
 
     @SuppressWarnings("unused")
-    protected boolean animalCanSpawnHere()
-    {
+    protected boolean animalCanSpawnHere() {
         return isStandingOn(Blocks.grass)
                 && getFullBlockLightValue(getWorldObj(), posX, posY - 1, posZ) > 8
                 && creatureCanSpawnHere();
     }
 
-    protected boolean creatureCanSpawnHere()
-    {
+    protected boolean creatureCanSpawnHere() {
         int i = MathHelper.floor_double(this.posX);
         int j = MathHelper.floor_double(this.boundingBox.minY);
         int k = MathHelper.floor_double(this.posZ);
         return livingCanSpawnHere() && this.getBlockPathWeight(i, j, k) >= 0.0F;
     }
 
-    protected boolean livingCanSpawnHere()
-    {
+    protected boolean livingCanSpawnHere() {
         return this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
     @Override
-    public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
-    {
+    public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_) {
         return 0.5F;
     }
 
