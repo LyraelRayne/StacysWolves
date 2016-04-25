@@ -1,4 +1,17 @@
-1.0.0 - Initial Release
+1.0.3 - Even more spawn tweakage.
+    * Added Mushroom Wolf to the Roofed Forest.
+    * Prevented Ice Wolves spawning in non-snowy cold biomes.
+    * Made Flower Wolves spawn only in Plains, Sunflower Plains and Flower Forest seeing as there is no biome dictionary type called Flower.
+    * Made wolves slower (Vanilla wolf speed instead of ocelot speed) and reduced max health as these are no longer dragons.
+    * Prevented Iron and Emerald wolves from spawning on the surface under trees by making their max height 50 and they only spawn on Stone.
+
+1.0.2 - More spawn tweaking
+    * Earth Wolves spawn in fewer locations (for example they no longer spawn in Desert or Mountain type biomes).
+    * Birch Wolves now are far more likely to stick to... birchy... biomes. No more Jungles, Mountains or Mesas.
+    * End Wolves should no longer spawn in the Eldritch biome created by Thaumcraft.
+    * Wolves will probably spawn a little less frequently as duplicate spawn registrations have been removed/reduced.
+    * Blacklisted Nether and End biome types for any wolf that shouldn't spawn in those places.
+    * Most wolves have had their spawn probabilities and max pack sizes tweaked.
 
 1.0.1 - Bug Fixes, Breeding and Spawn Overhaul
     * Completely changed spawn mechanics to be more reliable.
@@ -15,11 +28,4 @@
     * Can no longer tame wolves with any old vanilla item.
     * Added tooltips to the various kinds of bones which (not so subtly) hint at which kind of wolf might like them.
 
-
-1.0.2 - More spawn tweaking
-    * Earth wolves spawn in fewer locations (for example they no longer spawn in Desert or Mountain type biomes).
-    * Birch wolves now are far more likely to stick to... birchy... biomes. No more Jungles, Mountains or Mesas.
-    * End wolves should no longer spawn in the Eldritch biome created by Thaumcraft.
-    * Wolves will probably spawn a little less frequently as duplicate spawn registrations have been removed/reduced.
-    * Blacklisted Nether and End biome types for any wolf that shouldn't spawn in those places.
-    * Most wolves have had their spawn probabilities and max pack sizes tweaked.
+1.0.0 - Initial Release
