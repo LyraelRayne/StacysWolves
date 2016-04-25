@@ -759,7 +759,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_) {
-        return 0.5F;
+        return this.worldObj.getBlock(p_70783_1_, p_70783_2_ - 1, p_70783_3_) != Blocks.air ? 10.0F : this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_) - 0.5F;
     }
 
     @Override
