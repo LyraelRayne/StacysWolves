@@ -26,6 +26,7 @@ public class WolfRegistry {
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     private final Map<String, Class<? extends IWolf>> classRegistryByName = new HashMap<>();
+    private Map<String, BiomeGenBase> biomeNameMapping;
 
     public void registerWolf(Class<? extends IWolf> WolfClass) {
         final WolfMetadata metadata = getMetadataFor(WolfClass);
@@ -92,6 +93,11 @@ public class WolfRegistry {
             for (BiomeGenBase biome : baseBiomes) {
                 if (!excludeBiomeNames.contains(biome.biomeName))
                     result.add(biome);
+            }
+
+            for (String biomeName : biomeSpec.specificBiomes()) {
+                Map<String, BiomeGenBase> biomeNameMapping = getBiomeNameMapping();
+                result.add(biomeNameMapping.get(biomeName.toLowerCase()));
             }
         }
         return result;
@@ -172,5 +178,17 @@ public class WolfRegistry {
 
     public Class<? extends IWolf> getClassFor(String entityName) {
         return classRegistryByName.get(entityName);
+    }
+
+    public Map<String,BiomeGenBase> getBiomeNameMapping() {
+        if(this.biomeNameMapping == null)
+        {
+            this.biomeNameMapping = new HashMap<>();
+            for (BiomeGenBase biome : Arrays.asList(BiomeGenBase.getBiomeGenArray())) {
+                if (biome != null && biome.biomeName != null)
+                    this.biomeNameMapping.put(biome.biomeName.toLowerCase(), biome);
+            }
+        }
+        return this.biomeNameMapping;
     }
 }
