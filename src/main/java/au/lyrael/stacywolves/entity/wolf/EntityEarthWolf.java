@@ -15,9 +15,9 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 @WolfMetadata(name = "EntityEarthWolf", primaryColour = 0xB8845B, secondaryColour = 0x583C28,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
-                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
-                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}),
-                        @WolfSpawnBiome(requireBiomeTypes = {HILLS}),
+                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
+                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
+                        @WolfSpawnBiome(requireBiomeTypes = {HILLS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
                 }, probability = 8, min = 1, max = 4),
         })
 public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {

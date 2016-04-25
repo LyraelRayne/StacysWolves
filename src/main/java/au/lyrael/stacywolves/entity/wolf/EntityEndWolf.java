@@ -16,7 +16,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
 @WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
-                        @WolfSpawnBiome(requireBiomeTypes = {END}, excludeBiomeTypes = {NETHER}),
+                        @WolfSpawnBiome(requireBiomeTypes = {END}, excludeBiomeTypes = {NETHER}, excludeBiomeNames = "Eldritch"),
                 }, probability = 5, min = 1, max = 2),
         })
 public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
