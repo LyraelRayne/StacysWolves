@@ -16,8 +16,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
 @WolfMetadata(name = "EntityFlowerWolf", primaryColour = 0x0E5C00, secondaryColour = 0xB95E9A,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
-                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}),
-                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
+                        @WolfSpawnBiome(specificBiomes = {"Flower Forest", "Plains", "Sunflower Plains"}),
                 }, probability = 2, min = 1, max = 4),
         })
 public class EntityFlowerWolf extends EntityWolfBase implements IRenderableWolf {
