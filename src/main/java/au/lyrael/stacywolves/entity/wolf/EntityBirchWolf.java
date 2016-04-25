@@ -14,7 +14,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityBirchWolf", primaryColour = 0x2F332C, secondaryColour = 0xEEEEE9,
         spawns = {@WolfSpawn(spawnBiomes = {
-                @WolfSpawnBiome(requireBiomeTypes = {FOREST}, excludeBiomeTypes = {CONIFEROUS, DENSE, JUNGLE, MOUNTAIN, MESA, END, NETHER}),
+                @WolfSpawnBiome(requireBiomeTypes = {FOREST}, excludeBiomeTypes = {CONIFEROUS, DENSE, JUNGLE, MOUNTAIN, MESA, END, NETHER, MESA}, excludeBiomeNames = {"Mesa Plateau F M"}),
         }, probability = 10, min = 1, max = 4),
         })
 public class EntityBirchWolf extends EntityWolfBase implements IRenderableWolf {
