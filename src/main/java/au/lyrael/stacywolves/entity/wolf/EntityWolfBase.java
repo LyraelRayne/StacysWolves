@@ -66,7 +66,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.getNavigator().setAvoidsWater(this.normallyAvoidsWater());
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.6D, false));
+        this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.5D, false));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
         this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 5.0F));
         this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
@@ -89,12 +89,12 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
 
         if (this.isTamed()) {
-            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0D);
+            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0D);
         } else {
-            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(15.0D);
+            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
         }
     }
 
