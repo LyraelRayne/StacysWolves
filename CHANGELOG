@@ -1,3 +1,8 @@
+1.0.4 - The cake is no longer a lie
+    * Made sure cake wolves ONLY SPAWN IN VILLAGES!
+    * Made sure cake wolves only try to spawn in biomes where villages may spawn.
+    * Probably made cake wolves slightly more common as they almost never spawned before.
+
 1.0.3 - Even more spawn tweakage.
     * Added Mushroom Wolf to the Roofed Forest.
     * Prevented Ice Wolves spawning in non-snowy cold biomes.

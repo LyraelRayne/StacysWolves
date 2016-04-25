@@ -9,8 +9,10 @@ import au.lyrael.stacywolves.utility.MetadataUtility;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraftforge.common.BiomeDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,19 +67,34 @@ public class WolfRegistry {
             return;
         }
 
-        // Assume that because we looked the class up from the registry that it was in fact properly registered and
-        // has metadata.
-        final WolfMetadata metadata = getMetadataFor(wolfClass);
-        final List<WolfSpawn> wolfSpawns = Arrays.asList(metadata.spawns());
+        switch (entityName) {
+            case "EntityCakeWolf":
+                final List<BiomeGenBase> villageSpawnBiomes = (List<BiomeGenBase>)MapGenVillage.villageSpawnBiomes;
+                for (BiomeGenBase biome  : villageSpawnBiomes) {
+                    // Made this ten because most of the spawns will be denied. Can tune it back down if needed.
+                    final int weightedProb = 10;
+                    final int min = 1;
+                    final int max = 2;
+                    EntityRegistry.addSpawn(toModEntityName(entityName), weightedProb, min, max, EnumCreatureType.monster, biome);
+                    LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", entityName, biome.biomeName, weightedProb, min, max);
+                }
+                break;
+            default:
+                // Assume that because we looked the class up from the registry that it was in fact properly registered and
+                // has metadata.
+                final WolfMetadata metadata = getMetadataFor(wolfClass);
+                final List<WolfSpawn> wolfSpawns = Arrays.asList(metadata.spawns());
 
-        for (WolfSpawn wolfSpawnAnnotation : wolfSpawns) {
-            final Set<BiomeGenBase> biomesToSpawn = buildBiomeList(wolfSpawnAnnotation.spawnBiomes());
+                for (WolfSpawn wolfSpawnAnnotation : wolfSpawns) {
+                    final Set<BiomeGenBase> biomesToSpawn = buildBiomeList(wolfSpawnAnnotation.spawnBiomes());
 
-            for (BiomeGenBase biome : biomesToSpawn) {
-                final Integer probability = wolfSpawnAnnotation.probability();
-                EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
-                LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
-            }
+                    for (BiomeGenBase biome : biomesToSpawn) {
+                        final Integer probability = wolfSpawnAnnotation.probability();
+                        EntityRegistry.addSpawn(toModEntityName(entityName), probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
+                        LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
+                    }
+                }
+                break;
         }
     }
 
@@ -180,9 +197,8 @@ public class WolfRegistry {
         return classRegistryByName.get(entityName);
     }
 
-    public Map<String,BiomeGenBase> getBiomeNameMapping() {
-        if(this.biomeNameMapping == null)
-        {
+    public Map<String, BiomeGenBase> getBiomeNameMapping() {
+        if (this.biomeNameMapping == null) {
             this.biomeNameMapping = new HashMap<>();
             for (BiomeGenBase biome : Arrays.asList(BiomeGenBase.getBiomeGenArray())) {
                 if (biome != null && biome.biomeName != null)
