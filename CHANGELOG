@@ -14,3 +14,12 @@
     * Wolves are now healed for significantly more when fed.
     * Can no longer tame wolves with any old vanilla item.
     * Added tooltips to the various kinds of bones which (not so subtly) hint at which kind of wolf might like them.
+
+
+1.0.2 - More spawn tweaking
+    * Earth wolves spawn in fewer locations (for example they no longer spawn in Desert or Mountain type biomes).
+    * Birch wolves now are far more likely to stick to... birchy... biomes. No more Jungles, Mountains or Mesas.
+    * End wolves should no longer spawn in the Eldritch biome created by Thaumcraft.
+    * Wolves will probably spawn a little less frequently as duplicate spawn registrations have been removed/reduced.
+    * Blacklisted Nether and End biome types for any wolf that shouldn't spawn in those places.
+    * Most wolves have had their spawn probabilities and max pack sizes tweaked.
