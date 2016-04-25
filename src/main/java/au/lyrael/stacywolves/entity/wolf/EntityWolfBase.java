@@ -39,7 +39,6 @@ import java.util.List;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
-import static com.ibm.icu.impl.duration.impl.DataRecord.EGender.F;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable {
 
@@ -460,7 +459,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         }
 
 
-
         return super.interact(player);
     }
 
@@ -738,7 +736,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public boolean getCanSpawnHere() {
-        return creatureCanSpawnHere();
+        return canSeeTheSky(getWorldObj(), posX, posY, posZ) && creatureCanSpawnHere();
     }
 
     @SuppressWarnings("unused")
@@ -766,9 +764,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
-        return canSeeTheSky(world, x, y, z) && world.isDaytime();
+        return world.isDaytime();
     }
-
 
     /**
      * Used by the owner hurt by target AI in determining whether the wolf should attack their owner's attacker.

@@ -34,4 +34,9 @@ public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
     public String getTextureFolderName() {
         return "end";
     }
+
+    @Override
+    public boolean canSpawnNow(World world, float x, float y, float z) {
+        return true;
+    }
 }

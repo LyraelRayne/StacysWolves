@@ -43,4 +43,9 @@ public class EntityGoldWolf extends EntityWolfBase implements IRenderableWolf {
     public boolean getCanSpawnHere() {
         return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.posY < 30 && creatureCanSpawnHere();
     }
+
+    @Override
+    public boolean canSpawnNow(World world, float x, float y, float z) {
+        return true;
+    }
 }
