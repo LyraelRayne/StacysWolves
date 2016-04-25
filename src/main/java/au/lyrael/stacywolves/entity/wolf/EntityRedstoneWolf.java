@@ -17,6 +17,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                 @WolfSpawn(biomeTypes = PLAINS, probability = 4, min = 1, max = 4),
                 @WolfSpawn(biomeTypes = FOREST, probability = 4, min = 1, max = 4),
                 @WolfSpawn(biomeTypes = HILLS, probability = 4, min = 1, max = 4),
+                @WolfSpawn(biomeTypes = MOUNTAIN, probability = 4, min = 1, max = 4),
                 @WolfSpawn(biomeTypes = SANDY, probability = 4, min = 1, max = 4),
         })
 public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWolf {
