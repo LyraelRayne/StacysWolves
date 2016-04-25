@@ -2,29 +2,32 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityEnderWolf", primaryColour = 0x000000, secondaryColour = 0xCC00FA,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = MESA, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = FOREST, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = MOUNTAIN, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = HILLS, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = SWAMP, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = SANDY, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = SNOWY, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = WASTELAND, probability = 4, min = 1, max = 1),
-                @WolfSpawn(biomeTypes = BEACH, probability = 4, min = 1, max = 1),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
+                        @WolfSpawnBiome(requireBiomeTypes = {MESA}),
+                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}),
+                        @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN}),
+                        @WolfSpawnBiome(requireBiomeTypes = {HILLS}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SWAMP}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SANDY}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SNOWY}),
+                        @WolfSpawnBiome(requireBiomeTypes = {WASTELAND}),
+                        @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
+                }, probability = 4, min = 1, max = 1)
         })
+
 public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityEnderWolf(World worldObj) {

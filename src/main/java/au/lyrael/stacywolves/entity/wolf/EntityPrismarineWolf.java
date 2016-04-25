@@ -8,8 +8,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-@WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F,
-        spawns = {})
+@WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F)
 public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityPrismarineWolf(World worldObj) {

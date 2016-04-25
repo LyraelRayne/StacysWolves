@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 public @interface WolfSpawn {
 
     /**
-     * Probability of spawning in {@link #biomeTypes()}
+     * Probability of spawning in {@link #spawnBiomes()}
      */
     int probability();
 
@@ -27,21 +27,7 @@ public @interface WolfSpawn {
      */
     int max();
 
-    /**
-     * Biome types to spawn wolves of this type in. A biome must have all types in order to qualify.
-     * (For example HOT, DRY would mean that desert would qualify but Jungle would not.
-     */
-    BiomeDictionary.Type[] biomeTypes() default {};
-
-    /**
-     * Biome types to exclude wolves of this type from. Useful if you want a meta biome type but want to exclude a particular type.
-     */
-    BiomeDictionary.Type[] biomeTypeBlacklist() default {};
-
-    /**
-     * List of specific biome names to exclude spawns from.
-     */
-    String[] biomeBlacklist() default {};
+   WolfSpawnBiome[] spawnBiomes() default {};
 
     /**
      * Type of spawn list to add to.

@@ -9,12 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-@WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04,
-        spawns = {
-                // Spawns in nether fortress. Added in a special event handler MapGenEventHandler
-                //@WolfSpawn(biomeTypes = {HOT, DRY}, probability = 5, min = 1, max = 4),
-                //@WolfSpawn(biomeTypes = {NETHER}, probability = 10, min = 1, max = 4),
-        })
+@WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04)
 public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
@@ -26,7 +21,7 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
                 this.worldObj.spawnParticle("smoke",
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
                         this.posY + this.rand.nextDouble() * (double) this.height + 0.3,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width*3, 0.0D, 0.0D, 0.0D);
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width * 3, 0.0D, 0.0D, 0.0D);
             }
 
             for (int count = 0; count < 2; count++) {

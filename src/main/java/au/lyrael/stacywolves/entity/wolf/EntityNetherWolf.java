@@ -2,19 +2,22 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
+import static net.minecraftforge.common.BiomeDictionary.Type.END;
 import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
 
 @WolfMetadata(name = "EntityNetherWolf", primaryColour = 0x830D0D, secondaryColour = 0xD55910,
         spawns = {
-                @WolfSpawn(biomeTypes = {NETHER}, probability = 10, min = 1, max = 4),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {NETHER}, excludeBiomeTypes = {END}),
+                }, probability = 10, min = 1, max = 4),
         })
 public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -32,10 +35,8 @@ public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf 
     }
 
 
-
     @Override
-    public boolean getCanSpawnHere()
-    {
+    public boolean getCanSpawnHere() {
         return livingCanSpawnHere();
     }
 

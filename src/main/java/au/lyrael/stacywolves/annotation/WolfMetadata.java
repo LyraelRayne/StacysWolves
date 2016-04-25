@@ -14,5 +14,5 @@ public @interface WolfMetadata {
 
     int secondaryColour();
 
-    WolfSpawn[] spawns();
+    WolfSpawn[] spawns() default {};
 }

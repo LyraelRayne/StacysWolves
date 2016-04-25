@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -14,8 +15,10 @@ import static net.minecraftforge.common.BiomeDictionary.Type.OCEAN;
 
 @WolfMetadata(name = "EntityWaterWolf", primaryColour = 0xDDD9DA, secondaryColour = 0x91C5B7,
         spawns = {
-                @WolfSpawn(biomeTypes = OCEAN, probability = 5, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = BEACH, probability = 5, min = 1, max = 4),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {OCEAN}),
+                        @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
+                }, probability = 5, min = 1, max = 4),
         })
 public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -32,7 +35,7 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
         return createChild(parent, child);
     }
 
-      @Override
+    @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
         return world.isDaytime();
     }

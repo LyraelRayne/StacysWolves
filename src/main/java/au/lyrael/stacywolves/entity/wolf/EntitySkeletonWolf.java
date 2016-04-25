@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -13,9 +14,18 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntitySkeletonWolf", primaryColour = 0xDBD8D8, secondaryColour = 0x737373,
         spawns = {
-                @WolfSpawn(biomeTypes = PLAINS, probability = 6, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = FOREST, probability = 6, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = HILLS, probability = 6, min = 1, max = 4),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
+                        @WolfSpawnBiome(requireBiomeTypes = {MESA}),
+                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}),
+                        @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN}),
+                        @WolfSpawnBiome(requireBiomeTypes = {HILLS}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SWAMP}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SANDY}),
+                        @WolfSpawnBiome(requireBiomeTypes = {SNOWY}),
+                        @WolfSpawnBiome(requireBiomeTypes = {WASTELAND}),
+                        @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
+                }, probability = 6, min = 1, max = 4),
         })
 public class EntitySkeletonWolf extends EntityWolfBase implements IRenderableWolf {
 

@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -14,8 +15,10 @@ import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
 
 @WolfMetadata(name = "EntityFlowerWolf", primaryColour = 0x0E5C00, secondaryColour = 0xB95E9A,
         spawns = {
-                @WolfSpawn(biomeTypes = {FOREST}, probability = 2, min = 1, max = 4),
-                @WolfSpawn(biomeTypes = {PLAINS}, probability = 2, min = 1, max = 4),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {FOREST}),
+                        @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
+                }, probability = 2, min = 1, max = 4),
         })
 public class EntityFlowerWolf extends EntityWolfBase implements IRenderableWolf {
 

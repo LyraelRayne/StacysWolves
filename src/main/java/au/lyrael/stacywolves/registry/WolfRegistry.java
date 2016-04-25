@@ -2,14 +2,13 @@ package au.lyrael.stacywolves.registry;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
-import au.lyrael.stacywolves.entity.wolf.EntityFireWolf;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfPlacer;
 import au.lyrael.stacywolves.utility.MetadataUtility;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -30,7 +29,7 @@ public class WolfRegistry {
 
     public void registerWolf(Class<? extends IWolf> WolfClass) {
         final WolfMetadata metadata = getMetadataFor(WolfClass);
-        if(metadata != null) {
+        if (metadata != null) {
             registerWolfEntity(WolfClass, metadata);
         }
     }
@@ -68,25 +67,52 @@ public class WolfRegistry {
         // Assume that because we looked the class up from the registry that it was in fact properly registered and
         // has metadata.
         final WolfMetadata metadata = getMetadataFor(wolfClass);
-        final List<WolfSpawn> WolfSpawns = Arrays.asList(metadata.spawns());
+        final List<WolfSpawn> wolfSpawns = Arrays.asList(metadata.spawns());
 
-        for (WolfSpawn wolfSpawnAnnotation : WolfSpawns) {
-            final List<BiomeGenBase> biomes = getMatchingBiomes(Arrays.asList(wolfSpawnAnnotation.biomeTypes()));
-            biomes.removeAll(getMatchingBiomes(Arrays.asList(wolfSpawnAnnotation.biomeTypeBlacklist())));
-            final List<String> biomeBlacklist = Arrays.asList(wolfSpawnAnnotation.biomeBlacklist());
+        for (WolfSpawn wolfSpawnAnnotation : wolfSpawns) {
+            final Set<BiomeGenBase> biomesToSpawn = buildBiomeList(wolfSpawnAnnotation.spawnBiomes());
 
-            for (BiomeGenBase biome : biomes) {
-                if(!biomeBlacklist.contains(biome.biomeName)) {
-                    final Integer probability = wolfSpawnAnnotation.probability();
-                    EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
-                    LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
-                }
+            for (BiomeGenBase biome : biomesToSpawn) {
+                final Integer probability = wolfSpawnAnnotation.probability();
+                EntityRegistry.addSpawn(toModEntityName(entityName), wolfSpawnAnnotation.probability(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
+                LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
             }
         }
     }
 
-    private List<BiomeGenBase> getMatchingBiomes(List<BiomeDictionary.Type> requiredTypes) {
-        if(requiredTypes != null && requiredTypes.size() > 0) {
+    private Set<BiomeGenBase> buildBiomeList(WolfSpawnBiome[] biomeSpecs) {
+        Set<BiomeGenBase> result = new HashSet<>();
+
+        for (WolfSpawnBiome biomeSpec : biomeSpecs) {
+            final List<BiomeGenBase> baseBiomes = getBiomesMatchingAll(Arrays.asList(biomeSpec.requireBiomeTypes()));
+            final List<BiomeGenBase> excludeBiomes = getBiomesMatchingAny(Arrays.asList(biomeSpec.excludeBiomeTypes()));
+            final List<String> excludeBiomeNames = Arrays.asList(biomeSpec.excludeBiomeNames());
+
+            baseBiomes.removeAll(excludeBiomes);
+            for (BiomeGenBase biome : baseBiomes) {
+                if (!excludeBiomeNames.contains(biome.biomeName))
+                    result.add(biome);
+            }
+        }
+        return result;
+    }
+
+    protected List<BiomeGenBase> getBiomesMatchingAny(List<BiomeDictionary.Type> types) {
+        if (types != null && types.size() > 0) {
+            List<BiomeGenBase> result = new ArrayList<>();
+
+            for (Type type : types) {
+                List<BiomeGenBase> matchingBiomes = Arrays.asList(getBiomesForType(type));
+                result.addAll(matchingBiomes);
+            }
+            return result;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    protected List<BiomeGenBase> getBiomesMatchingAll(List<BiomeDictionary.Type> requiredTypes) {
+        if (requiredTypes != null && requiredTypes.size() > 0) {
             // Get the biomes which match the first type
             List<BiomeGenBase> biomesToTry = Arrays.asList(getBiomesForType(requiredTypes.get(0)));
             // Create an empty list with a capacity of all of the found biomes.
@@ -95,13 +121,12 @@ public class WolfRegistry {
             // Try each biome to see if it has ALL of the types.
             for (BiomeGenBase biome : biomesToTry) {
                 final List<Type> typesForBiome = Arrays.asList(BiomeDictionary.getTypesForBiome(biome));
-                if(typesForBiome.containsAll(requiredTypes))
-                {
+                if (typesForBiome.containsAll(requiredTypes)) {
                     matchingBiomes.add(biome);
                 }
             }
             // Trim down the list capacity to only the size of the matched biomes.
-            ((ArrayList)matchingBiomes).trimToSize();
+            ((ArrayList) matchingBiomes).trimToSize();
             return matchingBiomes;
         } else {
             // Return empty list if there were no required types to begin with.

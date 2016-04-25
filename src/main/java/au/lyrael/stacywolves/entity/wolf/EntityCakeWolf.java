@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -15,11 +16,13 @@ import static net.minecraft.entity.EnumCreatureType.creature;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityCakeWolf", primaryColour = 0xB35922, secondaryColour = 0xE41717,
-        spawns = {
-                @WolfSpawn(biomeTypes = {PLAINS}, probability = 1, min = 1, max = 2, creatureType = creature),
-                @WolfSpawn(biomeTypes = {SAVANNA}, probability = 1, min = 1, max = 2, creatureType = creature),
-                @WolfSpawn(biomeTypes = {SANDY, HOT, DRY}, probability = 1, min = 1, max = 2, creatureType = creature),
+        spawns = {@WolfSpawn(spawnBiomes = {
+                @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
+                @WolfSpawnBiome(requireBiomeTypes = {SAVANNA}),
+                @WolfSpawnBiome(requireBiomeTypes = {SANDY, HOT, DRY}),
+        }, probability = 2, min = 1, max = 2, creatureType = creature),
         })
+
 public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityCakeWolf(World worldObj) {

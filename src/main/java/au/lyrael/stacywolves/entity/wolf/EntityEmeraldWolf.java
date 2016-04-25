@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
+import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -14,7 +15,9 @@ import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityEmeraldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x17DD62,
         spawns = {
-                @WolfSpawn(biomeTypes = MOUNTAIN, probability = 5, min = 1, max = 2),
+                @WolfSpawn(spawnBiomes = {
+                        @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN}),
+                }, probability = 5, min = 1, max = 4),
         })
 public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf {
 
