@@ -11,11 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.COLD;
+import static net.minecraftforge.common.BiomeDictionary.Type.SNOWY;
 
 @WolfMetadata(name = "EntityIceWolf", primaryColour = 0xEDFEFE, secondaryColour = 0x9EBAE7,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
-                        @WolfSpawnBiome(requireBiomeTypes = {COLD}),
+                        @WolfSpawnBiome(requireBiomeTypes = {COLD, SNOWY}),
                 }, probability = 5, min = 1, max = 4),
         })
 public class EntityIceWolf extends EntityWolfBase implements IRenderableWolf {
