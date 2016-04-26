@@ -27,7 +27,6 @@ public class ItemWolfFood extends ItemStacyWolves {
 
     private final Map<String, ItemStack> foods = new HashMap<>();
 
-    @SideOnly(Side.CLIENT)
     private final Map<String, IIcon> icons = new HashMap<>();
 
     public ItemWolfFood() {
@@ -104,7 +103,6 @@ public class ItemWolfFood extends ItemStacyWolves {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(final Item item, final CreativeTabs tab, final List list) {
         for (Map.Entry<String, ItemStack> entry : foods.entrySet()) {
             list.add(entry.getValue());
