@@ -9,7 +9,6 @@ import au.lyrael.stacywolves.utility.MetadataUtility;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenVillage;
@@ -20,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
+import static au.lyrael.stacywolves.registry.WolfType.NORMAL;
 import static net.minecraftforge.common.BiomeDictionary.Type;
 import static net.minecraftforge.common.BiomeDictionary.getBiomesForType;
 
@@ -29,6 +29,7 @@ public class WolfRegistry {
 
     private final Map<String, Class<? extends IWolf>> classRegistryByName = new HashMap<>();
     private Map<String, BiomeGenBase> biomeNameMapping;
+    private Map<WolfType, Map<BiomeGenBase, List<BiomeGenBase.SpawnListEntry>>> spawnRegistry = new HashMap<>();
 
     public void registerWolf(Class<? extends IWolf> WolfClass) {
         final WolfMetadata metadata = getMetadataFor(WolfClass);
@@ -69,15 +70,7 @@ public class WolfRegistry {
 
         switch (entityName) {
             case "EntityCakeWolf":
-                final List<BiomeGenBase> villageSpawnBiomes = (List<BiomeGenBase>)MapGenVillage.villageSpawnBiomes;
-                for (BiomeGenBase biome  : villageSpawnBiomes) {
-                    // Made this ten because most of the spawns will be denied. Can tune it back down if needed.
-                    final int weightedProb = 10;
-                    final int min = 1;
-                    final int max = 2;
-                    EntityRegistry.addSpawn(toModEntityName(entityName), weightedProb, min, max, EnumCreatureType.monster, biome);
-                    LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", entityName, biome.biomeName, weightedProb, min, max);
-                }
+                registerCakeWolf(entityName);
                 break;
             default:
                 // Assume that because we looked the class up from the registry that it was in fact properly registered and
@@ -90,12 +83,38 @@ public class WolfRegistry {
 
                     for (BiomeGenBase biome : biomesToSpawn) {
                         final Integer probability = wolfSpawnAnnotation.probability();
-                        EntityRegistry.addSpawn(toModEntityName(entityName), probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), wolfSpawnAnnotation.creatureType(), biome);
-                        LOGGER.trace("Registered [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", metadata.name(), biome.biomeName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max());
+                        this.addSpawn(entityName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), biome, metadata.type());
                     }
                 }
                 break;
         }
+    }
+
+    private void registerCakeWolf(String entityName) {
+        final List<BiomeGenBase> villageSpawnBiomes = (List<BiomeGenBase>) MapGenVillage.villageSpawnBiomes;
+        for (BiomeGenBase biome : villageSpawnBiomes) {
+            this.addSpawn(entityName, 2, 1, 2, biome, NORMAL);
+        }
+    }
+
+    private void addSpawn(String entityName, Integer probability, int min, int max, BiomeGenBase biome, WolfType type) {
+        final Class<? extends IWolf> entityClass = getClassFor(entityName);
+        List<BiomeGenBase.SpawnListEntry> spawnListForBiome = getSpawnsFor(biome, type);
+        spawnListForBiome.add(new BiomeGenBase.SpawnListEntry(entityClass, probability, min, max));
+        LOGGER.trace("Registered [{}] [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", type.name(), entityName, biome.biomeName, probability, min, max);
+    }
+
+    public List<BiomeGenBase.SpawnListEntry> getSpawnsFor(BiomeGenBase biome, WolfType type) {
+        final Map<BiomeGenBase, List<BiomeGenBase.SpawnListEntry>> spawnRegistry = getSpawnsFor(type);
+        if (spawnRegistry.get(biome) == null)
+            spawnRegistry.put(biome, new ArrayList<BiomeGenBase.SpawnListEntry>());
+        return spawnRegistry.get(biome);
+    }
+
+    public Map<BiomeGenBase, List<BiomeGenBase.SpawnListEntry>> getSpawnsFor(WolfType type) {
+        if (getSpawnRegistry().get(type) == null)
+            getSpawnRegistry().put(type, new HashMap<BiomeGenBase, List<BiomeGenBase.SpawnListEntry>>());
+        return getSpawnRegistry().get(type);
     }
 
     private Set<BiomeGenBase> buildBiomeList(WolfSpawnBiome[] biomeSpecs) {
@@ -197,7 +216,7 @@ public class WolfRegistry {
         return classRegistryByName.get(entityName);
     }
 
-    public Map<String, BiomeGenBase> getBiomeNameMapping() {
+    protected Map<String, BiomeGenBase> getBiomeNameMapping() {
         if (this.biomeNameMapping == null) {
             this.biomeNameMapping = new HashMap<>();
             for (BiomeGenBase biome : Arrays.asList(BiomeGenBase.getBiomeGenArray())) {
@@ -206,5 +225,9 @@ public class WolfRegistry {
             }
         }
         return this.biomeNameMapping;
+    }
+
+    public Map<WolfType, Map<BiomeGenBase, List<BiomeGenBase.SpawnListEntry>>> getSpawnRegistry() {
+        return spawnRegistry;
     }
 }

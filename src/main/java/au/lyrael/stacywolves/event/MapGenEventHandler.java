@@ -12,7 +12,7 @@ public class MapGenEventHandler {
     public void onMapGenEvent(InitMapGenEvent event) {
         if (event.type == InitMapGenEvent.EventType.NETHER_BRIDGE) {
             final MapGenNetherBridge fortressGen = (MapGenNetherBridge) event.newGen;
-            fortressGen.getSpawnList().add(new BiomeGenBase.SpawnListEntry(EntityFireWolf.class, 15, 1, 4));
+            fortressGen.getSpawnList().add(new BiomeGenBase.SpawnListEntry(EntityFireWolf.class, 7, 1, 4));
         }
     }
 }

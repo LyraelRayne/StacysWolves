@@ -1,5 +1,6 @@
 package au.lyrael.stacywolves.annotation;
 
+import au.lyrael.stacywolves.event.SpawnEventHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -28,9 +29,4 @@ public @interface WolfSpawn {
     int max();
 
    WolfSpawnBiome[] spawnBiomes() default {};
-
-    /**
-     * Type of spawn list to add to.
-     */
-    EnumCreatureType creatureType() default EnumCreatureType.monster;
 }

@@ -10,9 +10,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.registry.WolfType.MOB;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityEnderWolf", primaryColour = 0x000000, secondaryColour = 0xCC00FA,
+@WolfMetadata(name = "EntityEnderWolf", primaryColour = 0x000000, secondaryColour = 0xCC00FA, type = MOB,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
@@ -25,7 +27,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {SNOWY}),
                         @WolfSpawnBiome(requireBiomeTypes = {WASTELAND}),
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
-                }, probability = 4, min = 1, max = 1)
+                }, probability = 10, min = 1, max = 1)
         })
 
 public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
@@ -47,7 +49,6 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     public String getTextureFolderName() {
         return "ender";
     }
-
 
     @Override
     public void onLivingUpdate() {
@@ -72,4 +73,8 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
         return !world.isDaytime();
     }
 
+    @Override
+    protected boolean isStandingOnSuitableFloor() {
+        return true;
+    }
 }

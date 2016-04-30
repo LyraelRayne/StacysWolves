@@ -5,15 +5,19 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.List;
+
+import static au.lyrael.stacywolves.registry.WolfType.ORE;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityRedstoneWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x8F0303,
+@WolfMetadata(name = "EntityRedstoneWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x8F0303, type = ORE,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MESA}),
@@ -49,11 +53,17 @@ public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWol
 
     @Override
     public boolean getCanSpawnHere() {
-        return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.posY < 15 && creatureCanSpawnHere();
+        return !canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.posY < 15 && creatureCanSpawnHere() && isStandingOnSuitableFloor();
     }
 
     @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
         return true;
     }
+
+    @Override
+    protected List<Block> getFloorBlocks() {
+        return ORE_FLOOR_BLOCKS;
+    }
+
 }

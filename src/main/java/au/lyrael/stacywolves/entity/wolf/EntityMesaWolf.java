@@ -5,18 +5,22 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.List;
+
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.MESA;
 
 @WolfMetadata(name = "EntityMesaWolf", primaryColour = 0x9A6147, secondaryColour = 0x4D3424,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MESA}),
-                }, probability = 5, min = 1, max = 4),
+                }, probability = 10, min = 1, max = 4),
         })
 public class EntityMesaWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -36,5 +40,10 @@ public class EntityMesaWolf extends EntityWolfBase implements IRenderableWolf {
     @Override
     public String getTextureFolderName() {
         return "mesa";
+    }
+
+    @Override
+    protected boolean isStandingOnSuitableFloor() {
+        return true;
     }
 }

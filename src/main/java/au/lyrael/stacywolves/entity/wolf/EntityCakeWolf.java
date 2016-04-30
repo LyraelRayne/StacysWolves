@@ -11,7 +11,6 @@ import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
 @WolfMetadata(name = "EntityCakeWolf", primaryColour = 0xB35922, secondaryColour = 0xE41717)
-
 public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf, IWolf {
 
     public EntityCakeWolf(World worldObj) {
@@ -31,7 +30,7 @@ public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf, I
         if (nearestVillage == null)
             return false;
         else
-            return creatureCanSpawnHere();
+            return super.getCanSpawnHere();
     }
 
     @Override

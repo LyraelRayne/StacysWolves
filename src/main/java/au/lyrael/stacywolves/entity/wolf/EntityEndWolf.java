@@ -10,10 +10,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static net.minecraftforge.common.BiomeDictionary.Type.END;
 import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
 
-@WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89,
+@WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89, type = MOB,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {END}, excludeBiomeTypes = {NETHER}, excludeBiomeNames = "Eldritch"),
@@ -41,6 +42,11 @@ public class EntityEndWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
+        return true;
+    }
+
+    @Override
+    protected boolean isStandingOnSuitableFloor() {
         return true;
     }
 }

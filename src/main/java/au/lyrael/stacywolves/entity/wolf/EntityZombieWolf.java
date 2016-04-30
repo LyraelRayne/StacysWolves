@@ -10,9 +10,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityZombieWolf", primaryColour = 0x04AEAE, secondaryColour = 0x447230,
+@WolfMetadata(name = "EntityZombieWolf", primaryColour = 0x04AEAE, secondaryColour = 0x447230, type = MOB,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
@@ -25,7 +26,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {SNOWY}),
                         @WolfSpawnBiome(requireBiomeTypes = {WASTELAND}),
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
-                }, probability = 6, min = 1, max = 4),
+                }, probability = 20, min = 1, max = 4),
         })
 public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf {
 

@@ -1,5 +1,6 @@
 package au.lyrael.stacywolves.entity.wolf;
 
+import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
@@ -20,7 +21,6 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,8 +39,11 @@ import java.util.List;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
+import static net.minecraft.init.Blocks.*;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable {
+
+    private final WolfMetadata metadata;
 
     private float field_70926_e;
     private float field_70924_f;
@@ -59,6 +62,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     private EntityAIWolfTempt aiTempt;
 
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
+    protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(grass, dirt, gravel, sand, sandstone);
+    protected static final List<Block> ORE_FLOOR_BLOCKS = Arrays.asList(stone, gravel);
+    protected static final List<Block> ICE_FLOOR_BLOCKS = Arrays.asList(ice, snow, packed_ice, snow_layer);
+    protected static final List<Block> SHROOM_FLOOR_BLOCKS = Arrays.asList((Block) mycelium, red_mushroom_block, brown_mushroom_block);
 
     public EntityWolfBase(World world) {
         super(world);
@@ -84,6 +92,12 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityChicken.class, 200, false));
 
         this.setTamed(false);
+
+        this.metadata = this.getClass().getAnnotation(WolfMetadata.class);
+    }
+
+    protected List<Block> getFloorBlocks() {
+        return NORMAL_FLOOR_BLOCKS;
     }
 
     @Override
@@ -736,12 +750,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public boolean getCanSpawnHere() {
-        return canSeeTheSky(getWorldObj(), posX, posY, posZ) && creatureCanSpawnHere();
+        return canSeeTheSky(getWorldObj(), posX, posY, posZ)
+                && isStandingOnSuitableFloor()
+                && creatureCanSpawnHere();
+    }
+
+    protected boolean isStandingOnSuitableFloor() {
+        return isStandingOn(getFloorBlocks().toArray(new Block[0]));
     }
 
     @SuppressWarnings("unused")
     protected boolean animalCanSpawnHere() {
-        return isStandingOn(Blocks.grass)
+        return isStandingOn(grass)
                 && getFullBlockLightValue(getWorldObj(), posX, posY - 1, posZ) > 8
                 && creatureCanSpawnHere();
     }
@@ -759,12 +779,26 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_) {
-        return this.worldObj.getBlock(p_70783_1_, p_70783_2_ - 1, p_70783_3_) != Blocks.air ? 10.0F : this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_) - 0.5F;
+        return this.worldObj.getBlock(p_70783_1_, p_70783_2_ - 1, p_70783_3_) != air ? 10.0F : this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_) - 0.5F;
+    }
+
+    @Override
+    public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) {
+        final EnumCreatureType myType = metadata.type().creatureType();
+
+        if (myType == null)
+            return !isTamed() && super.isCreatureType(type, forSpawnCount);
+        else {
+            if (forSpawnCount)
+                return !isTamed() && type == myType && super.isCreatureType(type, forSpawnCount);
+            else
+                return type == myType && super.isCreatureType(type, forSpawnCount);
+        }
     }
 
     @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
-        return world.isDaytime();
+        return world.countEntities(EntityWolfBase.class) < 20 && world.isDaytime();
     }
 
     /**

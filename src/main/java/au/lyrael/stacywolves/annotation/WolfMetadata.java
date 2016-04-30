@@ -1,5 +1,7 @@
 package au.lyrael.stacywolves.annotation;
 
+import au.lyrael.stacywolves.registry.WolfType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,4 +17,9 @@ public @interface WolfMetadata {
     int secondaryColour();
 
     WolfSpawn[] spawns() default {};
+
+    /**
+     * Type of creature this is considered as for spawn caps and such.
+     */
+    WolfType type() default WolfType.NORMAL;
 }

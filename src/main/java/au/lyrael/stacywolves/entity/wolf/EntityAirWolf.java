@@ -10,13 +10,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN})
-                }, probability = 10, min = 1, max = 4),
+                }, probability = 5, min = 1, max = 4),
         })
 public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
@@ -40,6 +41,12 @@ public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public boolean getCanSpawnHere() {
-        return this.posY > 95 && creatureCanSpawnHere();
+        return this.posY > 95 &&
+                super.getCanSpawnHere();
+    }
+
+    @Override
+    protected boolean isStandingOnSuitableFloor() {
+        return true;
     }
 }

@@ -52,8 +52,7 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
         setEntityToSpawnName(parEntityToSpawnName);
         colorBase = parPrimaryColor;
         colorSpots = parSecondaryColor;
-        // DEBUG
-        LOGGER.debug("Spawn egg constructor for [{}]", entityToSpawnName);
+//      LOGGER.debug("Spawn egg constructor for [{}]", entityToSpawnName);
     }
 
     /**

@@ -16,7 +16,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {SANDY, HOT, DRY})
-                }, probability = 7, min = 1, max = 3),
+                }, probability = 10, min = 1, max = 3),
         })
 public class EntityDesertWolf extends EntityWolfBase implements IRenderableWolf {
 
