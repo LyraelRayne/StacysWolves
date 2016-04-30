@@ -30,6 +30,8 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {SNOWY}),
                         @WolfSpawnBiome(requireBiomeTypes = {WASTELAND}),
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
+                        @WolfSpawnBiome(requireBiomeTypes = {JUNGLE}),
+                        @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
                 }, probability = 10, min = 1, max = 2),
         })
 public class EntityIronWolf extends EntityWolfBase implements IRenderableWolf {

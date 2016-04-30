@@ -19,6 +19,7 @@ import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.StacyWolves.WOLF_REGISTRY;
 import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static au.lyrael.stacywolves.registry.WolfType.NORMAL;
+import static au.lyrael.stacywolves.registry.WolfType.ORE;
 import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
 
 public class SpawnEventHandler {
@@ -54,6 +55,7 @@ public class SpawnEventHandler {
 
     protected void traceSpawnCaps(LivingSpawnEvent.CheckSpawn event) {
         traceSpawnCap(NORMAL.creatureType(), event.world);
+        traceSpawnCap(ORE.creatureType(), event.world);
         traceSpawnCap(MOB.creatureType(), event.world);
     }
 
@@ -73,7 +75,8 @@ public class SpawnEventHandler {
                     if(!event.list.contains(wolfSpawn))
                         event.list.add(wolfSpawn);
                 }
-                LOGGER.info("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
+                if(wolfType != MOB)
+                    LOGGER.info("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
             }
         }
     }
