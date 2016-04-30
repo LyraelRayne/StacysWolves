@@ -1,3 +1,12 @@
+1.0.5 - Tip your caps
+    * Changed most of the wolves to have their own spawn cap instead of using the monster spawn cap. Ore wolves also have their own spawn cap.
+    * Prismarine Wolves are rumoured to have been spotted in the Deep Ocean biome.
+    * Most wolves spawn only once every 400 ticks (just like farm animals). "Monster" wolves like Zombie and Bone wolves still spawn on the monster spawn cycle.
+    * Mod no longer crashes when run on a server.
+    * Wolf populations have been brought under control and should no longer overwhelm other kinds of creature.
+    * Ore Wolves (except Emerald which only spawns in Mountainous biomes) have begun to encroach on the Jungle and River type biomes.
+    * Monster Wolves have made incursions into Jungle and River type biomes.
+
 1.0.4 - The cake is no longer a lie
     * Made sure cake wolves ONLY SPAWN IN VILLAGES!
     * Made sure cake wolves only try to spawn in biomes where villages may spawn.
