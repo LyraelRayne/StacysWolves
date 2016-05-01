@@ -18,7 +18,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
                         @WolfSpawnBiome(requireBiomeTypes = {FOREST}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
                         @WolfSpawnBiome(requireBiomeTypes = {HILLS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
-                }, probability = 10, min = 1, max = 4),
+                }, probability = 5, min = 1, max = 4),
         })
 public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 

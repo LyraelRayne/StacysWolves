@@ -16,7 +16,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.SAVANNA;
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {SAVANNA}),
-                }, probability = 10, min = 1, max = 4),
+                }, probability = 7, min = 1, max = 4),
         })
 public class EntitySavannahWolf extends EntityWolfBase implements IRenderableWolf {
 
