@@ -3,13 +3,17 @@ package au.lyrael.stacywolves;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.registry.ItemRegistry;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
 import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
@@ -20,7 +24,7 @@ public class CommonProxy {
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public void init() {
-
+        ItemRegistry.wolf_food.registerRecipes();
     }
 
     public void preInit(FMLPreInitializationEvent event) {

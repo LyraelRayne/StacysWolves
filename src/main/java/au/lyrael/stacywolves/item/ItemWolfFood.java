@@ -1,5 +1,6 @@
 package au.lyrael.stacywolves.item;
 
+import au.lyrael.stacywolves.integration.EtFuturumHolder;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +27,6 @@ public class ItemWolfFood extends ItemStacyWolves {
     public static final String ID_TAG = "wolf_food_id";
 
     private final Map<String, ItemStack> foods = new HashMap<>();
-
     private final Map<String, IIcon> icons = new HashMap<>();
 
     public ItemWolfFood() {
@@ -40,31 +40,63 @@ public class ItemWolfFood extends ItemStacyWolves {
         canRepair = false;
     }
 
-    private void buildItemsList() {
-        createSubItem(this, "air_bone", new ItemStack(Items.glass_bottle));
-        createSubItem(this, "birch_bone", new ItemStack(Blocks.sapling, 1, 2));
-        createSubItem(this, "cake_bone", new ItemStack(Items.cake));
-        createSubItem(this, "desert_bone", new ItemStack(Blocks.cactus));
-        createSubItem(this, "diamond_bone", new ItemStack(Items.diamond));
-        createSubItem(this, "earth_bone", new ItemStack(Items.wooden_shovel));
-        createSubItem(this, "emerald_bone", new ItemStack(Items.emerald));
-        createSubItem(this, "end_bone", new ItemStack(Items.ender_eye));
-        createSubItem(this, "ender_bone", new ItemStack(Items.ender_pearl));
-        createSubItem(this, "fire_bone", new ItemStack(Items.blaze_powder));
-        createSubItem(this, "flower_bone", new ItemStack(Blocks.double_plant, 1, 5));
-        createSubItem(this, "gold_bone", new ItemStack(Items.gold_ingot));
-        createSubItem(this, "ice_bone", new ItemStack(Items.snowball));
-        createSubItem(this, "iron_bone", new ItemStack(Items.iron_ingot));
-        createSubItem(this, "mesa_bone", new ItemStack(Blocks.deadbush));
-        createSubItem(this, "mushroom_bone", new ItemStack(Blocks.red_mushroom));
-        createSubItem(this, "nether_bone", new ItemStack(Items.magma_cream));
-        createSubItem(this, "prismarine_bone", null);
-        createSubItem(this, "redstone_bone", new ItemStack(Items.redstone));
-        createSubItem(this, "savannah_bone", new ItemStack(Blocks.grass));
-        createSubItem(this, "skeleton_bone", new ItemStack(Items.dye, 1, 15));
-        createSubItem(this, "water_bone", new ItemStack(Items.water_bucket));
-        createSubItem(this, "zombie_bone", new ItemStack(Items.rotten_flesh));
-        createSubItem(this,"meaty_bone", new ItemStack(Items.beef));
+    public void buildItemsList() {
+        createSubItem("air_bone");
+        createSubItem("birch_bone");
+        createSubItem("cake_bone");
+        createSubItem("desert_bone");
+        createSubItem("diamond_bone");
+        createSubItem("earth_bone");
+        createSubItem("emerald_bone");
+        createSubItem("end_bone");
+        createSubItem("ender_bone");
+        createSubItem("fire_bone");
+        createSubItem("flower_bone");
+        createSubItem("gold_bone");
+        createSubItem("ice_bone");
+        createSubItem("iron_bone");
+        createSubItem("mesa_bone");
+        createSubItem("mushroom_bone");
+        createSubItem("nether_bone");
+        createSubItem("prismarine_bone");
+        createSubItem("redstone_bone");
+        createSubItem("savannah_bone");
+        createSubItem("skeleton_bone");
+        createSubItem("water_bone");
+        createSubItem("zombie_bone");
+        createSubItem("meaty_bone");
+    }
+
+    public void registerRecipes() {
+        registerRecipe("air_bone", new ItemStack(Items.glass_bottle));
+        registerRecipe("birch_bone", new ItemStack(Blocks.sapling, 1, 2));
+        registerRecipe("cake_bone", new ItemStack(Items.cake));
+        registerRecipe("desert_bone", new ItemStack(Blocks.cactus));
+        registerRecipe("diamond_bone", new ItemStack(Items.diamond));
+        registerRecipe("earth_bone", new ItemStack(Items.wooden_shovel));
+        registerRecipe("emerald_bone", new ItemStack(Items.emerald));
+        registerRecipe("end_bone", new ItemStack(Items.ender_eye));
+        registerRecipe("ender_bone", new ItemStack(Items.ender_pearl));
+        registerRecipe("fire_bone", new ItemStack(Items.blaze_powder));
+        registerRecipe("flower_bone", new ItemStack(Blocks.double_plant, 1, 5));
+        registerRecipe("gold_bone", new ItemStack(Items.gold_ingot));
+        registerRecipe("ice_bone", new ItemStack(Items.snowball));
+        registerRecipe("iron_bone", new ItemStack(Items.iron_ingot));
+        registerRecipe("mesa_bone", new ItemStack(Blocks.deadbush));
+        registerRecipe("mushroom_bone", new ItemStack(Blocks.red_mushroom));
+        registerRecipe("nether_bone", new ItemStack(Items.magma_cream));
+        registerRecipe("prismarine_bone", EtFuturumHolder.getPrismarineCrystalItemStack());
+        registerRecipe("redstone_bone", new ItemStack(Items.redstone));
+        registerRecipe("savannah_bone", new ItemStack(Blocks.grass));
+        registerRecipe("skeleton_bone", new ItemStack(Items.dye, 1, 15));
+        registerRecipe("water_bone", new ItemStack(Items.water_bucket));
+        registerRecipe("zombie_bone", new ItemStack(Items.rotten_flesh));
+        registerRecipe("meaty_bone", new ItemStack(Items.beef));
+    }
+
+    private void registerRecipe(String id, ItemStack craftedWith) {
+        if (craftedWith != null)
+            GameRegistry.addShapelessRecipe(getFood(id), Items.bone, craftedWith);
     }
 
     @Override
@@ -109,13 +141,11 @@ public class ItemWolfFood extends ItemStacyWolves {
         }
     }
 
-    protected ItemStack createSubItem(Item item, String id, ItemStack craftedWith) {
-        final ItemStack itemStack = new ItemStack(item, 1);
+    protected ItemStack createSubItem(String id) {
+        final ItemStack itemStack = new ItemStack(this, 1);
         itemStack.setTagCompound(new NBTTagCompound());
         itemStack.getTagCompound().setString(ID_TAG, id);
         foods.put(id, itemStack);
-        if (craftedWith != null)
-            GameRegistry.addShapelessRecipe(itemStack, Items.bone, craftedWith);
         return itemStack;
     }
 
@@ -140,5 +170,4 @@ public class ItemWolfFood extends ItemStacyWolves {
         return a.getTagCompound().getString(ID_TAG).equals(b.getTagCompound().getString(ID_TAG));
 
     }
-
 }

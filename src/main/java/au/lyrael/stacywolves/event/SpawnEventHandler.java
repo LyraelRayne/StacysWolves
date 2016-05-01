@@ -76,7 +76,7 @@ public class SpawnEventHandler {
                         event.list.add(wolfSpawn);
                 }
                 if(wolfType != MOB)
-                    LOGGER.info("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
+                    LOGGER.trace("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
             }
         }
     }
