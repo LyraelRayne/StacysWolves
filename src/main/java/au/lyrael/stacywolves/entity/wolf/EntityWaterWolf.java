@@ -36,6 +36,12 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
+    public void onEntityUpdate() {
+        super.onEntityUpdate();
+        preventDrowning();
+    }
+
+    @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {
         return world.isDaytime();
     }

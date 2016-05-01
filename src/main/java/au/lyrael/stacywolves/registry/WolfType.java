@@ -3,6 +3,7 @@ package au.lyrael.stacywolves.registry;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraftforge.common.util.EnumHelper;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import static net.minecraft.entity.EnumCreatureType.waterCreature;
 public enum WolfType {
     NORMAL("normalStacyWolf", 10, Material.air, false, true),
     ORE("oreStacyWolf", 6, Material.air, false, true),
-    WATER(waterCreature),
+    WATER("waterStacyWolf", 5, Material.water, false, false),
     MOB(EnumCreatureType.monster);
 
     private final EnumCreatureType creatureType;
