@@ -347,7 +347,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public boolean isShaking() {
         return this.isShaking;
     }
@@ -355,12 +354,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     /**
      * Used when calculating the amount of shading to apply while the wolf is shaking.
      */
-    @SideOnly(Side.CLIENT)
     public float getShadingWhileShaking(float p_70915_1_) {
         return 0.75F + (this.prevTimeWolfIsShaking + (this.timeWolfIsShaking - this.prevTimeWolfIsShaking) * p_70915_1_) / 2.0F * 0.25F;
     }
 
-    @SideOnly(Side.CLIENT)
     public float getShakeAngle(float p_70923_1_, float p_70923_2_) {
         float f2 = (this.prevTimeWolfIsShaking + (this.timeWolfIsShaking - this.prevTimeWolfIsShaking) * p_70923_1_ + p_70923_2_) / 1.8F;
 
@@ -378,7 +375,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return this.height * 0.8F;
     }
 
-    @SideOnly(Side.CLIENT)
     public float getInterestedAngle(float maybeTime) {
         return (this.field_70924_f + (this.field_70926_e - this.field_70924_f) * maybeTime) * 0.15F * (float) Math.PI;
     }
@@ -554,7 +550,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void handleHealthUpdate(byte updateFlags) {
         if (updateFlags == 8) {
             this.field_70928_h = true;
@@ -565,7 +560,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public float getTailRotation() {
         return this.isAngry() ? 1.5393804F : (this.isTamed() ? (0.55F - (20.0F - this.dataWatcher.getWatchableObjectFloat(18)) * 0.02F) * (float) Math.PI : ((float) Math.PI / 5F));
     }

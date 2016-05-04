@@ -10,7 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
 public class ModelWolf extends ModelBase {
     /**
      * main box for the wolf head

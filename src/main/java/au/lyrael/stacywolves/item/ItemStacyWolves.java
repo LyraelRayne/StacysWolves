@@ -34,7 +34,6 @@ public class ItemStacyWolves extends Item {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
         itemIcon = iconRegister.registerIcon(String.format("%s", unwrapUnlocalizedName(this.getUnlocalizedName())));
     }
@@ -54,7 +53,6 @@ public class ItemStacyWolves extends Item {
      * @param stack    The ItemStack passed from addInformation.
      * @param list     List of description lines passed from addInformation.
      */
-    @SideOnly(Side.CLIENT)
     public void formatTooltip(ImmutableMap<String, String> toFormat, ItemStack stack, List list) {
         if (showTooltipsAlways() || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
             LanguageHelper.formatTooltip(this.getUnlocalizedNameInefficiently(stack) + ".tooltip", toFormat, stack, list);
@@ -65,13 +63,11 @@ public class ItemStacyWolves extends Item {
      * formatTooltip() directly and DO NOT call super.addInformation().
      */
     @Override
-    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean whatDoesThisEvenDo) {
         this.formatTooltip(null, stack, list);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
         return LanguageHelper.getLocalization(this.getUnlocalizedNameInefficiently(stack) + ".name");
     }

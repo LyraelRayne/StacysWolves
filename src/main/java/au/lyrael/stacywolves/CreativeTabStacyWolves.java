@@ -12,7 +12,6 @@ public class CreativeTabStacyWolves extends CreativeTabs {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public Item getTabIconItem() {
         return ItemRegistry.getWolfFood("diamond_bone").getItem();
     }

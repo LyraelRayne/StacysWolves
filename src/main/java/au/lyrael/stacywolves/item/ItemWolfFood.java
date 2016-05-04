@@ -100,7 +100,6 @@ public class ItemWolfFood extends ItemStacyWolves {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
         for (Map.Entry<String, ItemStack> entry : foods.entrySet()) {
             IIcon itemIcon = iconRegister.registerIcon(String.format("%s/%s", unwrapUnlocalizedName(getUnlocalizedName()), entry.getKey()));

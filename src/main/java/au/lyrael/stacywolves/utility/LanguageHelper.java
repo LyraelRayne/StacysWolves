@@ -13,12 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@SideOnly(Side.CLIENT)
 public class LanguageHelper {
     public static Map<String, String> globals = new HashMap<String, String>();
     private static Map<String, String> preprocesssed = new HashMap<String, String>();
 
-    @SideOnly(Side.CLIENT)
     public static void setupColors() {
         /* Unicode colors that you can use in the tooltips/names lang files.
          * Use by calling {{!name}}, with name being the name being colors.color. */

@@ -32,7 +32,6 @@ import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 public class ItemWolfPlacer extends ItemMonsterPlacer {
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
-    @SideOnly(Side.CLIENT)
     private IIcon theIcon;
     protected int colorBase = 0x000000;
     protected int colorSpots = 0xFFFFFF;
@@ -179,19 +178,16 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(Item parItem, CreativeTabs parTab, List parList) {
         parList.add(new ItemStack(parItem, 1, 0));
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType) {
         return (parColorType == 0) ? colorBase : colorSpots;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean requiresMultipleRenderPasses() {
         return true;
     }
@@ -205,7 +201,6 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
 
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister par1IconRegister) {
         super.registerIcons(par1IconRegister);
         theIcon = par1IconRegister.registerIcon(getIconString() + "_overlay");
@@ -215,7 +210,6 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
      * Gets an icon index based on an item's damage value and the given render pass
      */
     @Override
-    @SideOnly(Side.CLIENT)
     public IIcon getIconFromDamageForRenderPass(int parDamageVal, int parRenderPass) {
         return parRenderPass > 0 ? theIcon : super.getIconFromDamageForRenderPass(parDamageVal,
                 parRenderPass);
