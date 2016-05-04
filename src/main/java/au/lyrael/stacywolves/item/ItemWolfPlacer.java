@@ -196,7 +196,7 @@ public class ItemWolfPlacer extends ItemMonsterPlacer {
     // Doing this override means that there is no localization for language
     // unless you specifically check for localization here and convert
     public String getItemStackDisplayName(ItemStack par1ItemStack) {
-        return "Spawn " + LanguageHelper.getLocalization("entity." + MOD_ID + "." + this.entityToSpawnName + ".name");
+        return "Spawn " + LanguageHelper.getLocalization("entity." + MOD_ID + ":" + this.entityToSpawnName + ".name");
     }
 
 
