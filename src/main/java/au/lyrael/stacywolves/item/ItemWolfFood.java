@@ -37,6 +37,7 @@ public class ItemWolfFood extends ItemStacyWolves {
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
         this.buildItemsList();
+        this.showTooltipsAlways(true);
         canRepair = false;
     }
 
