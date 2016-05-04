@@ -19,12 +19,7 @@ import org.apache.logging.log4j.Logger;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.registry.WolfType.WATER;
 
-@WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F, type = WATER,
-        spawns = {
-                @WolfSpawn(spawnBiomes = {
-                        @WolfSpawnBiome(specificBiomes = "Deep Ocean"),
-                }, probability = 7, min = 1, max = 6),
-        })
+@WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F, type = WATER)
 public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableWolf {
 
     public EntityPrismarineWolf(World worldObj) {
