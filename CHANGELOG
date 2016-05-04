@@ -1,3 +1,13 @@
+1.0.6 - Fix Mah Server!
+    * Fixed a serious issue where the wolf spawned on a server and the wolf the user sees on a client did not match.
+    * Fixed a serious bug where the server would crash if items are spawned using cheat commands.
+    * Fixed the display of the name of spawn eggs when spawned using cheats.
+    * Water type wolves no longer drown when underwater for too long.
+    * Bones now always show tooltips.
+    * Updated some tooltips and renamed the bony bone to skele-bone.
+    * Prismarine bone may now be crafted if Et Futurum is installed. NOTE: Prismarine Wolves will still not spawn.
+    * Added a Very Important Person to the credits.
+
 1.0.5 - Tip your caps
     * Changed most of the wolves to have their own spawn cap instead of using the monster spawn cap. Ore wolves also have their own spawn cap.
     * Prismarine Wolves are rumoured to have been spotted in the Deep Ocean biome.
