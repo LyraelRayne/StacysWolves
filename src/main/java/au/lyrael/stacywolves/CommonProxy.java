@@ -13,8 +13,7 @@ import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.StacyWolves.WOLF_REGISTRY;
@@ -34,7 +33,7 @@ public class CommonProxy {
     }
 
     private void registerWolfEntities(FMLPreInitializationEvent event) {
-        final Set<ASMDataTable.ASMData> wolfMetadatas = event.getAsmData().getAll(WolfMetadata.class.getName());
+        final List<ASMDataTable.ASMData> wolfMetadatas = sortWolfMetadata(event.getAsmData().getAll(WolfMetadata.class.getName()));
         LOGGER.trace("Found [{}] wolf metadata entries. Registering Wolves!", wolfMetadatas.size());
         for (ASMDataTable.ASMData annotation : wolfMetadatas) {
             try {
@@ -49,6 +48,21 @@ public class CommonProxy {
             }
         }
     }
+
+    private List<ASMDataTable.ASMData> sortWolfMetadata(Collection<ASMDataTable.ASMData> wolfMetadatas) {
+        List<ASMDataTable.ASMData> result = new ArrayList<>(wolfMetadatas);
+
+        Collections.sort(result, new Comparator<ASMDataTable.ASMData>() {
+            @Override
+            public int compare(ASMDataTable.ASMData first, ASMDataTable.ASMData second) {
+                final String firstName = (String) first.getAnnotationInfo().get("name");
+                final String secondName = (String) second.getAnnotationInfo().get("name");
+                return firstName.compareTo(secondName);
+            }
+        });
+        return result;
+    }
+
 
     private Class<?> getWolfClass(ASMDataTable.ASMData wolfMetadata) throws ClassNotFoundException {
         final String className = wolfMetadata.getClassName();
