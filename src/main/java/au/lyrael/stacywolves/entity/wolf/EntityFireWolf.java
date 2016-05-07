@@ -65,4 +65,9 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
     public boolean canSpawnNow(World world, float x, float y, float z) {
         return true;
     }
+
+    @Override
+    public boolean alwaysAvoidsWater() {
+        return !isTamed();
+    }
 }
