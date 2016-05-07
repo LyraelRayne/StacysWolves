@@ -733,10 +733,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         }
     }
 
-    protected void preventDrowning() {
-        this.setAir(300);
-    }
-
     /**
      * Determines if an entity can be despawned, used on idle far away entities
      */

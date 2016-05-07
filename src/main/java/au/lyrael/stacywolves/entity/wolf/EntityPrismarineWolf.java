@@ -13,10 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.registry.WolfType.WATER;
 
 @WolfMetadata(name = "EntityPrismarineWolf", primaryColour = 0x42689B, secondaryColour = 0x68516F, type = WATER,
@@ -35,15 +32,19 @@ public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableW
     }
 
     @Override
-    public EntityWolfBase createChild(EntityAgeable parent) {
-        EntityWolfBase child = new EntityPrismarineWolf(this.worldObj);
-        return createChild(parent, child);
+    public boolean isPushedByWater() {
+        return false;
     }
 
     @Override
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
-        preventDrowning();
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+
+    @Override
+    public EntityWolfBase createChild(EntityAgeable parent) {
+        EntityWolfBase child = new EntityPrismarineWolf(this.worldObj);
+        return createChild(parent, child);
     }
 
     @Override
@@ -87,11 +88,6 @@ public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableW
     @Override
     protected void doWolfShaking() {
 
-    }
-
-    @Override
-    public boolean isInWater() {
-        return super.isInWater();
     }
 
     @Override
