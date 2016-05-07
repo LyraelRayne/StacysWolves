@@ -36,9 +36,14 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
-        preventDrowning();
+    public boolean isPushedByWater() {
+        return false;
+    }
+
+    @Override
+    public boolean canBreatheUnderwater()
+    {
+        return true;
     }
 
     @Override
@@ -53,6 +58,11 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public boolean normallyAvoidsWater() {
+        return false;
+    }
+
+    @Override
+    public boolean alwaysAvoidsWater() {
         return false;
     }
 }
