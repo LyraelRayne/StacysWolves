@@ -17,9 +17,7 @@ import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.StacyWolves.WOLF_REGISTRY;
-import static au.lyrael.stacywolves.registry.WolfType.MOB;
-import static au.lyrael.stacywolves.registry.WolfType.NORMAL;
-import static au.lyrael.stacywolves.registry.WolfType.ORE;
+import static au.lyrael.stacywolves.registry.WolfType.*;
 import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
 
 public class SpawnEventHandler {
@@ -72,10 +70,10 @@ public class SpawnEventHandler {
                 final BiomeGenBase biome = event.world.getBiomeGenForCoords(event.x, event.z);
                 List<BiomeGenBase.SpawnListEntry> wolfSpawns = WOLF_REGISTRY.getSpawnsFor(biome, wolfType);
                 for (BiomeGenBase.SpawnListEntry wolfSpawn : wolfSpawns) {
-                    if(!event.list.contains(wolfSpawn))
+                    if (!event.list.contains(wolfSpawn))
                         event.list.add(wolfSpawn);
                 }
-                if(wolfType != MOB)
+                if (wolfType != MOB)
                     LOGGER.trace("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
             }
         }

@@ -3,17 +3,29 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 @WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04)
 public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
+
+
+    public EntityFireWolf(World worldObj) {
+        super(worldObj);
+        addLikedItem(ItemRegistry.getWolfFood("fire_bone"));
+        this.addEdibleItem(new ItemStack(Items.beef));
+        this.addEdibleItem(new ItemStack(Items.chicken));
+        this.isImmuneToFire = true;
+    }
+
+    @Override
+    public EntityWolfBase createChild(EntityAgeable parent) {
+        EntityWolfBase child = new EntityFireWolf(this.worldObj);
+        return createChild(parent, child);
+    }
 
     @Override
     public void onLivingUpdate() {
@@ -36,19 +48,6 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
         }
 
         super.onLivingUpdate();
-    }
-
-    public EntityFireWolf(World worldObj) {
-        super(worldObj);
-        addLikedItem(ItemRegistry.getWolfFood("fire_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
-    }
-
-    @Override
-    public EntityWolfBase createChild(EntityAgeable parent) {
-        EntityWolfBase child = new EntityFireWolf(this.worldObj);
-        return createChild(parent, child);
     }
 
     @Override

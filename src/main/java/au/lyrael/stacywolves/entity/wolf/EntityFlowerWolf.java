@@ -10,9 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.FOREST;
-import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
-
 @WolfMetadata(name = "EntityFlowerWolf", primaryColour = 0x0E5C00, secondaryColour = 0xB95E9A,
         spawns = {
                 @WolfSpawn(spawnBiomes = {

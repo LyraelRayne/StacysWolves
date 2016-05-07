@@ -1,7 +1,6 @@
 package au.lyrael.stacywolves.annotation;
 
 
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.lang.annotation.ElementType;
@@ -32,7 +31,7 @@ public @interface WolfSpawnBiome {
     String[] excludeBiomeNames() default {};
 
     /**
-    These biomes will be added to the list regardless of the other parameters.
+     * These biomes will be added to the list regardless of the other parameters.
      */
     String[] specificBiomes() default {};
 }

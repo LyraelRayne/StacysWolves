@@ -15,8 +15,7 @@ public class ItemRegistry {
 
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
-    public static ItemStack getWolfFood(final String id)
-    {
+    public static ItemStack getWolfFood(final String id) {
         return wolf_food.getFood(id);
     }
 

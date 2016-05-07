@@ -11,7 +11,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.COLD;

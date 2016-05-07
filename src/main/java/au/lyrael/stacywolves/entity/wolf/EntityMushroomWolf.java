@@ -7,7 +7,6 @@ import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -15,8 +14,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.entity.EnumCreatureType.creature;
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraftforge.common.BiomeDictionary.Type.MUSHROOM;
 
 @WolfMetadata(name = "EntityMushroomWolf", primaryColour = 0xB11917, secondaryColour = 0xD5D5D5,
         spawns = {
@@ -48,6 +46,7 @@ public class EntityMushroomWolf extends EntityWolfBase implements IRenderableWol
     }
 
     private static final List<Block> floorBlocks = new ArrayList<>(NORMAL_FLOOR_BLOCKS);
+
     {
         floorBlocks.addAll(SHROOM_FLOOR_BLOCKS);
     }

@@ -1,9 +1,5 @@
 package au.lyrael.stacywolves.annotation;
 
-import au.lyrael.stacywolves.event.SpawnEventHandler;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraftforge.common.BiomeDictionary;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,5 +24,5 @@ public @interface WolfSpawn {
      */
     int max();
 
-   WolfSpawnBiome[] spawnBiomes() default {};
+    WolfSpawnBiome[] spawnBiomes() default {};
 }

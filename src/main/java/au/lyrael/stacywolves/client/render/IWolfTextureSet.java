@@ -7,7 +7,10 @@ import net.minecraft.util.ResourceLocation;
  */
 public interface IWolfTextureSet {
     ResourceLocation getBase();
+
     ResourceLocation getAngry();
+
     ResourceLocation getTame();
+
     ResourceLocation getCollar();
 }

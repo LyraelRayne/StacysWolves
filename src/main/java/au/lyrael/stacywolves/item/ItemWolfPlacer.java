@@ -2,8 +2,6 @@ package au.lyrael.stacywolves.item;
 
 
 import au.lyrael.stacywolves.utility.LanguageHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;

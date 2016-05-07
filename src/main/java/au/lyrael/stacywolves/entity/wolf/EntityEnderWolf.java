@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.registry.WolfType.MOB;
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityEnderWolf", primaryColour = 0x000000, secondaryColour = 0xCC00FA, type = MOB,

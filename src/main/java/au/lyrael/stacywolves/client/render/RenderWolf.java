@@ -36,13 +36,12 @@ public class RenderWolf extends RenderLiving {
             bindTexture(this.getEntityTexture(wolf));
             GL11.glColor3f(f1, f1, f1);
             return 1;
-        } else if(pass == 1 && wolf.isWolfTamed()) {
+        } else if (pass == 1 && wolf.isWolfTamed()) {
             bindTexture(this.getCollarTexture(wolf));
             int color = wolf.getCollarColor();
             GL11.glColor3f(EntitySheep.fleeceColorTable[color][0], EntitySheep.fleeceColorTable[color][1], EntitySheep.fleeceColorTable[color][2]);
             return 1;
-        }
-        else{
+        } else {
             return -1;
         }
     }

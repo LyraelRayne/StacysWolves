@@ -41,8 +41,7 @@ public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    public boolean canBreatheUnderwater()
-    {
+    public boolean canBreatheUnderwater() {
         return true;
     }
 

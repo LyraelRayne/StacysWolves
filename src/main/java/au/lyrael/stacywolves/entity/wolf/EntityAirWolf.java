@@ -10,7 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 @WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,

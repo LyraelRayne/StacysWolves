@@ -3,13 +3,10 @@ package au.lyrael.stacywolves.registry;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraftforge.common.util.EnumHelper;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static net.minecraft.entity.EnumCreatureType.waterCreature;
 
 public enum WolfType {
     NORMAL("normalStacyWolf", 10, Material.air, false, true),
@@ -44,7 +41,7 @@ public enum WolfType {
     private static WolfType longValueOf(EnumCreatureType type) {
         for (WolfType wolfType : values()) {
             reverseMapping.put(wolfType.creatureType(), wolfType);
-            if(type == wolfType.creatureType())
+            if (type == wolfType.creatureType())
                 return wolfType;
         }
         reverseMapping.put(type, null);

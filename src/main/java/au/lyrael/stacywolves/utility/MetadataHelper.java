@@ -1,7 +1,7 @@
 package au.lyrael.stacywolves.utility;
 
-import cpw.mods.fml.common.ModMetadata;
 import au.lyrael.stacywolves.StacyWolves;
+import cpw.mods.fml.common.ModMetadata;
 
 public class MetadataHelper {
     public static ModMetadata transformMetadata(ModMetadata meta) {
