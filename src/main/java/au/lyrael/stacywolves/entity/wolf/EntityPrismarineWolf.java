@@ -83,4 +83,39 @@ public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableW
                 ? getWorldObj().getBlock(blockPosition.blockX, blockPosition.blockY, blockPosition.blockZ)
                 : null;
     }
+
+    @Override
+    protected void doWolfShaking() {
+
+    }
+
+    @Override
+    public boolean isInWater() {
+        return super.isInWater();
+    }
+
+    @Override
+    public boolean handleWaterMovement() {
+        if (!shouldSwimToSurface()) {
+            this.setIsInWater(false);
+            return false;
+        } else
+            return super.handleWaterMovement();
+    }
+
+    @Override
+    public boolean shouldSwimToSurface() {
+        final Block blockInDirection = getBlockInDirection(Vec3.createVectorHelper(0D, 30D, 0D));
+        return blockInDirection == null;
+    }
+
+    @Override
+    public boolean normallyAvoidsWater() {
+        return false;
+    }
+
+    @Override
+    public boolean alwaysAvoidsWater() {
+        return false;
+    }
 }

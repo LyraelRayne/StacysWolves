@@ -3,14 +3,9 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ISpawnable;
-import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
-import au.lyrael.stacywolves.entity.ai.EntityAIWolfMate;
-import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
-import au.lyrael.stacywolves.entity.ai.WolfAIBeg;
+import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.registry.ItemRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.command.IEntitySelector;
@@ -71,8 +66,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     public EntityWolfBase(World world) {
         super(world);
         this.setSize(0.6F, 0.8F);
-        this.getNavigator().setAvoidsWater(this.normallyAvoidsWater());
-        this.tasks.addTask(1, new EntityAISwimming(this));
+        this.getNavigator().setAvoidsWater(this.normallyAvoidsWater() || this.alwaysAvoidsWater());
+        this.tasks.addTask(1, new EntityAIWolfSwimming(this));
         this.tasks.addTask(2, this.aiSit);
         this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.5D, false));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
@@ -99,6 +94,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     protected List<Block> getFloorBlocks() {
         return NORMAL_FLOOR_BLOCKS;
     }
+
 
     @Override
     protected void applyEntityAttributes() {
@@ -170,7 +166,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public float getWolfBrightness(float maybeTime) {
-        return getBrightness(maybeTime);
+        return isOffsetPositionInLiquid(posX, posY, posZ) ? 1F : getBrightness(maybeTime);
     }
 
     /**
@@ -298,22 +294,33 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (!this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
-            this.setDead();
-            return;
-        }
+        if (doPeacefulDespawn()) return;
+
         this.field_70924_f = this.field_70926_e;
 
+        doBeggingChase();
+
+        doWolfShaking();
+    }
+
+    protected void doBeggingChase() {
         if (this.isBegging()) {
             this.field_70926_e += (1.0F - this.field_70926_e) * 0.4F;
+            this.numTicksToChaseTarget = 10;
         } else {
             this.field_70926_e += (0.0F - this.field_70926_e) * 0.4F;
         }
+    }
 
-        if (this.isBegging()) {
-            this.numTicksToChaseTarget = 10;
+    protected boolean doPeacefulDespawn() {
+        if (!this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
+            this.setDead();
+            return true;
         }
+        return false;
+    }
 
+    protected void doWolfShaking() {
         if (this.isWet()) {
             this.isShaking = true;
             this.field_70928_h = false;
@@ -872,6 +879,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return this.worldObj;
     }
 
+    public void setIsInWater(boolean value) {
+        this.inWater = value;
+    }
+
     /**
      * NOTE: This method basically exists because I wanted a method on the wolf interface to be used by other stuff.
      * <p>
@@ -902,4 +913,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         return isTamed();
     }
 
+    public boolean shouldSwimToSurface() {
+        return true;
+    }
 }
