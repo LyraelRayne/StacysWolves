@@ -614,20 +614,6 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
             this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -3)));
         }
     }
-//
-//    /**
-//     * Return this wolf's collar color.
-//     */
-//    public int getCollarColor() {
-//        return this.dataWatcher.getWatchableObjectByte(20) & 15;
-//    }
-//
-//    /**
-//     * Set this wolf's collar color.
-//     */
-//    public void setCollarColor(int color) {
-//        this.dataWatcher.updateObject(20, Byte.valueOf((byte) (color & 15)));
-//    }
 
     @Override
     public abstract EntityWolfBase createChild(EntityAgeable parent);
