@@ -1,11 +1,16 @@
 package au.lyrael.stacywolves.blocks;
 
+import au.lyrael.stacywolves.item.IRegisterMyOwnRecipes;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -17,13 +22,15 @@ import java.util.Random;
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
-public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntityProvider {
+public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntityProvider, IRegisterMyOwnRecipes {
+
+    public static final String WOLFSBANE_TORCH = "wolfsbane_torch";
 
     public BlockWolfsbaneTorch() {
         super(Material.circuits);
         this.setTickRandomly(false);
-        this.setBlockName("wolfsbane_torch");
-        this.setBlockTextureName("wolfsbane_torch");
+        this.setBlockName(WOLFSBANE_TORCH);
+        this.setBlockTextureName(WOLFSBANE_TORCH);
         this.setCreativeTab(CREATIVE_TAB);
         this.setLightLevel(1.0F);
     }
@@ -266,5 +273,11 @@ public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntity
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
         return new TileEntityWolfsbane();
+    }
+
+    @Override
+    public void registerRecipes() {
+        // Wolfsbane is a purple flower. Peonies are the closest thing in Vanilla.
+        GameRegistry.addRecipe(new ItemStack(this), new Object[] {"FFF", "FTF", "FFF", 'F', new ItemStack(Blocks.double_plant, 1, 1), 'T', Blocks.torch});
     }
 }

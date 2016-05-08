@@ -81,3 +81,6 @@ item.stacywolves.wolf_food_zombie_bone.tooltip=Zombie Wolves will eat ANYthing..
 item.stacywolves.wolf_food_meaty_bone.name=Meaty Bone of Love
 item.stacywolves.wolf_food_meaty_bone.tooltip=Feeding this to a tamed wolf will prepare it for mating.
 
+# - Block Localization
+tile.stacywolves.wolfsbane_torch.name=Wolfsbane Torch
+tile.stacywolves.wolfsbane_torch.tooltip=Keeps the hungry wolf at bay.

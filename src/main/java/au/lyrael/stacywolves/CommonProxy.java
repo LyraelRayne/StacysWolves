@@ -4,6 +4,7 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
 import cpw.mods.fml.common.discovery.ASMDataTable;
@@ -24,15 +25,24 @@ public class CommonProxy {
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public void init() {
-        ItemRegistry.wolf_food.registerRecipes();
+        registerRecipes();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
+    }
+
+    protected void registerRecipes() {
+        ItemRegistry.wolf_food.registerRecipes();
+        ItemRegistry.wolfsbane_torch.registerRecipes();
     }
 
     public void preInit(FMLPreInitializationEvent event) {
         registerWolfEntities(event);
-        GameRegistry.registerItem(new ItemWolfFood(), ItemWolfFood.UNLOCALIZED_NAME);
+        registerItemsAndBlocks();
+    }
+
+    protected void registerItemsAndBlocks() {
+        GameRegistry.registerItem(new ItemWolfFood(), ItemWolfFood.WOLF_FOOD);
         final Block blockWolfsbaneTorch = new BlockWolfsbaneTorch();
-        GameRegistry.registerBlock(blockWolfsbaneTorch, blockWolfsbaneTorch.getUnlocalizedName());
+        GameRegistry.registerBlock(blockWolfsbaneTorch, ItemBlockStacyWolves.class, blockWolfsbaneTorch.getUnlocalizedName());
     }
 
     private void registerWolfEntities(FMLPreInitializationEvent event) {

@@ -18,9 +18,9 @@ import java.util.Map;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
 
-public class ItemWolfFood extends ItemStacyWolves {
+public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecipes {
 
-    public static final String UNLOCALIZED_NAME = "wolf_food";
+    public static final String WOLF_FOOD = "wolf_food";
 
     public static final String ID_TAG = "wolf_food_id";
 
@@ -30,7 +30,7 @@ public class ItemWolfFood extends ItemStacyWolves {
     public ItemWolfFood() {
         super();
         this.setCreativeTab(CREATIVE_TAB);
-        this.setUnlocalizedName(UNLOCALIZED_NAME);
+        this.setUnlocalizedName(WOLF_FOOD);
         this.setMaxStackSize(64);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);

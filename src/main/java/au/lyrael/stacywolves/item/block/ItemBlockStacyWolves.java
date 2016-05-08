@@ -1,44 +1,45 @@
-package au.lyrael.stacywolves.item;
+package au.lyrael.stacywolves.item.block;
 
 import au.lyrael.stacywolves.utility.LanguageHelper;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
+import static au.lyrael.stacywolves.utility.LanguageHelper.unwrapUnlocalizedName;
 
+public class ItemBlockStacyWolves extends ItemBlock {
+    private final Block block;
+    //defaults to only showing the tooltip when shift is pressed. you can override this behavior at the item level by setting the item's showTooltipsAlways bool to true.
+    private boolean showTooltipsAlways = true;
 
-public class ItemStacyWolves extends Item {
-    private boolean showTooltipsAlways = false;
-
-    public ItemStacyWolves() {
-        super();
-        this.setCreativeTab(CREATIVE_TAB);
+    public ItemBlockStacyWolves(Block block) {
+        super(block);
+        this.block = block;
     }
 
     @Override
     public String getUnlocalizedName() {
-        return String.format("item.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return String.format("item.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("tile.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
     }
 
+    /**
+     * Just a call to formatTooltip(). If you are overriding this function, call
+     * formatTooltip() directly and DO NOT call super.addInformation().
+     */
     @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon(String.format("%s", unwrapUnlocalizedName(this.getUnlocalizedName())));
-    }
-
-    protected String unwrapUnlocalizedName(String unlocalizedName) {
-        return LanguageHelper.unwrapUnlocalizedName(unlocalizedName);
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean whatDoesThisEvenDo) {
+        this.formatTooltip(null, stack, list);
     }
 
     /**
@@ -57,15 +58,6 @@ public class ItemStacyWolves extends Item {
             LanguageHelper.formatTooltip(this.getUnlocalizedNameInefficiently(stack) + ".tooltip", toFormat, stack, list);
     }
 
-    /**
-     * Just a call to formatTooltip(). If you are overriding this function, call
-     * formatTooltip() directly and DO NOT call super.addInformation().
-     */
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean whatDoesThisEvenDo) {
-        this.formatTooltip(null, stack, list);
-    }
-
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         return LanguageHelper.getLocalization(this.getUnlocalizedNameInefficiently(stack) + ".name");
@@ -75,9 +67,7 @@ public class ItemStacyWolves extends Item {
         return this.showTooltipsAlways;
     }
 
-    protected void showTooltipsAlways(boolean showTooltipAlways) {
-        this.showTooltipsAlways = showTooltipAlways;
+    protected void showTooltipsAlways(boolean b) {
+        this.showTooltipsAlways = b;
     }
-
-
 }
