@@ -3,6 +3,7 @@ package au.lyrael.stacywolves.event;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.registry.WolfType;
+import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
@@ -14,9 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Set;
 
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
-import static au.lyrael.stacywolves.StacyWolves.WOLF_REGISTRY;
+import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.registry.WolfType.*;
 import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
 
@@ -40,8 +41,14 @@ public class SpawnEventHandler {
                 } else {
                     if (entity instanceof IWolf) {
                         if (entity.getCanSpawnHere()) {
-                            LOGGER.debug("Can spawn here and now: {}", entity);
-                            traceSpawnCaps(event);
+                            if (!isNearWolfsBane(event)) {
+                                LOGGER.debug("Can spawn here and now: {}", entity);
+                                traceSpawnCaps(event);
+                            } else {
+                                event.setResult(DENY);
+                                LOGGER.debug("Spawn prevented by wolfsbane. Aborted entity: [{}]", entity);
+                                return;
+                            }
                         } else {
                             LOGGER.trace("Can spawn now but not here: {}", entity);
                         }
@@ -49,6 +56,19 @@ public class SpawnEventHandler {
                 }
             }
         }
+    }
+
+    private boolean isNearWolfsBane(LivingSpawnEvent.CheckSpawn event) {
+        boolean result = false;
+        final Set<TileEntityWolfsbane> wolfsBanes = WOLFSBANE_REGISTRY.getWolfsbanesForWorld(event.world);
+        for (TileEntityWolfsbane wolfsBane : wolfsBanes) {
+            if (wolfsBane.isWithinRange(event.x, event.y, event.z)) {
+                result = true;
+                LOGGER.debug("entity [{}] attempted to spawn near wolfsbane [{}]", event.entity, wolfsBane);
+                break;
+            }
+        }
+        return result;
     }
 
     protected void traceSpawnCaps(LivingSpawnEvent.CheckSpawn event) {

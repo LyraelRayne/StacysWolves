@@ -3,7 +3,9 @@ package au.lyrael.stacywolves;
 import au.lyrael.stacywolves.config.ConfigurationEventHandler;
 import au.lyrael.stacywolves.event.MapGenEventHandler;
 import au.lyrael.stacywolves.event.SpawnEventHandler;
+import au.lyrael.stacywolves.event.WorldEventHandler;
 import au.lyrael.stacywolves.registry.WolfRegistry;
+import au.lyrael.stacywolves.registry.WolfsbaneRegistry;
 import au.lyrael.stacywolves.utility.MetadataHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -12,6 +14,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -51,6 +54,7 @@ public class StacyWolves {
     public static Configuration configuration;
 
     public static final WolfRegistry WOLF_REGISTRY = new WolfRegistry();
+    public static final WolfsbaneRegistry WOLFSBANE_REGISTRY = new WolfsbaneRegistry();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -59,8 +63,7 @@ public class StacyWolves {
         final ConfigurationEventHandler configurationEventHandler = new ConfigurationEventHandler();
         configurationEventHandler.preInit(event);
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
-        MinecraftForge.EVENT_BUS.register(new SpawnEventHandler());
-        MinecraftForge.TERRAIN_GEN_BUS.register(new MapGenEventHandler());
+
 
         metadata = MetadataHelper.transformMetadata(metadata);
 
@@ -73,6 +76,8 @@ public class StacyWolves {
     public void init(FMLInitializationEvent event) {
         LOGGER.log(Level.INFO, "Initialization: Starting...");
         proxy.init();
+
+
         LOGGER.log(Level.INFO, "Initialization: Complete");
     }
 
@@ -81,9 +86,10 @@ public class StacyWolves {
         LOGGER.log(Level.INFO, "Post Initialization: Starting...");
 
         proxy.postInit(event);
+        MinecraftForge.EVENT_BUS.register(new SpawnEventHandler());
+        MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
+        MinecraftForge.TERRAIN_GEN_BUS.register(new MapGenEventHandler());
 
         LOGGER.log(Level.INFO, "Post Initialization: Complete");
     }
-
-
 }
