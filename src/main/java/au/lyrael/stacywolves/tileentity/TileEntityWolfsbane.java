@@ -78,6 +78,10 @@ public class TileEntityWolfsbane extends TileEntity {
     }
 
     public boolean isWithinRange(float targetX, float targetY, float targetZ) {
+       return isWithinRange((double)targetX, (double)targetY, (double)targetZ);
+    }
+
+    public boolean isWithinRange(double targetX, double targetY, double targetZ) {
         return getBoundingBox().isVecInside(Vec3.createVectorHelper(targetX, targetY, targetZ));
     }
 

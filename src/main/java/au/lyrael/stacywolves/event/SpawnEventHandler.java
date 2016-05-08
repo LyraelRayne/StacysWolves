@@ -1,14 +1,17 @@
 package au.lyrael.stacywolves.event;
 
 import au.lyrael.stacywolves.entity.ISpawnable;
+import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.registry.WolfType;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
@@ -56,6 +59,33 @@ public class SpawnEventHandler {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onEnderTeleport(EnderTeleportEvent event) {
+        if(event.entityLiving instanceof EntityWolfBase)
+        {
+            EntityWolfBase wolf = (EntityWolfBase) event.entityLiving;
+            if(!wolf.isTamed() && isNearWolfsBane(event)) {
+                LOGGER.debug("Denied teleport of [{}] event [{}] due to Wolfsbane.", wolf, event);
+                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
+                return;
+            }
+        }
+    }
+
+    private boolean isNearWolfsBane(EnderTeleportEvent event) {
+        boolean result = false;
+        final Set<TileEntityWolfsbane> wolfsBanes = WOLFSBANE_REGISTRY.getWolfsbanesForWorld(event.entity.worldObj);
+        for (TileEntityWolfsbane wolfsBane : wolfsBanes) {
+            if (wolfsBane.isWithinRange(event.targetX, event.targetY, event.targetZ)) {
+                result = true;
+                LOGGER.debug("entity [{}] attempted to teleport near wolfsbane [{}]", event.entity, wolfsBane);
+                break;
+            }
+        }
+        return result;
     }
 
     private boolean isNearWolfsBane(LivingSpawnEvent.CheckSpawn event) {

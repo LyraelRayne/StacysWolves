@@ -8,6 +8,8 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.ai.EntityAITargetNonTamed;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -87,12 +89,12 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     protected void doAttackTeleport() {
         if (this.isEntityAlive()) {
             if (this.getAttackTarget() != null) {
-                if (this.getAttackTarget().getDistanceSqToEntity(this) > 32.0D && this.teleportDelay++ >= 30 && this.teleportToEntity(this.getAttackTarget())) {
+                if (this.getAttackTarget().getDistanceSqToEntity(this) > 32.0D && this.teleportDelay-- <= 0 && this.teleportToEntity(this.getAttackTarget())) {
                     this.getNavigator().clearPathEntity();
-                    this.teleportDelay = 0;
+                    this.teleportDelay = 30;
                 }
             } else {
-                this.teleportDelay = 0;
+                this.teleportDelay = 30;
             }
         }
     }
@@ -135,6 +137,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     protected boolean teleportTo(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
         EnderTeleportEvent event = new EnderTeleportEvent(this, p_70825_1_, p_70825_3_, p_70825_5_, 0);
         if (MinecraftForge.EVENT_BUS.post(event)) {
+            this.teleportDelay = 90;
             return false;
         }
         double origPosX = this.posX;
