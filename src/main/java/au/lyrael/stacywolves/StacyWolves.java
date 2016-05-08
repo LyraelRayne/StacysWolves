@@ -14,7 +14,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -41,10 +40,10 @@ public class StacyWolves {
     public static int modEntityID = 0;
 
     @Mod.Instance(MOD_ID)
-    public static StacyWolves instance;
+    public static StacyWolves INSTANCE;
 
     @Mod.Metadata(MOD_ID)
-    public static ModMetadata metadata;
+    public static ModMetadata MOD_METADATA;
 
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS, serverSide = COMMON_PROXY_CLASS)
     public static CommonProxy proxy;
@@ -65,7 +64,7 @@ public class StacyWolves {
         FMLCommonHandler.instance().bus().register(configurationEventHandler);
 
 
-        metadata = MetadataHelper.transformMetadata(metadata);
+        MOD_METADATA = MetadataHelper.transformMetadata(MOD_METADATA);
 
         proxy.preInit(event);
 
