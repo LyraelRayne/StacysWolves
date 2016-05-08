@@ -98,7 +98,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     private boolean shouldRandomTeleport() {
-        return false && getAttackTarget() == null && canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.getRNG().nextInt(100) < 2;
+        return getAttackTarget() == null && canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.getRNG().nextInt(100) < 2;
     }
 
 
