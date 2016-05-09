@@ -40,7 +40,7 @@ public class WolfRegistry {
 
     protected void registerModEntityWithEgg(Class parEntityClass, String parEntityName,
                                             int parEggColor, int parEggSpotsColor) {
-        EntityRegistry.registerModEntity(parEntityClass, parEntityName, ++modEntityID,
+        EntityRegistry.registerModEntity(parEntityClass, parEntityName, ++LAST_MOD_ENTITY_ID,
                 INSTANCE, 80, 3, false);
         Item itemSpawnEgg = new ItemWolfPlacer(parEntityName, parEggColor, parEggSpotsColor)
                 .setUnlocalizedName("spawn_egg_" + parEntityName.toLowerCase())

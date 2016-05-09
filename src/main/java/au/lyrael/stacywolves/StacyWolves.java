@@ -37,7 +37,11 @@ public class StacyWolves {
     public static final String LOGO_PATH = ""; // PUT LOGO PATH HERE!
     public static final String CLIENT_PROXY_CLASS = "au.lyrael.stacywolves.ClientProxy";
     public static final String COMMON_PROXY_CLASS = "au.lyrael.stacywolves.CommonProxy";
-    public static int modEntityID = 0;
+
+    /**
+     * Make sure these are loaded in the same order every time so that clients and servers match!
+     **/
+    public static int LAST_MOD_ENTITY_ID = 0;
 
     @Mod.Instance(MOD_ID)
     public static StacyWolves INSTANCE;

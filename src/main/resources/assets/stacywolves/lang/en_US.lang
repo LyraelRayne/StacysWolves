@@ -30,6 +30,7 @@ entity.stacywolves.EntitySavannahWolf.name=Savannah Wolf
 entity.stacywolves.EntitySkeletonWolf.name=Bone Wolf
 entity.stacywolves.EntityWaterWolf.name=Ocean Wolf
 entity.stacywolves.EntityZombieWolf.name=Zombie Wolf
+entity.stacywolves.EntityWolfTransporter.name=Ender Ball
 
 # - Item Localization
 item.stacywolves.wolf_food_air_bone.name=Cloud Bone
@@ -80,7 +81,10 @@ item.stacywolves.wolf_food_zombie_bone.name=Zombone
 item.stacywolves.wolf_food_zombie_bone.tooltip=Zombie Wolves will eat ANYthing.... ugh.
 item.stacywolves.wolf_food_meaty_bone.name=Meaty Bone of Love
 item.stacywolves.wolf_food_meaty_bone.tooltip=Feeding this to a tamed wolf will prepare it for mating.
+item.stacywolves.wolf_transporter.name=Ender Ball
+item.stacywolves.wolf_transporter.tooltip=Through the power of Science; Stacy's Wolves may now be transported using the power of Ender!
 
 # - Block Localization
 tile.stacywolves.wolfsbane_torch.name=Wolfsbane Torch
 tile.stacywolves.wolfsbane_torch.tooltip=Keeps the hungry wolf at bay.
+

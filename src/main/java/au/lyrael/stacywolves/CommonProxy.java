@@ -2,14 +2,17 @@ package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
+import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.item.ItemWolfTransporter;
 import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import org.apache.logging.log4j.LogManager;
@@ -17,8 +20,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
-import static au.lyrael.stacywolves.StacyWolves.WOLF_REGISTRY;
+import static au.lyrael.stacywolves.StacyWolves.*;
+import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
+import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
+import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
 
 public class CommonProxy {
 
@@ -27,6 +32,7 @@ public class CommonProxy {
     public void init() {
         registerRecipes();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
+        EntityRegistry.registerModEntity(EntityWolfTransporter.class, ENTITY_WOLF_TRANSPORTER, ++LAST_MOD_ENTITY_ID, INSTANCE, 128, 5, true);
     }
 
     protected void registerRecipes() {
@@ -40,7 +46,12 @@ public class CommonProxy {
     }
 
     protected void registerItemsAndBlocks() {
-        GameRegistry.registerItem(new ItemWolfFood(), ItemWolfFood.WOLF_FOOD);
+        GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
+        registerWolfsBaneTorch();
+        GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
+    }
+
+    private void registerWolfsBaneTorch() {
         final Block blockWolfsbaneTorch = new BlockWolfsbaneTorch();
         GameRegistry.registerBlock(blockWolfsbaneTorch, ItemBlockStacyWolves.class, blockWolfsbaneTorch.getUnlocalizedName());
     }
