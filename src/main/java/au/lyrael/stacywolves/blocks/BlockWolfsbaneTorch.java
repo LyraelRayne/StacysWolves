@@ -276,7 +276,9 @@ public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntity
 
     @Override
     public void registerRecipes() {
-        // Wolfsbane is a purple flower. Peonies are the closest thing in Vanilla.
-        GameRegistry.addRecipe(new ItemStack(this), new Object[] {"FFF", "FTF", "FFF", 'F', new ItemStack(Blocks.double_plant, 1, 1), 'T', Blocks.torch});
+        // Wolfsbane is a purple flower. Lilac is the closest thing in Vanilla. Allium also works.
+        GameRegistry.addRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.double_plant, 1, 1), 'T', Blocks.torch});
+        GameRegistry.addRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.red_flower, 1, 2), 'T', Blocks.torch});
+
     }
 }
