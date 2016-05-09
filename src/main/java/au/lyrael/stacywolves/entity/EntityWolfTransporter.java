@@ -17,6 +17,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.utility.WolfTransporterUtility.*;
+import static au.lyrael.stacywolves.utility.WorldHelper.spawnParticle;
 
 public class EntityWolfTransporter extends EntityThrowable {
 
@@ -57,13 +58,13 @@ public class EntityWolfTransporter extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (count == 2) {
-            for (int particles = 0; particles < rand.nextInt(2) + 1; particles++) {
-                worldObj.spawnParticle("mobSpell", posX + worldObj.rand.nextDouble(), posY + worldObj.rand.nextDouble(), posZ + worldObj.rand.nextDouble(), 0D, 0D, 0D);
+        if (worldObj.isRemote) {
+            if (count == 2) {
+                spawnParticle(worldObj, "portal", rand.nextInt(8) + 2, 1.0, posX, posY, posZ);
+                count = 0;
+            } else {
+                count++;
             }
-            count = 0;
-        } else {
-            count++;
         }
     }
 
@@ -89,6 +90,8 @@ public class EntityWolfTransporter extends EntityThrowable {
             entityNbt.setString(WOLF_TYPE_TAG, (String) EntityList.classToStringMapping.get(wolf.getClass()));
             itemNbt.setTag(CAPTURED_ENTITY_DETAILS_TAG, entityNbt);
             itemstack.setTagCompound(itemNbt);
+            this.worldObj.playSoundEffect(wolf.posX, wolf.posY, wolf.posZ, "mob.endermen.portal", 1.0F, 1.0F);
+
             wolf.setDead();
             return true;
         } else {
@@ -115,8 +118,9 @@ public class EntityWolfTransporter extends EntityThrowable {
      */
     @Override
     protected void onImpact(MovingObjectPosition impactPoint) {
-        if (worldObj.isRemote)
+        if (worldObj.isRemote) {
             return;
+        }
 
         ItemStack container = getWolfContainer();
         if (container != null) {
@@ -167,7 +171,7 @@ public class EntityWolfTransporter extends EntityThrowable {
                 if (tameableHit.isTamed() && tameableHitOwner == spawnedWolfOwner || tameableHitOwner == tosser)
                     shouldAttack = false;
             } else {
-                if(entityHit instanceof  EntityPlayer)
+                if (entityHit instanceof EntityPlayer)
                     shouldAttack = false;
             }
             if (shouldAttack)
@@ -184,6 +188,7 @@ public class EntityWolfTransporter extends EntityThrowable {
                     impactPoint.blockX + Facing.offsetsXForSide[sideHit],
                     impactPoint.blockY + Facing.offsetsYForSide[sideHit],
                     impactPoint.blockZ + Facing.offsetsZForSide[sideHit]);
+
         }
     }
 
@@ -193,6 +198,7 @@ public class EntityWolfTransporter extends EntityThrowable {
             spawnedWolf.setPosition(x, y, z);
             worldObj.spawnEntityInWorld(spawnedWolf);
             spawnedWolf.playLivingSound();
+            this.worldObj.playSoundEffect(x, y, z, "mob.endermen.portal", 1.0F, 1.0F);
             setDead();
         } else {
             dropItem(container);
