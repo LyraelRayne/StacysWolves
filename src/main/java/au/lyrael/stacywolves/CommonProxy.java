@@ -38,6 +38,7 @@ public class CommonProxy {
     protected void registerRecipes() {
         ItemRegistry.wolf_food.registerRecipes();
         ItemRegistry.wolfsbane_torch.registerRecipes();
+        ItemRegistry.wolf_transporter.registerRecipes();
     }
 
     public void preInit(FMLPreInitializationEvent event) {
