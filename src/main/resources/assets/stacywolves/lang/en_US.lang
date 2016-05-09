@@ -76,13 +76,13 @@ item.stacywolves.wolf_food_savannah_bone.tooltip=Savannah Wolves are reminded of
 item.stacywolves.wolf_food_skeleton_bone.name=Skele-Bone
 item.stacywolves.wolf_food_skeleton_bone.tooltip=More bone than your body has room for.;Good thing that Bone Wolves have no body.;Grim wishes he could have such a bony bone ;)
 item.stacywolves.wolf_food_water_bone.name=Wet Bone
-item.stacywolves.wolf_food_water_bone.tooltip=This wet bone is a little soggy. ;Only an Ocean Wolf could love it.
+item.stacywolves.wolf_food_water_bone.tooltip=This wet bone is a little soggy.;Only an Ocean Wolf could love it.
 item.stacywolves.wolf_food_zombie_bone.name=Zombone
 item.stacywolves.wolf_food_zombie_bone.tooltip=Zombie Wolves will eat ANYthing.... ugh.
 item.stacywolves.wolf_food_meaty_bone.name=Meaty Bone of Love
 item.stacywolves.wolf_food_meaty_bone.tooltip=Feeding this to a tamed wolf will prepare it for mating.
 item.stacywolves.wolf_transporter.name=Ender Ball
-item.stacywolves.wolf_transporter.tooltip=Through the power of Science; Stacy's Wolves may now be transported using the power of Ender!
+item.stacywolves.wolf_transporter.tooltip=Through the mighty power of Science;Stacy's Wolves may now be transported using the power of Ender!
 
 # - Block Localization
 tile.stacywolves.wolfsbane_torch.name=Wolfsbane Torch
