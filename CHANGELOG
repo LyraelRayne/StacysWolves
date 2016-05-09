@@ -1,3 +1,17 @@
+1.0.7 - Old Dogs can learn new tricks
+    * Prismarine wolves now spawn in ocean monuments if Et Futurum is installed.
+    * Prismarine wolves can now walk and breathe underwater. They will do so if there are any blocks within 30 spaces above them.
+    * Fire wolves now always avoid water unless tamed.
+    * Water wolves never avoid water, are not pushed by water and can breathe underwater.
+    * Added the Wolfsbane Torch. May be crafted by placing a torch between Lilac or Allium flowers in the shape of a cross.
+    * Wolves will no longer spawn within a 16 block radius of a Wolfsbane Torch.
+    * Ender Wolves have learned to teleport. Untamed Ender Wolves will not teleport to a space near a Wolfsbane Torch
+    * Reduced the chance that Stacy's Wolves will attack passive mobs. Your sheep are now twice as safe as they ever were. (from Stacy's Wolves, at least).
+    * Added the Ender Ball. May be crafted by making a circle of alternating Ender Pearls and Eyes of Ender in the crafting grid. The recipe will be updated to require an Ender Dragon Egg in a later version.
+    * Throwing an Ender Ball at Stacy's Wolves will capture them inside the ball.
+    * Throwing the Ender Ball again will release the wolf.
+    * Throwing an Ender Ball containing a Wolf at a creature will unleash the fury of the wolf (unless the creature is tamed by the person who threw the Ender Ball, or the creature is a Player).
+
 1.0.6 - Fix Mah Server!
     * Fixed a serious issue where the wolf spawned on a server and the wolf the user sees on a client did not match.
     * Fixed a serious bug where the server would crash if items are spawned using cheat commands.
