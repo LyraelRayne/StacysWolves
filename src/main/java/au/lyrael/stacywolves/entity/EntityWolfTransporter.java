@@ -28,31 +28,14 @@ public class EntityWolfTransporter extends EntityThrowable {
 
     public EntityWolfTransporter(World par1World) {
         super(par1World);
-        dataWatcher.addObject(2, new ItemStack(ItemRegistry.wolf_transporter));
+        final ItemStack container = new ItemStack(ItemRegistry.wolf_transporter, 1);
+        dataWatcher.addObject(2, container);
     }
 
     public EntityWolfTransporter(World world, EntityPlayer tosser, ItemStack container) {
         super(world, tosser);
         this.tosser = tosser;
         dataWatcher.addObject(2, container);
-    }
-
-    /**
-     * Gets the amount of gravity to apply to the thrown entity with each tick.
-     */
-    @Override
-    protected float getGravityVelocity() {
-        return 0.04F;
-    }
-
-    @Override
-    protected float func_70182_d() {
-        return 0.9F;
-    }
-
-    @Override
-    protected float func_70183_g() {
-        return -20.0F;
     }
 
     @Override
