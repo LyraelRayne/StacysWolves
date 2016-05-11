@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 
 public class WolfTransporterUtility {
@@ -16,10 +15,15 @@ public class WolfTransporterUtility {
     public static final String WOLF_TYPE_TAG = "id";
 
     public static boolean containsWolf(ItemStack container) {
-        final NBTTagCompound tagCompound = container.getTagCompound();
-        return container != null
-                && tagCompound != null
-                && tagCompound.getCompoundTag(CAPTURED_ENTITY_DETAILS_TAG) != null;
+        return getWolfDetails(container) != null;
+    }
+
+    public static NBTTagCompound getWolfDetails(ItemStack container) {
+        if (container != null) {
+            final NBTTagCompound tagCompound = container.getTagCompound();
+            return tagCompound != null ? tagCompound.getCompoundTag(CAPTURED_ENTITY_DETAILS_TAG) : null;
+        }
+        return null;
     }
 
     public static EntityWolfBase loadWolf(ItemStack container, World world) {

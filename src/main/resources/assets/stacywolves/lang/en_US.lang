@@ -83,6 +83,8 @@ item.stacywolves.wolf_food_meaty_bone.name=Meaty Bone of Love
 item.stacywolves.wolf_food_meaty_bone.tooltip=Feeding this to a tamed wolf will prepare it for mating.
 item.stacywolves.wolf_transporter.name=Ender Ball
 item.stacywolves.wolf_transporter.tooltip=Through the mighty power of Science;Stacy's Wolves may now be transported using the power of Ender!
+item.stacywolves.wolf_transporter.unnamedcontents.tooltip=Contains {{!colors.light_purple}}{{type}}
+item.stacywolves.wolf_transporter.namedcontents.tooltip=Contains {{!colors.light_purple}}{{type}}{{!colors.reset}}({{!colors.yellow}}{{name}}{{!colors.reset}})
 
 # - Block Localization
 tile.stacywolves.wolfsbane_torch.name=Wolfsbane Torch

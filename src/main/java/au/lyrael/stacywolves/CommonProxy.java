@@ -24,15 +24,28 @@ import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
+import static au.lyrael.stacywolves.utility.LanguageHelper.setupColors;
 
 public class CommonProxy {
 
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
+    public void preInit(FMLPreInitializationEvent event) {
+        registerWolfEntities(event);
+        registerItemsAndBlocks();
+        setupColors();
+    }
+
     public void init() {
         registerRecipes();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
         EntityRegistry.registerModEntity(EntityWolfTransporter.class, ENTITY_WOLF_TRANSPORTER, ++LAST_MOD_ENTITY_ID, INSTANCE, 128, 5, true);
+    }
+
+    public void postInit(FMLPostInitializationEvent event) {
+        for (String wolfName : WOLF_REGISTRY.getRegisteredEntityNames()) {
+            WOLF_REGISTRY.registerForSpawning(wolfName);
+        }
     }
 
     protected void registerRecipes() {
@@ -41,10 +54,6 @@ public class CommonProxy {
         ItemRegistry.wolf_transporter.registerRecipes();
     }
 
-    public void preInit(FMLPreInitializationEvent event) {
-        registerWolfEntities(event);
-        registerItemsAndBlocks();
-    }
 
     protected void registerItemsAndBlocks() {
         GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
@@ -95,9 +104,4 @@ public class CommonProxy {
     }
 
 
-    public void postInit(FMLPostInitializationEvent event) {
-        for (String wolfName : WOLF_REGISTRY.getRegisteredEntityNames()) {
-            WOLF_REGISTRY.registerForSpawning(wolfName);
-        }
-    }
 }
