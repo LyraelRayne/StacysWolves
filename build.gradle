@@ -9,9 +9,15 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            name = "gradleplugins"
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.7"
+
     }
 }
 
@@ -30,3 +36,22 @@ minecraft {
 }
 
 idea { module { inheritOutputDirs = true } }
+
+apply plugin: "com.matthewprenger.cursegradle"
+
+curseforge {
+    project {
+        apiKey = new File('apikey.txt').text
+        id = '244308'
+        changelogType = 'markdown'
+        changelog = new File("changeloginput-" + "$project.version" + ".txt")
+        releaseType = 'beta'
+        addGameVersion '1.7.10'
+        mainArtifact(jar) {
+            displayName = "Stacy's Wolves version: $project.version"
+        }
+        relations {
+            optionalLibrary 'et-futurum'
+        }
+    }
+}
