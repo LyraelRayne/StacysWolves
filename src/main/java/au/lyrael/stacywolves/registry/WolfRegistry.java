@@ -98,6 +98,17 @@ public class WolfRegistry {
     }
 
     private void addSpawn(String entityName, Integer probability, int min, int max, BiomeGenBase biome, WolfType type) {
+        if(biome == null && type != null) {
+            LOGGER.warn("Biome entry was null registering [{}] as [{}]!", entityName, type.name());
+            return;
+        } else if(biome != null && type == null)
+        {
+            LOGGER.warn("Wolf type was null registering [{}] in [{}]!", entityName, biome.biomeName);
+            return;
+        } else if (biome == null && type == null) {
+            LOGGER.warn("Null biome AND type registering [{}]", entityName);
+        }
+
         final Class<? extends IWolf> entityClass = getClassFor(entityName);
         List<BiomeGenBase.SpawnListEntry> spawnListForBiome = getSpawnsFor(biome, type);
         spawnListForBiome.add(new BiomeGenBase.SpawnListEntry(entityClass, probability, min, max));
