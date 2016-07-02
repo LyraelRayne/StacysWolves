@@ -11,14 +11,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
+import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 
 public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecipes {
+
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static final String WOLF_FOOD_NAME = "wolf_food";
 
@@ -94,8 +99,13 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
     }
 
     private void registerRecipe(String id, ItemStack craftedWith) {
-        if (craftedWith != null)
-            GameRegistry.addShapelessRecipe(getFood(id), Items.bone, craftedWith);
+        final ItemStack food = getFood(id);
+
+        if (craftedWith != null && food != null) {
+            GameRegistry.addShapelessRecipe(food, Items.bone, craftedWith);
+            if (id.endsWith("_bone"))
+                GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 5, 15), food);
+        }
     }
 
     @Override
@@ -168,4 +178,41 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         return a.getTagCompound().getString(ID_TAG).equals(b.getTagCompound().getString(ID_TAG));
 
     }
+
+//    public void registerOreDict() {
+//        registerOreDict("air_bone", "bone");
+//        registerOreDict("birch_bone", "bone");
+//        registerOreDict("cake_bone", "bone");
+//        registerOreDict("desert_bone", "bone");
+//        registerOreDict("diamond_bone", "bone");
+//        registerOreDict("earth_bone", "bone");
+//        registerOreDict("emerald_bone", "bone");
+//        registerOreDict("end_bone", "bone");
+//        registerOreDict("ender_bone", "bone");
+//        registerOreDict("fire_bone", "bone");
+//        registerOreDict("flower_bone", "bone");
+//        registerOreDict("gold_bone", "bone");
+//        registerOreDict("ice_bone", "bone");
+//        registerOreDict("iron_bone", "bone");
+//        registerOreDict("mesa_bone", "bone");
+//        registerOreDict("mushroom_bone", "bone");
+//        registerOreDict("nether_bone", "bone");
+//        registerOreDict("prismarine_bone", "bone");
+//        registerOreDict("redstone_bone", "bone");
+//        registerOreDict("savannah_bone", "bone");
+//        registerOreDict("skeleton_bone", "bone");
+//        registerOreDict("water_bone", "bone");
+//        registerOreDict("zombie_bone", "bone");
+//        registerOreDict("meaty_bone", "bone");
+//    }
+//
+//    private void registerOreDict(String id, String oreDictName) {
+//        final ItemStack food = getFood(id);
+//
+//        if (oreDictName != null && food != null) {
+//            OreDictionary.registerOre(oreDictName, food);
+//        } else {
+//            LOGGER.warn("Tried to register [{}] as [{}] but one was null.", id, oreDictName);
+//        }
+//    }
 }

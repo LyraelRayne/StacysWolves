@@ -38,6 +38,7 @@ public class CommonProxy {
 
     public void init() {
         registerRecipes();
+//        ItemRegistry.wolf_food.registerOreDict();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
         EntityRegistry.registerModEntity(EntityWolfTransporter.class, ENTITY_WOLF_TRANSPORTER, ++LAST_MOD_ENTITY_ID, INSTANCE, 128, 5, true);
     }
