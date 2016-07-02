@@ -183,6 +183,7 @@ public class EntityWolfTransporter extends EntityThrowable {
             spawnedWolf.playLivingSound();
             this.worldObj.playSoundEffect(x, y, z, "mob.endermen.portal", 1.0F, 1.0F);
             setDead();
+            dropItem(new ItemStack(ItemRegistry.wolf_transporter, 1));
         } else {
             dropItem(container);
         }
