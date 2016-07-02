@@ -1,3 +1,9 @@
+1.0.8 - Bonemeal Bonanza
+    * Bonemeal can be crafted using Stacy's bones. It gives a little extra, because these are especially nutritious bones.
+    * Ender Ball recipe cost reduced.
+    * Ender Ball is now reusable.
+    * Fixed a crash when a biome entry exists that is null.
+
 1.0.7 - Old Dogs can learn new tricks
     * Prismarine wolves now spawn in ocean monuments if Et Futurum is installed.
     * Prismarine wolves can now walk and breathe underwater. They will do so if there are any blocks within 30 spaces above them.
