@@ -91,7 +91,7 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         registerRecipe("nether_bone", new ItemStack(Items.magma_cream));
         registerRecipe("prismarine_bone", EtFuturumHolder.getPrismarineCrystalItemStack());
         registerRecipe("redstone_bone", new ItemStack(Items.redstone));
-        registerRecipe("savannah_bone", new ItemStack(Blocks.grass));
+        registerRecipe("savannah_bone", new ItemStack(Blocks.tallgrass));
         registerRecipe("skeleton_bone", new ItemStack(Items.dye, 1, 15));
         registerRecipe("water_bone", new ItemStack(Items.water_bucket));
         registerRecipe("zombie_bone", new ItemStack(Items.rotten_flesh));
