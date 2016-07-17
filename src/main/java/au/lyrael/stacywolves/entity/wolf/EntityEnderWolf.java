@@ -44,6 +44,16 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
 
     private int teleportDelay;
 
+    @Override
+    public boolean normallyAvoidsWater() {
+        return !isTamed();
+    }
+
+    @Override
+    public boolean alwaysAvoidsWater() {
+        return !isTamed();
+    }
+
     public EntityEnderWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("ender_bone"));

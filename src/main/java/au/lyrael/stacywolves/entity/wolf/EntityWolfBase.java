@@ -426,6 +426,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
         if (tamed) {
             this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
+            this.getNavigator().setAvoidsWater(this.normallyAvoidsWater() || this.alwaysAvoidsWater());
         } else {
             this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
         }
