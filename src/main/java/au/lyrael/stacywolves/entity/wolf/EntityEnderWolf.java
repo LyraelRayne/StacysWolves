@@ -98,10 +98,12 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
         final EntityAIWolfTempt aiTempt = getAiTempt();
         final EntityPlayer temptingPlayer = aiTempt.getTemptingPlayer();
 
-        if (!isTamed() && (isWet() || isBurning())) {
+        if (isTamed() && isSitting()) {
+            // do nothing
+        } else if (!isTamed() && (isWet() || isBurning())) {
             teleportRandomly();
         } else if (aiTempt.isRunning() && temptingPlayer != null) {
-                doTeleportToEntity(temptingPlayer);
+            doTeleportToEntity(temptingPlayer);
         } else if (getAttackTarget() != null) {
             doTeleportToEntity(getAttackTarget());
         } else if (!isTamed() && shouldRandomTeleport()) {
