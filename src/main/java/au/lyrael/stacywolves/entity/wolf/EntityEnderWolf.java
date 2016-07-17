@@ -4,12 +4,13 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -42,7 +43,10 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
 
+    private static int TICKS_BETWEEN_RANDOM_TELEPORT_ATTEMPTS = 20 * 5;
+
     private int teleportDelay;
+    private int randomTeleportDelay = TICKS_BETWEEN_RANDOM_TELEPORT_ATTEMPTS;
 
     @Override
     public boolean normallyAvoidsWater() {
@@ -76,13 +80,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     public void onLivingUpdate() {
         if (!this.worldObj.isRemote) {
             hurtIfWet();
-
-            if (!isTamed() && (isWet() || isBurning() || shouldRandomTeleport()))
-                teleportRandomly();
-
-            if (getAttackTarget() != null) {
-                doAttackTeleport();
-            }
+            doTeleportStuff();
         } else {
             for (int loop = 0; loop < 2; ++loop) {
                 this.worldObj.spawnParticle("portal",
@@ -96,10 +94,25 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
         super.onLivingUpdate();
     }
 
-    protected void doAttackTeleport() {
+    protected void doTeleportStuff() {
+        final EntityAIWolfTempt aiTempt = getAiTempt();
+        final EntityPlayer temptingPlayer = aiTempt.getTemptingPlayer();
+
+        if (!isTamed() && (isWet() || isBurning())) {
+            teleportRandomly();
+        } else if (aiTempt.isRunning() && temptingPlayer != null) {
+                doTeleportToEntity(temptingPlayer);
+        } else if (getAttackTarget() != null) {
+            doTeleportToEntity(getAttackTarget());
+        } else if (!isTamed() && shouldRandomTeleport()) {
+            teleportRandomly();
+        }
+    }
+
+    protected void doTeleportToEntity(EntityLivingBase target) {
         if (this.isEntityAlive()) {
-            if (this.getAttackTarget() != null) {
-                if (this.getAttackTarget().getDistanceSqToEntity(this) > 32.0D && this.teleportDelay-- <= 0 && this.teleportToEntity(this.getAttackTarget())) {
+            if (target != null) {
+                if (target.getDistanceSqToEntity(this) > 32.0D && this.teleportDelay-- <= 0 && this.teleportToEntity(target)) {
                     this.getNavigator().clearPathEntity();
                     this.teleportDelay = 30;
                 }
@@ -110,7 +123,14 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     private boolean shouldRandomTeleport() {
-        return getAttackTarget() == null && canSeeTheSky(getWorldObj(), posX, posY, posZ) && this.getRNG().nextInt(100) < 2;
+        if (getAttackTarget() == null && canSeeTheSky(getWorldObj(), posX, posY, posZ)) {
+            randomTeleportDelay = randomTeleportDelay > 0 ? randomTeleportDelay - 1 : 0;
+            if (this.randomTeleportDelay <= 0) {
+                this.randomTeleportDelay = TICKS_BETWEEN_RANDOM_TELEPORT_ATTEMPTS;
+                return this.getRNG().nextInt(100) < 20;
+            }
+        }
+        return false;
     }
 
 
@@ -147,7 +167,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     protected boolean teleportTo(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
         EnderTeleportEvent event = new EnderTeleportEvent(this, p_70825_1_, p_70825_3_, p_70825_5_, 0);
         if (MinecraftForge.EVENT_BUS.post(event)) {
-            this.teleportDelay = 90;
+            this.teleportDelay = 90 * 20;
             return false;
         }
         double origPosX = this.posX;

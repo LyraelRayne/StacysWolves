@@ -69,7 +69,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.getNavigator().setAvoidsWater(this.normallyAvoidsWater() || this.alwaysAvoidsWater());
         this.tasks.addTask(1, new EntityAIWolfSwimming(this));
         this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, this.aiTempt = new EntityAIWolfTempt(this, 0.5D, false));
+        this.setAiTempt(new EntityAIWolfTempt(this, 0.5D, false));
+        this.tasks.addTask(3, this.getAiTempt());
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
         this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 5.0F));
         this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
@@ -898,5 +899,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     public boolean shouldSwimToSurface() {
         return true;
+    }
+
+    protected EntityAIWolfTempt getAiTempt() {
+        return aiTempt;
+    }
+
+    protected void setAiTempt(EntityAIWolfTempt aiTempt) {
+        this.aiTempt = aiTempt;
     }
 }
