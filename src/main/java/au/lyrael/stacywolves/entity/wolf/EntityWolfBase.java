@@ -2,6 +2,7 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
@@ -58,6 +59,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
     private EntityAIWolfTempt aiTempt;
 
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    private static final Logger SPAWNLOGGER = LogManager.getLogger(MOD_ID + ".spawn");
 
     protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(grass, dirt, gravel, sand, sandstone);
     protected static final List<Block> ORE_FLOOR_BLOCKS = Arrays.asList(stone, gravel);
@@ -754,9 +756,21 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public boolean getCanSpawnHere() {
-        return canSeeTheSky(getWorldObj(), posX, posY, posZ)
+        return isSuitableDimension()
+                && canSeeTheSky(getWorldObj(), posX, posY, posZ)
                 && isStandingOnSuitableFloor()
                 && creatureCanSpawnHere();
+    }
+
+    protected boolean isSuitableDimension() {
+        int dimensionId = getWorldObj().provider.dimensionId;
+        if (RuntimeConfiguration.dimensionSpawnBlackList != null
+                && RuntimeConfiguration.dimensionSpawnBlackList.contains(dimensionId)) {
+            SPAWNLOGGER.trace("Spawn in dimension [{}] prevented due to dimension blacklist.", dimensionId);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     protected boolean isStandingOnSuitableFloor() {

@@ -1,0 +1,8 @@
+package au.lyrael.stacywolves.config;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RuntimeConfiguration {
+    public static List<Integer> dimensionSpawnBlackList = new ArrayList<>();
+}

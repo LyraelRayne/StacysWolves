@@ -37,7 +37,15 @@ public class ConfigurationLoader {
     }
 
     private void loadGeneralSettings(Configuration configuration) {
+        final String category = "general";
+        LOGGER.debug("Loading configuration category [{}]", category);
+        configuration.setCategoryComment(category, "General settings");
+        configuration.setCategoryRequiresMcRestart(category, true);
 
+        for (int dimension : configuration.get(category, "dimensionSpawnBlackList",
+                new int[0], "List of dimensions to NEVER spawn Stacy's Wolves in.").getIntList()) {
+            RuntimeConfiguration.dimensionSpawnBlackList.add(dimension);
+        }
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {

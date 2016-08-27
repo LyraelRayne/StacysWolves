@@ -7,8 +7,6 @@ import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -43,7 +41,8 @@ public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf
 
     @Override
     public boolean getCanSpawnHere() {
-        return posY < 40
+        return isSuitableDimension()
+                && posY < 40
                 && !canSeeTheSky(getWorldObj(), posX, posY, posZ)
                 && isStandingOn(getFloorBlocks().toArray(new Block[0]))
                 && isStandingOnSuitableFloor();

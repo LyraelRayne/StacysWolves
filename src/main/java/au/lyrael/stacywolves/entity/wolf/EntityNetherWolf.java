@@ -6,8 +6,6 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static net.minecraftforge.common.BiomeDictionary.Type.END;
@@ -35,7 +33,8 @@ public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf 
 
     @Override
     public boolean getCanSpawnHere() {
-        return livingCanSpawnHere();
+        return isSuitableDimension()
+                && livingCanSpawnHere();
     }
 
     @Override

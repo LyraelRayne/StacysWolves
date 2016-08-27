@@ -36,7 +36,7 @@ public class SpawnEventHandler {
             final EntityLiving entity = (EntityLiving) event.entity;
 
             if (entity instanceof ISpawnable) {
-                if (!canSpawn(event, (ISpawnable) entity)) {
+                if (!canSpawnNow(event, (ISpawnable) entity)) {
                     event.setResult(DENY);
                     if (entity instanceof IWolf)
                         LOGGER.trace("Can not spawn now: {}", entity);
@@ -129,7 +129,7 @@ public class SpawnEventHandler {
         }
     }
 
-    protected boolean canSpawn(LivingSpawnEvent.CheckSpawn event, ISpawnable entity) {
+    protected boolean canSpawnNow(LivingSpawnEvent.CheckSpawn event, ISpawnable entity) {
         return entity.canSpawnNow(event.world, event.x, event.y, event.z);
     }
 }

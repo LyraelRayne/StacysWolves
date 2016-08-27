@@ -8,8 +8,6 @@ import au.lyrael.stacywolves.integration.EtFuturumHolder;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -60,7 +58,8 @@ public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableW
         // Naming this variable "down" will cause the vector to have some weird value. No, really. It's insane.
         final Vec3 downwards = Vec3.createVectorHelper(0D, -5.0D, 0D);
         final Vec3 up = Vec3.createVectorHelper(0D, 5D, 0D);
-        return this.worldObj.checkNoEntityCollision(this.boundingBox)
+        return isSuitableDimension()
+                && this.worldObj.checkNoEntityCollision(this.boundingBox)
                 && isBlockInDirectionPrismarine(downwards)
                 && isBlockInDirectionPrismarine(up);
     }
