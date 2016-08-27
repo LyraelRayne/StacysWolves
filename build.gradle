@@ -52,6 +52,7 @@ curseforge {
         }
         relations {
             optionalLibrary 'et-futurum'
+            optionalLibrary 'pams-harvestcraft'
         }
     }
 }

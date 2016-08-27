@@ -24,8 +24,6 @@ public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf 
     public EntityNetherWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("nether_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

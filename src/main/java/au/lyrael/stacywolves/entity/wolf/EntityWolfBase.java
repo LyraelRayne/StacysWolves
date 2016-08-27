@@ -4,6 +4,7 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.*;
+import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
@@ -90,6 +91,17 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.setTamed(false);
 
         this.metadata = this.getClass().getAnnotation(WolfMetadata.class);
+
+        this.setupEdibleItems();
+    }
+
+    private void setupEdibleItems() {
+        this.addEdibleItem(new ItemStack(Items.beef));
+        this.addEdibleItem(new ItemStack(Items.chicken));
+        final ItemStack blackberryJellySandwichItemStack = PamsHarvestcraftHolder.getBlackberryJellySandwichItemStack();
+        if (blackberryJellySandwichItemStack != null) {
+            this.addEdibleItem(blackberryJellySandwichItemStack);
+        }
     }
 
     protected List<Block> getFloorBlocks() {
@@ -536,9 +548,12 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     @Override
     public float getHealAmount(ItemStack itemstack) {
-        if (canEat(itemstack))
-            return 8F;
-        else
+        if (canEat(itemstack)) {
+            if (itemstack.getItem().equals(PamsHarvestcraftHolder.blackberryjellysandwichItem))
+                return 16F;
+            else
+                return 8F;
+        } else
             return 0F;
     }
 

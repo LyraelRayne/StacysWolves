@@ -30,8 +30,6 @@ public class EntityMushroomWolf extends EntityWolfBase implements IRenderableWol
     public EntityMushroomWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("mushroom_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

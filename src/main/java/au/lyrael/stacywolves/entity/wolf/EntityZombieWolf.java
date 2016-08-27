@@ -35,8 +35,6 @@ public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf 
     public EntityZombieWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("zombie_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

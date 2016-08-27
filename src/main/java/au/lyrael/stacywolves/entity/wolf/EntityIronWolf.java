@@ -39,8 +39,6 @@ public class EntityIronWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityIronWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("iron_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

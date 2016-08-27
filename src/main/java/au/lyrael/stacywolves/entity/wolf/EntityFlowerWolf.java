@@ -21,8 +21,6 @@ public class EntityFlowerWolf extends EntityWolfBase implements IRenderableWolf 
     public EntityFlowerWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("flower_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

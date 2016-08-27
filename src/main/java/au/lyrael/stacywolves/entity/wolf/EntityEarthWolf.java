@@ -25,8 +25,6 @@ public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityEarthWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("earth_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

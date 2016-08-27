@@ -23,8 +23,6 @@ public class EntitySavannahWolf extends EntityWolfBase implements IRenderableWol
     public EntitySavannahWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("savannah_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

@@ -23,8 +23,6 @@ public class EntityMesaWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityMesaWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("mesa_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

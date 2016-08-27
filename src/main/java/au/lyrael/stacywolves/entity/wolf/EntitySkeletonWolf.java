@@ -35,8 +35,6 @@ public class EntitySkeletonWolf extends EntityWolfBase implements IRenderableWol
     public EntitySkeletonWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("skeleton_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override

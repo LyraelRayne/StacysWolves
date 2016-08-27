@@ -27,8 +27,6 @@ public class EntityPrismarineWolf extends EntityWolfBase implements IRenderableW
     public EntityPrismarineWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("prismarine_bone"));
-        this.addEdibleItem(new ItemStack(Items.beef));
-        this.addEdibleItem(new ItemStack(Items.chicken));
     }
 
     @Override
