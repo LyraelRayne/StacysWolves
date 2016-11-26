@@ -8,6 +8,7 @@ import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.registry.ItemRegistry;
+import au.lyrael.stacywolves.registry.WolfType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.command.IEntitySelector;
@@ -86,9 +87,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 400, false));
-        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 400, false));
-        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityChicken.class, 400, false));
+        if(RuntimeConfiguration.wolvesAttackAnimals) {
+            this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 400, false));
+            this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 400, false));
+            this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityChicken.class, 400, false));
+        }
 
         this.setTamed(false);
 
@@ -808,9 +811,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
             return !isTamed() && super.isCreatureType(type, forSpawnCount);
         else {
             if (forSpawnCount)
-                return !isTamed() && type == myType && super.isCreatureType(type, forSpawnCount);
+                return !isTamed() && type == myType;
             else
-                return type == myType && super.isCreatureType(type, forSpawnCount);
+                return type == myType;
         }
     }
 
@@ -936,5 +939,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
     protected void setAiTempt(EntityAIWolfTempt aiTempt) {
         this.aiTempt = aiTempt;
+    }
+
+    public WolfType getWolfType() {
+        return metadata.type();
     }
 }

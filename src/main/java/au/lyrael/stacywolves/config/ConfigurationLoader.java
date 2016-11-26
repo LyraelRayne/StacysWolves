@@ -1,16 +1,18 @@
 package au.lyrael.stacywolves.config;
 
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
+import static au.lyrael.stacywolves.StacyWolves.MOD_NAME;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
-import static au.lyrael.stacywolves.StacyWolves.MOD_NAME;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 
 public class ConfigurationLoader {
 
@@ -46,6 +48,11 @@ public class ConfigurationLoader {
                 new int[0], "List of dimensions to NEVER spawn Stacy's Wolves in.").getIntList()) {
             RuntimeConfiguration.dimensionSpawnBlackList.add(dimension);
         }
+		RuntimeConfiguration.debugEnabled = configuration.getBoolean("debugEnabled", category, false,
+				"Display debug information on the F3 screen.");
+        RuntimeConfiguration.wolvesAttackAnimals = configuration.getBoolean("wolvesAttackAnimals", category, true,
+				"Set to false if you don't want your piggies being devoured by wolves. " +
+                        "Will not prevent wolves from defending themselves or their masters.");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {

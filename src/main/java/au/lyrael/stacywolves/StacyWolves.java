@@ -2,6 +2,7 @@ package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.config.ConfigurationEventHandler;
 import au.lyrael.stacywolves.event.MapGenEventHandler;
+import au.lyrael.stacywolves.event.RenderGameOverlayEventHandler;
 import au.lyrael.stacywolves.event.SpawnEventHandler;
 import au.lyrael.stacywolves.event.WorldEventHandler;
 import au.lyrael.stacywolves.registry.WolfRegistry;
@@ -58,6 +59,7 @@ public class StacyWolves {
 
     public static final WolfRegistry WOLF_REGISTRY = new WolfRegistry();
     public static final WolfsbaneRegistry WOLFSBANE_REGISTRY = new WolfsbaneRegistry();
+    public static final RenderGameOverlayEventHandler DEBUG_HANDLER = new RenderGameOverlayEventHandler();
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -91,6 +93,7 @@ public class StacyWolves {
         proxy.postInit(event);
         MinecraftForge.EVENT_BUS.register(new SpawnEventHandler());
         MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
+        MinecraftForge.EVENT_BUS.register(DEBUG_HANDLER);
         MinecraftForge.TERRAIN_GEN_BUS.register(new MapGenEventHandler());
 
         LOGGER.log(Level.INFO, "Post Initialization: Complete");

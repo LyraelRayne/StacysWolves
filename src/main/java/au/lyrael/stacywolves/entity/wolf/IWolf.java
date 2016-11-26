@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.entity.ai.ITemptable;
+import au.lyrael.stacywolves.registry.WolfType;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 
@@ -46,4 +47,6 @@ public interface IWolf extends ITemptable {
     boolean isWolfAngry();
 
     boolean isWolfTamed();
+
+    WolfType getWolfType();
 }
