@@ -6,10 +6,9 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntityEarthWolf", primaryColour = 0xB8845B, secondaryColour = 0x583C28,
@@ -18,7 +17,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
                         @WolfSpawnBiome(requireBiomeTypes = {FOREST}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
                         @WolfSpawnBiome(requireBiomeTypes = {HILLS}, excludeBiomeTypes = {MOUNTAIN, SANDY, NETHER, END, COLD, SAVANNA}),
-                }, probability = 5, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 4),
         })
 public class EntityEarthWolf extends EntityWolfBase implements IRenderableWolf {
 

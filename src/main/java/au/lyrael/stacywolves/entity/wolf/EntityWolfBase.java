@@ -1,19 +1,5 @@
 package au.lyrael.stacywolves.entity.wolf;
 
-import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
-import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
-import static net.minecraft.init.Blocks.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.config.RuntimeConfiguration;
@@ -37,10 +23,24 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StringUtils;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
+import static net.minecraft.init.Blocks.*;
 
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable
@@ -1003,10 +1003,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		final EnumCreatureType myType = metadata.type().creatureType();
 
-		if (myType == null)
+		if (myType == null) {
+			LOGGER.warn("Stacy's wolf with no type! [{}]", this);
 			return !isTamed() && super.isCreatureType(type, forSpawnCount);
-		else
-		{
+		} else {
 			if (forSpawnCount)
 				return !isTamed() && type == myType;
 			else
@@ -1018,6 +1018,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public boolean canSpawnNow(World world, float x, float y, float z)
 	{
 		return world.countEntities(EntityWolfBase.class) < 20 && world.isDaytime();
+	}
+
+	@Override
+	public boolean testSpawnProbability() {
+		return RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
 	}
 
 	/**

@@ -13,4 +13,6 @@ public interface ISpawnable {
      * @return false if the spawn is to be prevented. True if it is not.
      */
     boolean canSpawnNow(World world, float x, float y, float z);
+
+    boolean testSpawnProbability();
 }

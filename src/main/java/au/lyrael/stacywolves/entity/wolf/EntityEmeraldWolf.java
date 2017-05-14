@@ -11,15 +11,18 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_RARE;
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SUPER_RARE;
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.ORE;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
-@WolfMetadata(name = "EntityEmeraldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x17DD62, type = ORE,
+@WolfMetadata(name = "EntityEmeraldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x17DD62, type = ORE, probability = SPAWN_PROBABILITY_SUPER_RARE,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN}),
-                }, probability = 5, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_SUPER_RARE, min = 1, max = 4),
         })
 public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf {
 

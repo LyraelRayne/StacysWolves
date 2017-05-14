@@ -10,9 +10,20 @@ import java.lang.annotation.Target;
 public @interface WolfSpawn {
 
     /**
-     * Probability of spawning in {@link #spawnBiomes()}
+     * Probabilistic weight of spawning in {@link #spawnBiomes()}
+     * If a chunk can spawn 5 types of wolf
+     * Earth - 50
+     * Cake - 5
+     * Mesa - 50
+     *
+     * Then cake wolves will spawn 5/105 times. Earth wolves 50/105, mesa wolves 50/105.
+     *
+     * This is not a probability of spawning! It's the probability of being selected out of a list.
+     * If only one kind of wolf can spawn, that wolf WILL spawn.
+     *
+     * @see net.minecraft.util.WeightedRandom
      */
-    int probability();
+    int weight();
 
     /**
      * Minimum number of wolves to spawn in a pack.

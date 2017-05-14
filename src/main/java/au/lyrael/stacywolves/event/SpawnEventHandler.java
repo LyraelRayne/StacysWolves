@@ -22,6 +22,8 @@ import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.registry.WolfType.*;
+import static cpw.mods.fml.common.eventhandler.Event.Result.ALLOW;
+import static cpw.mods.fml.common.eventhandler.Event.Result.DEFAULT;
 import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
 
 public class SpawnEventHandler {
@@ -34,27 +36,32 @@ public class SpawnEventHandler {
     public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.entity instanceof EntityLiving) {
             final EntityLiving entity = (EntityLiving) event.entity;
-
+            event.setResult(DEFAULT);
             if (entity instanceof ISpawnable) {
-                if (!canSpawnNow(event, (ISpawnable) entity)) {
+                final ISpawnable spawnable = (ISpawnable) entity;
+                if (!spawnable.testSpawnProbability()) {
+                    LOGGER.trace("Spawn canceled due to probability: {}", entity);
+                    event.setResult(DENY);
+                    return;
+                } else if (!canSpawnNow(event, spawnable)) {
                     event.setResult(DENY);
                     if (entity instanceof IWolf)
                         LOGGER.trace("Can not spawn now: {}", entity);
                     return;
-                } else {
-                    if (entity instanceof IWolf) {
-                        if (entity.getCanSpawnHere()) {
-                            if (!isNearWolfsBane(event)) {
-                                LOGGER.debug("Can spawn here and now: {}", entity);
-                                traceSpawnCaps(event);
-                            } else {
-                                event.setResult(DENY);
-                                LOGGER.debug("Spawn prevented by wolfsbane. Aborted entity: [{}]", entity);
-                                return;
-                            }
+                } else if (entity instanceof IWolf) {
+                    if (entity.getCanSpawnHere()) {
+                        if (!isNearWolfsBane(event)) {
+                            LOGGER.debug("Can spawn here and now: {}", entity);
+                            traceSpawnCaps(event);
+                            event.setResult(ALLOW);
                         } else {
-                            LOGGER.trace("Can spawn now but not here: {}", entity);
+                            event.setResult(DENY);
+                            LOGGER.debug("Spawn prevented by wolfsbane. Aborted entity: [{}]", entity);
+                            return;
                         }
+                    } else {
+                        event.setResult(DENY);
+                        LOGGER.trace("Can spawn now but not here: {}", entity);
                     }
                 }
             }
@@ -63,10 +70,9 @@ public class SpawnEventHandler {
 
     @SubscribeEvent
     public void onEnderTeleport(EnderTeleportEvent event) {
-        if(event.entityLiving instanceof EntityWolfBase)
-        {
+        if (event.entityLiving instanceof EntityWolfBase) {
             EntityWolfBase wolf = (EntityWolfBase) event.entityLiving;
-            if(!wolf.isTamed() && isNearWolfsBane(event)) {
+            if (!wolf.isTamed() && isNearWolfsBane(event)) {
                 LOGGER.debug("Denied teleport of [{}] event [{}] due to Wolfsbane.", wolf, event);
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
@@ -108,7 +114,8 @@ public class SpawnEventHandler {
     }
 
     protected void traceSpawnCap(EnumCreatureType creatureType, World world) {
-        LOGGER.trace("Total spawned [{}] wolf count: {}", creatureType.name(), world.countEntities(creatureType, true));
+        if(LOGGER.isTraceEnabled())
+            LOGGER.trace("Total spawned [{}] wolf count: {}", creatureType.name(), world.countEntities(creatureType, true));
     }
 
     @SubscribeEvent
@@ -116,15 +123,16 @@ public class SpawnEventHandler {
     public void onGetSpawnList(WorldEvent.PotentialSpawns event) {
         final WolfType wolfType = WolfType.valueOf(event.type);
         if (wolfType != null) {
-            if (WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
+            final boolean throttlePeriodExpired = event.world.getWorldInfo().getWorldTotalTime() % wolfType.getThrottlePeriod() == 0L;
+            if (throttlePeriodExpired && WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
                 final BiomeGenBase biome = event.world.getBiomeGenForCoords(event.x, event.z);
                 List<BiomeGenBase.SpawnListEntry> wolfSpawns = WOLF_REGISTRY.getSpawnsFor(biome, wolfType);
                 for (BiomeGenBase.SpawnListEntry wolfSpawn : wolfSpawns) {
                     if (!event.list.contains(wolfSpawn))
                         event.list.add(wolfSpawn);
                 }
-                if (wolfType != MOB)
-                    LOGGER.trace("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
+                if (wolfType != MOB && event.list != null && !event.list.isEmpty())
+                    LOGGER.trace("Added [{}] wolves to spawn list at [{},{}] with biome [{}]: [{}]", event.type.name(), event.x, event.y, biome.biomeName, event.list);
             }
         }
     }
