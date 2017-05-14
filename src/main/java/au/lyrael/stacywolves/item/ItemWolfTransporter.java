@@ -137,7 +137,6 @@ public class ItemWolfTransporter extends ItemStacyWolves implements IRegisterMyO
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ItemStack(this), new Object[]{" E ", "E E", " E ", 'E', Items.ender_eye});
-
+        GameRegistry.addRecipe(new ItemStack(this), new Object[]{" G ", "GEG", " G ", 'E', Items.ender_pearl, 'G', Items.glowstone_dust});
     }
 }
