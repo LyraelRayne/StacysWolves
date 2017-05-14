@@ -7,12 +7,11 @@ import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.List;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
 import static net.minecraftforge.common.BiomeDictionary.Type.COLD;
 import static net.minecraftforge.common.BiomeDictionary.Type.SNOWY;
 
@@ -20,7 +19,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.SNOWY;
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {COLD, SNOWY}),
-                }, probability = 8, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 4),
         })
 public class EntityIceWolf extends EntityWolfBase implements IRenderableWolf {
 

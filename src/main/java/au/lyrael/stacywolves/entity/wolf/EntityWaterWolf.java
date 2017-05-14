@@ -6,10 +6,9 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
 import static net.minecraftforge.common.BiomeDictionary.Type.BEACH;
 import static net.minecraftforge.common.BiomeDictionary.Type.OCEAN;
 
@@ -18,7 +17,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.OCEAN;
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {OCEAN}),
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
-                }, probability = 5, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 4),
         })
 public class EntityWaterWolf extends EntityWolfBase implements IRenderableWolf {
 

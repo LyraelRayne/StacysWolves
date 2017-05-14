@@ -11,14 +11,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_MOB_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
@@ -38,7 +37,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
                         @WolfSpawnBiome(requireBiomeTypes = {JUNGLE}),
                         @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
-                }, probability = 10, min = 1, max = 1)
+                }, weight = SPAWN_WEIGHT_MOB_RARE, min = 1, max = 1)
         })
 
 public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {

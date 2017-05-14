@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.ORE;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
@@ -19,7 +20,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN}),
-                }, probability = 5, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_SUPER_RARE, min = 1, max = 4),
         })
 public class EntityEmeraldWolf extends EntityWolfBase implements IRenderableWolf {
 

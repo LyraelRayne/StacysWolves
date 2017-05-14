@@ -14,6 +14,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,10 +64,9 @@ public class SpawnEventHandler {
 
     @SubscribeEvent
     public void onEnderTeleport(EnderTeleportEvent event) {
-        if(event.entityLiving instanceof EntityWolfBase)
-        {
+        if (event.entityLiving instanceof EntityWolfBase) {
             EntityWolfBase wolf = (EntityWolfBase) event.entityLiving;
-            if(!wolf.isTamed() && isNearWolfsBane(event)) {
+            if (!wolf.isTamed() && isNearWolfsBane(event)) {
                 LOGGER.debug("Denied teleport of [{}] event [{}] due to Wolfsbane.", wolf, event);
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
@@ -115,16 +115,21 @@ public class SpawnEventHandler {
     @SuppressWarnings("unused")
     public void onGetSpawnList(WorldEvent.PotentialSpawns event) {
         final WolfType wolfType = WolfType.valueOf(event.type);
+
         if (wolfType != null) {
-            if (WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
-                final BiomeGenBase biome = event.world.getBiomeGenForCoords(event.x, event.z);
-                List<BiomeGenBase.SpawnListEntry> wolfSpawns = WOLF_REGISTRY.getSpawnsFor(biome, wolfType);
-                for (BiomeGenBase.SpawnListEntry wolfSpawn : wolfSpawns) {
-                    if (!event.list.contains(wolfSpawn))
-                        event.list.add(wolfSpawn);
+            final boolean throttlePeriodExpired = event.world.getWorldInfo().getWorldTotalTime() % wolfType.getThrottlePeriod() == 0L;
+            if (throttlePeriodExpired && WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
+                final boolean shouldSpawn = RandomUtils.nextInt(0, 1000) <= wolfType.getChanceToSpawn();
+                if (shouldSpawn) {
+                    final BiomeGenBase biome = event.world.getBiomeGenForCoords(event.x, event.z);
+                    List<BiomeGenBase.SpawnListEntry> wolfSpawns = WOLF_REGISTRY.getSpawnsFor(biome, wolfType);
+                    for (BiomeGenBase.SpawnListEntry wolfSpawn : wolfSpawns) {
+                        if (!event.list.contains(wolfSpawn))
+                            event.list.add(wolfSpawn);
+                    }
+                    if (wolfType != MOB && event.list!= null && !event.list.isEmpty())
+                        LOGGER.trace("Added [{}] wolves to spawn list at [{},{}] with biome [{}]: [{}]", event.type.name(), event.x, event.y, biome.biomeName, event.list);
                 }
-                if (wolfType != MOB)
-                    LOGGER.trace("Added [{}] wolves to spawn list for biome [{}]: [{}]", event.type.name(), biome.biomeName, event.list);
             }
         }
     }

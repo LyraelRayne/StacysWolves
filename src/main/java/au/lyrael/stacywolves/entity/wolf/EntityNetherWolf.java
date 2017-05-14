@@ -8,6 +8,7 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
 import static net.minecraftforge.common.BiomeDictionary.Type.END;
 import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
 
@@ -15,7 +16,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {NETHER}, excludeBiomeTypes = {END}),
-                }, probability = 10, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 4),
         })
 public class EntityNetherWolf extends EntityWolfBase implements IRenderableWolf {
 

@@ -6,10 +6,9 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_MOB_COMMON;
 import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
@@ -28,7 +27,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {BEACH}),
                         @WolfSpawnBiome(requireBiomeTypes = {JUNGLE}),
                         @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
-                }, probability = 20, min = 1, max = 4),
+                }, weight = SPAWN_WEIGHT_MOB_COMMON, min = 1, max = 4),
         })
 public class EntityZombieWolf extends EntityWolfBase implements IRenderableWolf {
 

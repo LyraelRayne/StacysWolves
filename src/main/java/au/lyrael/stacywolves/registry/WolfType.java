@@ -9,21 +9,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum WolfType {
-    NORMAL("normalStacyWolf", 10, Material.air, false, true),
-    ORE("oreStacyWolf", 6, Material.air, false, true),
-    WATER("waterStacyWolf", 5, Material.water, false, false),
+    NORMAL("normalStacyWolf", 10, 20 * 2, 200, Material.air, false, false),
+    ORE("oreStacyWolf", 6, 20 * 2, 100, Material.air, false, false),
+    WATER("waterStacyWolf", 5, 20 / 2 , 100, Material.water, false, false),
     MOB(EnumCreatureType.monster);
 
     private final EnumCreatureType creatureType;
 
     private static final Map<EnumCreatureType, WolfType> reverseMapping = new HashMap<>();
 
-    WolfType(String typeName, int spawnCap, Material spawnMaterial, boolean peaceful, boolean animal) {
+    /**
+     * Time (in ticks) between allowing this type to be added to a spawn list.
+     */
+    private final long throttlePeriod;
+    /**
+     * Chance out of 1000 that this type should spawn at all.
+     */
+    private final int chanceToSpawn;
+
+    WolfType(String typeName, int spawnCap, long throttlePeriod, int chanceToSpawn, Material spawnMaterial, boolean peaceful, boolean animal) {
         this.creatureType = EnumHelper.addCreatureType(typeName, EntityWolfBase.class, spawnCap, spawnMaterial, peaceful, animal);
+        this.throttlePeriod = throttlePeriod;
+        this.chanceToSpawn = chanceToSpawn;
     }
 
     WolfType(EnumCreatureType creatureType) {
         this.creatureType = creatureType;
+        this.throttlePeriod = 1;
+        this.chanceToSpawn = 1000;
     }
 
     public EnumCreatureType creatureType() {
@@ -46,5 +59,13 @@ public enum WolfType {
         }
         reverseMapping.put(type, null);
         return null;
+    }
+
+    public long getThrottlePeriod() {
+        return throttlePeriod;
+    }
+
+    public int getChanceToSpawn() {
+        return chanceToSpawn;
     }
 }

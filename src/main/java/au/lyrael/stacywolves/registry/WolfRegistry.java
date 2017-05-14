@@ -82,8 +82,7 @@ public class WolfRegistry {
                     final Set<BiomeGenBase> biomesToSpawn = buildBiomeList(wolfSpawnAnnotation.spawnBiomes());
 
                     for (BiomeGenBase biome : biomesToSpawn) {
-                        final Integer probability = wolfSpawnAnnotation.probability();
-                        this.addSpawn(entityName, probability, wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), biome, metadata.type());
+                        this.addSpawn(entityName, wolfSpawnAnnotation.weight(), wolfSpawnAnnotation.min(), wolfSpawnAnnotation.max(), biome, metadata.type());
                     }
                 }
                 break;
@@ -97,12 +96,11 @@ public class WolfRegistry {
         }
     }
 
-    private void addSpawn(String entityName, Integer probability, int min, int max, BiomeGenBase biome, WolfType type) {
-        if(biome == null && type != null) {
+    private void addSpawn(String entityName, Integer weight, int min, int max, BiomeGenBase biome, WolfType type) {
+        if (biome == null && type != null) {
             LOGGER.warn("Biome entry was null registering [{}] as [{}]!", entityName, type.name());
             return;
-        } else if(biome != null && type == null)
-        {
+        } else if (biome != null && type == null) {
             LOGGER.warn("Wolf type was null registering [{}] in [{}]!", entityName, biome.biomeName);
             return;
         } else if (biome == null && type == null) {
@@ -111,8 +109,8 @@ public class WolfRegistry {
 
         final Class<? extends IWolf> entityClass = getClassFor(entityName);
         List<BiomeGenBase.SpawnListEntry> spawnListForBiome = getSpawnsFor(biome, type);
-        spawnListForBiome.add(new BiomeGenBase.SpawnListEntry(entityClass, probability, min, max));
-        LOGGER.trace("Registered [{}] [{}] to spawn in [{}] with probability [{}] in packs of [{}]-[{}]", type.name(), entityName, biome.biomeName, probability, min, max);
+        spawnListForBiome.add(new BiomeGenBase.SpawnListEntry(entityClass, weight, min, max));
+        LOGGER.trace("Registered [{}] [{}] to spawn in [{}] with weight [{}] in packs of [{}]-[{}]", type.name(), entityName, biome.biomeName, weight, min, max);
     }
 
     public List<BiomeGenBase.SpawnListEntry> getSpawnsFor(BiomeGenBase biome, WolfType type) {
