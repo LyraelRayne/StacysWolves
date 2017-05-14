@@ -11,12 +11,13 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_RARE;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.ORE;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityGoldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0xF8AF2B, type = ORE,
+@WolfMetadata(name = "EntityGoldWolf", primaryColour = 0x7F7F7F, secondaryColour = 0xF8AF2B, type = ORE, probability = SPAWN_PROBABILITY_RARE,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),

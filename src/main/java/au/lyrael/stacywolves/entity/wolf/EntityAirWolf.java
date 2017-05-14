@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
 import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
-@WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1,
+@WolfMetadata(name = "EntityAirWolf", primaryColour = 0xEDECEC, secondaryColour = 0xC9EFF1, probability = 500,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MOUNTAIN})

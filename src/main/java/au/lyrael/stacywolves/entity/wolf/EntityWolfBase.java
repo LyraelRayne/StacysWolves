@@ -29,6 +29,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -1003,10 +1004,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		final EnumCreatureType myType = metadata.type().creatureType();
 
 		if (myType == null) {
-			// This is safer than calling super, becuase otherwise anything that doesn't have a type will be considered a mob.
-			// This may be why hostiles were no longer spawning on stacy's playthrough?
 			LOGGER.warn("Stacy's wolf with no type! [{}]", this);
-			return false;
+			return !isTamed() && super.isCreatureType(type, forSpawnCount);
 		} else {
 			if (forSpawnCount)
 				return !isTamed() && type == myType;
@@ -1019,6 +1018,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public boolean canSpawnNow(World world, float x, float y, float z)
 	{
 		return world.countEntities(EntityWolfBase.class) < 20 && world.isDaytime();
+	}
+
+	@Override
+	public boolean testSpawnProbability() {
+		return RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
 	}
 
 	/**

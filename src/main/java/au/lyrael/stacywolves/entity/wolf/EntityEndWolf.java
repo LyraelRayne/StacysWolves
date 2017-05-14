@@ -8,11 +8,12 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.MOB;
 import static net.minecraftforge.common.BiomeDictionary.Type.END;
 import static net.minecraftforge.common.BiomeDictionary.Type.NETHER;
 
-@WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89, type = MOB,
+@WolfMetadata(name = "EntityEndWolf", primaryColour = 0xF9F9C5, secondaryColour = 0xC3BD89, type = MOB, probability = SPAWN_PROBABILITY_RARE,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {END}, excludeBiomeTypes = {NETHER}, excludeBiomeNames = "Eldritch"),

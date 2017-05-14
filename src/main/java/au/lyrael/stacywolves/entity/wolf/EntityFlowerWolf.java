@@ -8,9 +8,10 @@ import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SOMETIMES;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
 
-@WolfMetadata(name = "EntityFlowerWolf", primaryColour = 0x0E5C00, secondaryColour = 0xB95E9A,
+@WolfMetadata(name = "EntityFlowerWolf", primaryColour = 0x0E5C00, secondaryColour = 0xB95E9A, probability = SPAWN_PROBABILITY_SOMETIMES,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(specificBiomes = {"Flower Forest", "Plains", "Sunflower Plains"}),
