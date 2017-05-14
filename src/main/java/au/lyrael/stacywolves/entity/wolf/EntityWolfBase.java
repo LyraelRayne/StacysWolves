@@ -1017,12 +1017,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public boolean canSpawnNow(World world, float x, float y, float z)
 	{
-		return world.countEntities(EntityWolfBase.class) < 20 && world.isDaytime();
+		return world.isDaytime();
 	}
 
 	@Override
 	public boolean testSpawnProbability() {
 		return RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
+	}
+
+	@Override
+	public long getSpawnThrottlePeriod()
+	{
+		return this.metadata.type().getThrottlePeriod();
 	}
 
 	/**

@@ -15,4 +15,6 @@ public interface ISpawnable {
     boolean canSpawnNow(World world, float x, float y, float z);
 
     boolean testSpawnProbability();
+
+    long getSpawnThrottlePeriod();
 }

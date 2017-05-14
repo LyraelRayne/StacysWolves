@@ -17,7 +17,9 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
@@ -30,6 +32,27 @@ public class SpawnEventHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(MOD_ID + ".spawn");
 
+    private Map<WolfType, Long> lastSpawnOfType = new HashMap<>();
+
+    protected boolean hasThrottlePeriodExpired(WolfType type, World world) {
+        final long worldTime = world.getWorldInfo().getWorldTotalTime();
+        final long throttlePeriod = type.getThrottlePeriod();
+        final Long lastSpawnTime = lastSpawnOfType.get(type);
+        if(lastSpawnTime == null && worldTime % throttlePeriod == 0L)
+        {
+            lastSpawnOfType.put(type, worldTime);
+            return true;
+        } else if(lastSpawnTime != null){
+            final long timeSinceLastSpawn = worldTime - lastSpawnTime;
+            if(timeSinceLastSpawn >= throttlePeriod) {
+                lastSpawnOfType.put(type, worldTime);
+                return true;
+            } else if(timeSinceLastSpawn == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @SubscribeEvent
     @SuppressWarnings("unused")
@@ -37,7 +60,9 @@ public class SpawnEventHandler {
         if (event.entity instanceof EntityLiving) {
             final EntityLiving entity = (EntityLiving) event.entity;
             event.setResult(DEFAULT);
+
             if (entity instanceof ISpawnable) {
+
                 final ISpawnable spawnable = (ISpawnable) entity;
                 if (!spawnable.testSpawnProbability()) {
                     LOGGER.trace("Spawn canceled due to probability: {}", entity);
@@ -49,7 +74,8 @@ public class SpawnEventHandler {
                         LOGGER.trace("Can not spawn now: {}", entity);
                     return;
                 } else if (entity instanceof IWolf) {
-                    if (entity.getCanSpawnHere()) {
+                    final IWolf wolf = (IWolf) entity;
+                    if (hasThrottlePeriodExpired(wolf.getWolfType(), event.world) && entity.getCanSpawnHere()) {
                         if (!isNearWolfsBane(event)) {
                             LOGGER.debug("Can spawn here and now: {}", entity);
                             traceSpawnCaps(event);
@@ -123,8 +149,7 @@ public class SpawnEventHandler {
     public void onGetSpawnList(WorldEvent.PotentialSpawns event) {
         final WolfType wolfType = WolfType.valueOf(event.type);
         if (wolfType != null) {
-            final boolean throttlePeriodExpired = event.world.getWorldInfo().getWorldTotalTime() % wolfType.getThrottlePeriod() == 0L;
-            if (throttlePeriodExpired && WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
+            if (WOLF_REGISTRY.getSpawnRegistry().containsKey(wolfType)) {
                 final BiomeGenBase biome = event.world.getBiomeGenForCoords(event.x, event.z);
                 List<BiomeGenBase.SpawnListEntry> wolfSpawns = WOLF_REGISTRY.getSpawnsFor(biome, wolfType);
                 for (BiomeGenBase.SpawnListEntry wolfSpawn : wolfSpawns) {
