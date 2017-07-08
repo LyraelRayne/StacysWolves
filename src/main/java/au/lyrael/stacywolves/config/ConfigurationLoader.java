@@ -53,6 +53,9 @@ public class ConfigurationLoader {
         RuntimeConfiguration.wolvesAttackAnimals = configuration.getBoolean("wolvesAttackAnimals", category, true,
 				"Set to false if you don't want your piggies being devoured by wolves. " +
                         "Will not prevent wolves from defending themselves or their masters.");
+        RuntimeConfiguration.lightingEnabled = configuration.getBoolean("lightingEnabled", category, true,
+                "Should lighting be done for wolves which have a light level (e.g. torch wolf). " +
+                 "Turn off for improved performance.");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {
