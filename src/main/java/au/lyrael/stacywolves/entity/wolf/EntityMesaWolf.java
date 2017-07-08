@@ -37,6 +37,7 @@ public class EntityMesaWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     protected boolean isStandingOnSuitableFloor() {
+        // TODO Implement me properly.
         return true;
     }
 }
