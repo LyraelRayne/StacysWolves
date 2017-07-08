@@ -9,8 +9,14 @@ itemGroup.stacywolves=Stacy's Wolves
 # Entity Localization
 entity.stacywolves.EntityAirWolf.name=Cloud Wolf
 entity.stacywolves.EntityBirchWolf.name=Birch Wolf
+entity.stacywolves.EntityBookshelfWolf.name=Bookworm Wolf
 entity.stacywolves.EntityCakeWolf.name=Cake Wolf
+entity.stacywolves.EntityCoalWolf.name=Coal Wolf
+entity.stacywolves.EntityCookieWolf.name=Cookie Wolf
+entity.stacywolves.EntityCowWolf.name=Cow Wolf
+entity.stacywolves.EntityCraftingWolf.name=Crafting Table Wolf
 entity.stacywolves.EntityDesertWolf.name=Desert Wolf
+entity.stacywolves.EntityDonkeyWolf.name=Donkey Wolf
 entity.stacywolves.EntityDiamondWolf.name=Diamond Wolf
 entity.stacywolves.EntityEarthWolf.name=Earth Wolf
 entity.stacywolves.EntityEmeraldWolf.name=Emerald Wolf
@@ -19,18 +25,29 @@ entity.stacywolves.EntityEnderWolf.name=Ender Wolf
 entity.stacywolves.EntityFireWolf.name=Blaze Wolf
 entity.stacywolves.EntityFlowerWolf.name=Flower Wolf
 entity.stacywolves.EntityGoldWolf.name=Gold Wolf
+entity.stacywolves.EntityGuardianWolf.name=Guardian Wolf
 entity.stacywolves.EntityIceWolf.name=Ice Wolf
 entity.stacywolves.EntityIronWolf.name=Iron Wolf
+entity.stacywolves.EntityLapisWolf.name=Lapis Wolf
+entity.stacywolves.EntityMelonWolf.name=Melon Wolf
 entity.stacywolves.EntityMesaWolf.name=Mesa Wolf
 entity.stacywolves.EntityMushroomWolf.name=Mushroom Wolf
 entity.stacywolves.EntityNetherWolf.name=Nether Wolf
+entity.stacywolves.EntityOcelotWolf.name=Ocelot Wolf
 entity.stacywolves.EntityPrismarineWolf.name=Prismarine Wolf
+entity.stacywolves.EntityRedSandWolf.name=Red Sand Wolf
 entity.stacywolves.EntityRedstoneWolf.name=Redstone Wolf
 entity.stacywolves.EntitySavannahWolf.name=Savannah Wolf
 entity.stacywolves.EntitySkeletonWolf.name=Bone Wolf
+entity.stacywolves.EntitySlimeWolf.name=Slime Wolf
+entity.stacywolves.EntitySquidWolf.name=Squid Wolf
+entity.stacywolves.EntitySunflowerWolf.name=Sunflower Wolf
+entity.stacywolves.EntityTorchWolf.name=Torch Wolf
 entity.stacywolves.EntityWaterWolf.name=Ocean Wolf
+entity.stacywolves.EntityWitchWolf.name=Witch Wolf
 entity.stacywolves.EntityZombieWolf.name=Zombie Wolf
 entity.stacywolves.EntityWolfTransporter.name=Ender Ball
+
 
 # - Item Localization
 item.stacywolves.wolf_food_air_bone.name=Cloud Bone
@@ -85,6 +102,41 @@ item.stacywolves.wolf_transporter.name=Ender Ball
 item.stacywolves.wolf_transporter.tooltip=Through the mighty power of Science;Stacy's Wolves may now be transported using the power of Ender!
 item.stacywolves.wolf_transporter.unnamedcontents.tooltip=Contains {{!colors.light_purple}}{{type}}
 item.stacywolves.wolf_transporter.namedcontents.tooltip=Contains {{!colors.light_purple}}{{type}}{{!colors.reset}}({{!colors.yellow}}{{name}}{{!colors.reset}})
+
+item.stacywolves.wolf_food_inky_bone.name=Inky Bone
+item.stacywolves.wolf_food_inky_bone.tooltip=Sometimes a squid wolf will cover a bone in ink as a tasty snack.
+
+item.stacywolves.wolf_food_solid_prismarine_bone.name=Solid Prismarine Bone
+item.stacywolves.wolf_food_solid_prismarine_bone.tooltip=This bone is so hard that only the mighty Guardian Wolf dare chew on it.
+item.stacywolves.wolf_food_witch_bone.name=Glowbone
+item.stacywolves.wolf_food_witch_bone.tooltip=Witch Wolves will fetch these for their mystical mistresses in order to help brew potions.
+item.stacywolves.wolf_food_book_bone.name=Well Read Bone
+item.stacywolves.wolf_food_book_bone.tooltip=Bookworm Wolves love to read these before eating them.
+item.stacywolves.wolf_food_sunflower_bone.name=Sunflower Bone
+item.stacywolves.wolf_food_sunflower_bone.tooltip=This cheerful looking bone looks like it might impress the Sunflower Wolf.
+item.stacywolves.wolf_food_cookie_bone.name=Cookie Bone
+item.stacywolves.wolf_food_cookie_bone.tooltip=Mmmm... Tasty! But too bony to be suitable for Humans! The Cookie Wolf would surely love this.
+item.stacywolves.wolf_food_melon_bone.name=Melon Bone
+item.stacywolves.wolf_food_melon_bone.tooltip=Juicy! Melon Wolves are sure to take a liking to those who possess it.
+item.stacywolves.wolf_food_lapis_bone.name=Blue Bone
+item.stacywolves.wolf_food_lapis_bone.tooltip=This bone has been painted blue. Most likely to attract the attention of the elusive Lapis Wolf.
+item.stacywolves.wolf_food_coal_bone.name=Carbon Fiber Bone
+item.stacywolves.wolf_food_coal_bone.tooltip=This bone has been constructed of the finest coal. Guaranteed to turn the head of the discerning Coal Wolf.
+item.stacywolves.wolf_food_red_sand_bone.name=Red Sand Bone
+item.stacywolves.wolf_food_red_sand_bone.tooltip=Bits of this bone manage to get everywhere. Better feed it to a Red Sand Wolf before it's too difficult to clean up.
+item.stacywolves.wolf_food_fish_bone.name=Fishy Bone
+item.stacywolves.wolf_food_fish_bone.tooltip=This bone looks (and smells! pooooh-we!) like it came from a fish. The cat-like Ocelot Wolf would smell it a mile away.
+item.stacywolves.wolf_food_apple_bone.name=Apple on a Bone
+item.stacywolves.wolf_food_apple_bone.tooltip=Like a toffee apple, but less likely to ruin your teeth. Perhaps the Donkey Wolf will like it.
+item.stacywolves.wolf_food_crafty_bone.name=Crafty Bone
+item.stacywolves.wolf_food_crafty_bone.tooltip=Welcome in any recipe, this bone might come in handy to the versatile Crafting Table Wolf.
+item.stacywolves.wolf_food_wheat_bone.name=Wheat Bone
+item.stacywolves.wolf_food_wheat_bone.tooltip=No need to grind this bone to make bread. The Cow Wolf will love it.
+item.stacywolves.wolf_food_torch_bone.name=Torch Bone
+item.stacywolves.wolf_food_torch_bone.tooltip=Once an object of curiosity for a secret team of alien hunters, this bone made of torch wood is now only of use to the Torch Wolf.
+item.stacywolves.wolf_food_slime_bone.name=Sticky Bone
+item.stacywolves.wolf_food_slime_bone.tooltip=This bone is covered in green slime. A slime wolf would stick to it like glue.
+
 
 # - Block Localization
 tile.stacywolves.wolfsbane_torch.name=Wolfsbane Torch
