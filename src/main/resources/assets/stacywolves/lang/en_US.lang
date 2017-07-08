@@ -105,7 +105,6 @@ item.stacywolves.wolf_transporter.namedcontents.tooltip=Contains {{!colors.light
 
 item.stacywolves.wolf_food_inky_bone.name=Inky Bone
 item.stacywolves.wolf_food_inky_bone.tooltip=Sometimes a squid wolf will cover a bone in ink as a tasty snack.
-
 item.stacywolves.wolf_food_solid_prismarine_bone.name=Solid Prismarine Bone
 item.stacywolves.wolf_food_solid_prismarine_bone.tooltip=This bone is so hard that only the mighty Guardian Wolf dare chew on it.
 item.stacywolves.wolf_food_witch_bone.name=Glowbone

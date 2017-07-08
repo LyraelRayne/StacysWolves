@@ -69,6 +69,23 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         createSubItem("water_bone");
         createSubItem("zombie_bone");
         createSubItem("meaty_bone");
+
+        createSubItem("inky_bone");
+        createSubItem("solid_prismarine_bone");
+        createSubItem("witch_bone");
+        createSubItem("book_bone");
+        createSubItem("sunflower_bone");
+        createSubItem("cookie_bone");
+        createSubItem("melon_bone");
+        createSubItem("lapis_bone");
+        createSubItem("coal_bone");
+        createSubItem("red_sand_bone");
+        createSubItem("fish_bone");
+        createSubItem("apple_bone");
+        createSubItem("crafty_bone");
+        createSubItem("wheat_bone");
+        createSubItem("torch_bone");
+        createSubItem("slime_bone");
     }
 
     public void registerRecipes() {
@@ -96,6 +113,23 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         registerRecipe("water_bone", new ItemStack(Items.water_bucket));
         registerRecipe("zombie_bone", new ItemStack(Items.rotten_flesh));
         registerRecipe("meaty_bone", new ItemStack(Items.beef));
+
+        registerRecipe("inky_bone", new ItemStack(Items.dye));
+        registerRecipe("solid_prismarine_bone", EtFuturumHolder.getPrismarineShardItemStack());
+        registerRecipe("witch_bone", new ItemStack(Items.glowstone_dust));
+        registerRecipe("book_bone", new ItemStack(Items.book));
+        registerRecipe("sunflower_bone", new ItemStack(Blocks.double_plant,1,0));
+        registerRecipe("cookie_bone", new ItemStack(Items.cookie));
+        registerRecipe("melon_bone", new ItemStack(Items.melon));
+        registerRecipe("lapis_bone", new ItemStack(Items.dye,1,4));
+        registerRecipe("coal_bone", new ItemStack(Items.coal));
+        registerRecipe("red_sand_bone", new ItemStack(Blocks.sand, 1, 1));
+        registerRecipe("fish_bone", new ItemStack(Items.fish));
+        registerRecipe("apple_bone", new ItemStack(Items.apple));
+        registerRecipe("crafty_bone", new ItemStack(Blocks.crafting_table));
+        registerRecipe("wheat_bone", new ItemStack(Items.wheat));
+        registerRecipe("torch_bone", new ItemStack(Blocks.torch));
+        registerRecipe("slime_bone", new ItemStack(Items.slime_ball));
     }
 
     private void registerRecipe(String id, ItemStack craftedWith) {
