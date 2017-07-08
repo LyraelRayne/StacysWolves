@@ -70,10 +70,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private static final Logger SPAWNLOGGER = LogManager.getLogger(MOD_ID + ".spawn");
 
 	protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(grass, dirt, gravel, sand, sandstone);
-	protected static final List<Block> ORE_FLOOR_BLOCKS = Arrays.asList(stone, gravel);
+	protected static final List<Block> SUBTERRANEAN_FLOOR_BLOCKS = Arrays.asList(stone, gravel);
 	protected static final List<Block> ICE_FLOOR_BLOCKS = Arrays.asList(ice, snow, packed_ice, snow_layer);
 	protected static final List<Block> SHROOM_FLOOR_BLOCKS = Arrays.asList((Block) mycelium, red_mushroom_block,
 			brown_mushroom_block);
+	protected static final List<Block> MESA_FLOOR_BLOCKS = Arrays.asList(sand, hardened_clay, stained_hardened_clay);
 
 	public EntityWolfBase(World world)
 	{

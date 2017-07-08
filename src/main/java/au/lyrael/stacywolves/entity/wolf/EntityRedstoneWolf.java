@@ -5,18 +5,14 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
-import static au.lyrael.stacywolves.registry.WolfType.ORE;
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static au.lyrael.stacywolves.registry.WolfType.SUBTERRANEAN;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityRedstoneWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x8F0303, type = ORE,
+@WolfMetadata(name = "EntityRedstoneWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x8F0303, type = SUBTERRANEAN,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {MESA}),
@@ -32,7 +28,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
                 }, weight = SPAWN_WEIGHT_RARE, min = 1, max = 6),
         })
-public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWolf {
+public class EntityRedstoneWolf extends EntitySubterraneanWolfBase implements IRenderableWolf {
 
     public EntityRedstoneWolf(World worldObj) {
         super(worldObj);
@@ -52,21 +48,6 @@ public class EntityRedstoneWolf extends EntityWolfBase implements IRenderableWol
 
     @Override
     public boolean getCanSpawnHere() {
-        return isSuitableDimension()
-                && !canSeeTheSky(getWorldObj(), posX, posY, posZ)
-                && this.posY < 15
-                && creatureCanSpawnHere()
-                && isStandingOnSuitableFloor();
+        return getCanSpawnHere(15);
     }
-
-    @Override
-    public boolean canSpawnNow(World world, float x, float y, float z) {
-        return true;
-    }
-
-    @Override
-    protected List<Block> getFloorBlocks() {
-        return ORE_FLOOR_BLOCKS;
-    }
-
 }

@@ -5,18 +5,15 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
-import java.util.List;
-
-import static au.lyrael.stacywolves.entity.SpawnWeights.*;
-import static au.lyrael.stacywolves.registry.WolfType.ORE;
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SUPER_RARE;
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
+import static au.lyrael.stacywolves.registry.WolfType.SUBTERRANEAN;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityDiamondWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x5DECF5, type = ORE, probability = SPAWN_PROBABILITY_SUPER_RARE,
+@WolfMetadata(name = "EntityDiamondWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x5DECF5, type = SUBTERRANEAN, probability = SPAWN_PROBABILITY_SUPER_RARE,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
@@ -33,7 +30,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
                 }, weight = SPAWN_WEIGHT_SUPER_RARE, min = 1, max = 4)
         })
-public class EntityDiamondWolf extends EntityWolfBase implements IRenderableWolf {
+public class EntityDiamondWolf extends EntitySubterraneanWolfBase implements IRenderableWolf {
 
     public EntityDiamondWolf(World worldObj) {
         super(worldObj);
@@ -53,21 +50,6 @@ public class EntityDiamondWolf extends EntityWolfBase implements IRenderableWolf
 
     @Override
     public boolean getCanSpawnHere() {
-        return isSuitableDimension()
-                && !canSeeTheSky(getWorldObj(), posX, posY, posZ)
-                && this.posY < 15
-                && creatureCanSpawnHere()
-                && isStandingOnSuitableFloor();
-    }
-
-    @Override
-    public boolean canSpawnNow(World world, float x, float y, float z) {
-        return true;
-    }
-
-    @Override
-    protected List<Block> getFloorBlocks() {
-        return ORE_FLOOR_BLOCKS;
-    }
-
+		return getCanSpawnHere(15);
+	}
 }

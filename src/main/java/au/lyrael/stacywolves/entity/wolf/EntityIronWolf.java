@@ -13,11 +13,11 @@ import java.util.List;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SOMETIMES;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
-import static au.lyrael.stacywolves.registry.WolfType.ORE;
+import static au.lyrael.stacywolves.registry.WolfType.SUBTERRANEAN;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityIronWolf", primaryColour = 0x7F7F7F, secondaryColour = 0xD8AF93, type = ORE, probability = SPAWN_PROBABILITY_SOMETIMES,
+@WolfMetadata(name = "EntityIronWolf", primaryColour = 0x7F7F7F, secondaryColour = 0xD8AF93, type = SUBTERRANEAN, probability = SPAWN_PROBABILITY_SOMETIMES,
         spawns = {
                 @WolfSpawn(spawnBiomes = {
                         @WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
@@ -34,7 +34,7 @@ import static net.minecraftforge.common.BiomeDictionary.Type.*;
                         @WolfSpawnBiome(requireBiomeTypes = {RIVER}),
                 }, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 2),
         })
-public class EntityIronWolf extends EntityWolfBase implements IRenderableWolf {
+public class EntityIronWolf extends EntitySubterraneanWolfBase implements IRenderableWolf {
 
     public EntityIronWolf(World worldObj) {
         super(worldObj);
@@ -68,7 +68,7 @@ public class EntityIronWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     protected List<Block> getFloorBlocks() {
-        return ORE_FLOOR_BLOCKS;
-    }
+		return SUBTERRANEAN_FLOOR_BLOCKS;
+	}
 
 }
