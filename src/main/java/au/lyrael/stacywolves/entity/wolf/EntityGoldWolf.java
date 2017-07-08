@@ -4,8 +4,11 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_RARE;
@@ -35,7 +38,8 @@ public class EntityGoldWolf extends EntitySubterraneanWolfBase implements IRende
     public EntityGoldWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("gold_bone"));
-    }
+		setPeriodicDrop(new WolfPeriodicItemDrop(300, 10, new ItemStack(Items.gold_ingot)));
+	}
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {

@@ -4,8 +4,11 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SOMETIMES;
@@ -35,6 +38,8 @@ public class EntityCoalWolf extends EntitySubterraneanWolfBase implements IRende
 	public EntityCoalWolf(World worldObj) {
 		super(worldObj);
 		addLikedItem(ItemRegistry.getWolfFood("coal_bone"));
+		setPeriodicDrop(new WolfPeriodicItemDrop(600, 20, new ItemStack(Items.coal)));
+
 	}
 
 	@Override

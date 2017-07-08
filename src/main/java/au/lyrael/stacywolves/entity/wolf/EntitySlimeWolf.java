@@ -4,8 +4,11 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
@@ -22,6 +25,7 @@ public class EntitySlimeWolf extends EntityWolfBase implements IRenderableWolf {
 	public EntitySlimeWolf(World worldObj) {
 		super(worldObj);
 		addLikedItem(ItemRegistry.getWolfFood("slime_bone"));
+		setPeriodicDrop(new WolfPeriodicItemDrop(800, 20, new ItemStack(Items.slime_ball)));
 	}
 
 	@Override

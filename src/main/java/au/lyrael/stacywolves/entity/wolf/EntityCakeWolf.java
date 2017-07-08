@@ -3,8 +3,11 @@ package au.lyrael.stacywolves.entity.wolf;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.SpawnWeights;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
@@ -15,7 +18,8 @@ public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf, I
     public EntityCakeWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("cake_bone"));
-    }
+		setPeriodicDrop(new WolfPeriodicItemDrop(800, 2, new ItemStack(Items.cake)));
+	}
 
     @Override
     public boolean getCanSpawnHere() {

@@ -2,10 +2,13 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.lighting.WolfLightSource;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 @WolfMetadata(name = "EntityFireWolf", primaryColour = 0xF4C923, secondaryColour = 0x6D2C04)
@@ -16,7 +19,8 @@ public class EntityFireWolf extends EntityWolfBase implements IRenderableWolf {
         addLikedItem(ItemRegistry.getWolfFood("fire_bone"));
         this.isImmuneToFire = true;
         this.setLightSource(new WolfLightSource(this, worldObj, 15));
-    }
+		setPeriodicDrop(new WolfPeriodicItemDrop(800, 5, new ItemStack(Items.blaze_rod)));
+	}
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {

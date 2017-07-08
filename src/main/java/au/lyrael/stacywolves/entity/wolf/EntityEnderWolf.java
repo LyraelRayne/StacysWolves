@@ -5,12 +5,15 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -47,20 +50,12 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     private int teleportDelay;
     private int randomTeleportDelay = TICKS_BETWEEN_RANDOM_TELEPORT_ATTEMPTS;
 
-    @Override
-    public boolean normallyAvoidsWater() {
-        return !isTamed();
-    }
-
-    @Override
-    public boolean alwaysAvoidsWater() {
-        return !isTamed();
-    }
 
     public EntityEnderWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("ender_bone"));
-    }
+		setPeriodicDrop(new WolfPeriodicItemDrop(300, 5, new ItemStack(Items.ender_pearl)));
+	}
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {
@@ -237,4 +232,14 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     protected boolean isStandingOnSuitableFloor() {
         return true;
     }
+
+	@Override
+	public boolean normallyAvoidsWater() {
+		return !isTamed();
+	}
+
+	@Override
+	public boolean alwaysAvoidsWater() {
+		return !isTamed();
+	}
 }

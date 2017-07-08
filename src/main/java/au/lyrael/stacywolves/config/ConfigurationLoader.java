@@ -56,6 +56,10 @@ public class ConfigurationLoader {
         RuntimeConfiguration.lightingEnabled = configuration.getBoolean("lightingEnabled", category, true,
                 "Should lighting be done for wolves which have a light level (e.g. torch wolf). " +
                  "Turn off for improved performance.");
+        RuntimeConfiguration.randomDropsEnabled = configuration.getBoolean("randomDropsEnabled", category, true,
+                "Turn this off to prevent wolves periodically dropping items (e.g. diamond wolves dropping diamonds)");
+        RuntimeConfiguration.allowedInPeaceful = configuration.getBoolean("allowedInPeaceful", category, false,
+                "Turn this on to prevent untamed wolves despawning in peaceful mode.");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {

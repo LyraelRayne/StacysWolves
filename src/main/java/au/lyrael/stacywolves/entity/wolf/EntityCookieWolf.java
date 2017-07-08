@@ -4,8 +4,11 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
@@ -22,6 +25,7 @@ public class EntityCookieWolf extends EntityWolfBase implements IRenderableWolf 
 	public EntityCookieWolf(World worldObj) {
 		super(worldObj);
 		addLikedItem(ItemRegistry.getWolfFood("cookie_bone"));
+		setPeriodicDrop(new WolfPeriodicItemDrop(300, 5, new ItemStack(Items.cookie)));
 	}
 
 	@Override
