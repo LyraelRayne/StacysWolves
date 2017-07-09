@@ -9,13 +9,14 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.WATER;
 
 @WolfMetadata(name = "EntityGuardianWolf", primaryColour = 0x395F4E, secondaryColour = 0xD7793A, type = WATER,
 		spawns = {
 				@WolfSpawn(spawnBiomes = {
 						@WolfSpawnBiome(specificBiomes = "Deep Ocean"),
-				}, weight = SPAWN_WEIGHT_RARE, min = 1, max = 2),
+				}, weight = SPAWN_WEIGHT_SUPER_RARE, min = 1, max = 2),
 		})
 public class EntityGuardianWolf extends EntityPrismarineWolfBase implements IRenderableWolf {
 

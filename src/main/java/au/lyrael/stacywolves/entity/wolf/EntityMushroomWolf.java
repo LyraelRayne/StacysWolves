@@ -49,7 +49,6 @@ public class EntityMushroomWolf extends EntityWolfBase implements IRenderableWol
 	}
 
 	private static final List<Block> floorBlocks = new ArrayList<>(NORMAL_FLOOR_BLOCKS);
-
 	{
 		floorBlocks.addAll(SHROOM_FLOOR_BLOCKS);
 	}

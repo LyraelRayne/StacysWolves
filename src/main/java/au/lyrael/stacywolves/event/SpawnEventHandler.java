@@ -1,6 +1,7 @@
 package au.lyrael.stacywolves.event;
 
 import au.lyrael.stacywolves.entity.ISpawnable;
+import au.lyrael.stacywolves.entity.wolf.EntityBookshelfWolf;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.registry.WolfType;
@@ -12,6 +13,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingPackSizeEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
@@ -24,9 +26,7 @@ import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.registry.WolfType.*;
-import static cpw.mods.fml.common.eventhandler.Event.Result.ALLOW;
-import static cpw.mods.fml.common.eventhandler.Event.Result.DEFAULT;
-import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
+import static cpw.mods.fml.common.eventhandler.Event.Result.*;
 
 public class SpawnEventHandler {
 
@@ -95,6 +95,7 @@ public class SpawnEventHandler {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void onEnderTeleport(EnderTeleportEvent event) {
         if (event.entityLiving instanceof EntityWolfBase) {
             EntityWolfBase wolf = (EntityWolfBase) event.entityLiving;

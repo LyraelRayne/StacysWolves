@@ -5,6 +5,7 @@ import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.item.ItemWolfSpawnForcer;
 import au.lyrael.stacywolves.item.ItemWolfTransporter;
 import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
@@ -60,6 +61,7 @@ public class CommonProxy {
         GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
         registerWolfsBaneTorch();
         GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
+        GameRegistry.registerItem(new ItemWolfSpawnForcer(), "wolf_spawn_forcer");
     }
 
     private void registerWolfsBaneTorch() {

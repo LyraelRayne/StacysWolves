@@ -9,12 +9,13 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
+import static net.minecraftforge.common.BiomeDictionary.Type.JUNGLE;
 import static net.minecraftforge.common.BiomeDictionary.Type.SAVANNA;
 
 @WolfMetadata(name = "EntityMelonWolf", primaryColour = 0x444F0F, secondaryColour = 0xB92013,
 		spawns = {
 				@WolfSpawn(spawnBiomes = {
-						@WolfSpawnBiome(requireBiomeTypes = {SAVANNA}),
+						@WolfSpawnBiome(requireBiomeTypes = {JUNGLE}),
 				}, weight = SPAWN_WEIGHT_COMMON, min = 1, max = 4),
 		})
 public class EntityMelonWolf extends EntityWolfBase implements IRenderableWolf {

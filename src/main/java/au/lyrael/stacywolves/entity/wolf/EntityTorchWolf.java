@@ -6,16 +6,18 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.lighting.WolfLightSource;
 import au.lyrael.stacywolves.registry.ItemRegistry;
+import au.lyrael.stacywolves.registry.WolfType;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_RARE;
+import static au.lyrael.stacywolves.registry.WolfType.SUBTERRANEAN;
 import static au.lyrael.stacywolves.utility.MathUtility.getFacing;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityTorchWolf", primaryColour = 0x665130, secondaryColour = 0xFFD800,
+@WolfMetadata(name = "EntityTorchWolf", primaryColour = 0x665130, secondaryColour = 0xFFD800, type = SUBTERRANEAN,
 		spawns = {
 				@WolfSpawn(spawnBiomes = {
 						@WolfSpawnBiome(requireBiomeTypes = {PLAINS}),

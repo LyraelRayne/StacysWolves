@@ -69,8 +69,9 @@ public class WolfRegistry {
         }
 
         switch (entityName) {
+            case "EntityBookshelfWolf":
             case "EntityCakeWolf":
-                registerCakeWolf(entityName);
+                registerVillageWolf(entityName);
                 break;
             default:
                 // Assume that because we looked the class up from the registry that it was in fact properly registered and
@@ -89,10 +90,14 @@ public class WolfRegistry {
         }
     }
 
-    private void registerCakeWolf(String entityName) {
+    private void registerVillageWolf(String entityName) {
+        registerVillageWolf(entityName, 2, 1, 2);
+    }
+
+    private void registerVillageWolf(String entityName, int weight, int min, int max) {
         final List<BiomeGenBase> villageSpawnBiomes = (List<BiomeGenBase>) MapGenVillage.villageSpawnBiomes;
         for (BiomeGenBase biome : villageSpawnBiomes) {
-            this.addSpawn(entityName, 2, 1, 2, biome, NORMAL);
+            this.addSpawn(entityName, weight, min, max, biome, NORMAL);
         }
     }
 

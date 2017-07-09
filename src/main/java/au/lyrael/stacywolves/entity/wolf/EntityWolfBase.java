@@ -29,6 +29,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
+import net.minecraft.village.Village;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.RandomUtils;
@@ -61,6 +62,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private boolean hasDroppedItem = false;
 
 	private boolean shouldFollowOwner = true;
+
+	private boolean bypassThrottleAndProbability = false;
+
 	/**
 	 * This time increases while wolf is shaking and emitting water particles.
 	 */
@@ -74,7 +78,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private static final Logger SPAWNLOGGER = LogManager.getLogger(MOD_ID + ".spawn");
 
 	protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(grass, dirt, gravel, sand, sandstone);
-	protected static final List<Block> SUBTERRANEAN_FLOOR_BLOCKS = Arrays.asList(stone, gravel);
+	protected static final List<Block> SUBTERRANEAN_FLOOR_BLOCKS = Arrays.asList(stone, gravel, cobblestone, obsidian);
+	protected static final List<Block> INDOOR_FLOOR_BLOCKS = Arrays.asList(stone, cobblestone, planks, wooden_slab, stone_slab, double_stone_slab, double_wooden_slab);
 	protected static final List<Block> ICE_FLOOR_BLOCKS = Arrays.asList(ice, snow, packed_ice, snow_layer);
 	protected static final List<Block> SHROOM_FLOOR_BLOCKS = Arrays.asList((Block) mycelium, red_mushroom_block,
 			brown_mushroom_block);
@@ -127,6 +132,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		{
 			this.addEdibleItem(blackberryJellySandwichItemStack);
 		}
+	}
+
+	protected Village scanForVillage(int villageScanRadius) {
+		return getWorldObj().villageCollectionObj.findNearestVillage(
+				MathHelper.floor_double(this.posX),
+				MathHelper.floor_double(this.posY),
+				MathHelper.floor_double(this.posZ), villageScanRadius);
 	}
 
 	protected List<Block> getFloorBlocks()
@@ -403,6 +415,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		}
 
 		doWolfShaking();
+
+		if(isBypassThrottleAndProbability() && this.ticksExisted > 60)
+			this.setDead();
 	}
 
 	protected void doBeggingChase()
@@ -823,7 +838,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public int getMaxSpawnedInChunk()
 	{
-		return 8;
+		return 4;
 	}
 
 	/**
@@ -999,8 +1014,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		return isSuitableDimension() && canSeeTheSky(getWorldObj(), posX, posY, posZ) && isStandingOnSuitableFloor()
-				&& creatureCanSpawnHere();
+		return getCanSpawnHere(false);
+	}
+
+	/**
+	 * Standard spawn conditions
+	 * @param noSky If true, wolf shouldn't be able to see the sky, otherwise they should.
+	 */
+	protected boolean getCanSpawnHere(boolean noSky) {
+		return isSuitableDimension() &&
+				creatureCanSpawnHere() &&
+				isStandingOnSuitableFloor() &&
+				(canSeeTheSky(getWorldObj(), posX, posY, posZ) ^ noSky);
 	}
 
 	protected boolean isSuitableDimension()
@@ -1075,13 +1100,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	@Override
 	public boolean testSpawnProbability() {
-		return RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
+		return isBypassThrottleAndProbability() || RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
 	}
 
 	@Override
 	public long getSpawnThrottlePeriod()
 	{
-		return this.metadata.type().getThrottlePeriod();
+		return isBypassThrottleAndProbability() ? 0 : this.metadata.type().getThrottlePeriod();
 	}
 
 	/**
@@ -1251,5 +1276,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	public void setPeriodicDrop(WolfPeriodicItemDrop periodicDrop) {
 		this.periodicDrop = periodicDrop;
+	}
+
+
+	public void setBypassThrottleAndProbability(boolean bypassThrottleAndProbability) {
+		this.bypassThrottleAndProbability = bypassThrottleAndProbability;
+	}
+
+	public boolean isBypassThrottleAndProbability() {
+		return bypassThrottleAndProbability;
 	}
 }

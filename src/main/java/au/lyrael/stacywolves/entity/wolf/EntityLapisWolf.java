@@ -54,7 +54,6 @@ public class EntityLapisWolf extends EntitySubterraneanWolfBase implements IRend
 
 	@Override
 	public boolean getCanSpawnHere() {
-		final int maxY = 15;
-		return getCanSpawnHere(maxY);
+		return getCanSpawnHere(15);
 	}
 }

@@ -5,19 +5,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
-
 public abstract class EntitySubterraneanWolfBase extends EntityWolfBase {
 	public EntitySubterraneanWolfBase(World world) {
 		super(world);
 	}
 
 	protected boolean getCanSpawnHere(int maxY) {
-		return isSuitableDimension()
-				&& !canSeeTheSky(getWorldObj(), posX, posY, posZ)
-				&& this.posY < maxY
-				&& creatureCanSpawnHere()
-				&& isStandingOnSuitableFloor();
+		return getCanSpawnHere(true)
+				&& this.posY < maxY;
 	}
 
 	@Override
