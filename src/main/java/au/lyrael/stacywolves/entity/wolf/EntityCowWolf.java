@@ -6,6 +6,9 @@ import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
@@ -28,6 +31,23 @@ public class EntityCowWolf extends EntityWolfBase implements IRenderableWolf {
 	public EntityWolfBase createChild(EntityAgeable parent) {
 		EntityWolfBase child = new EntityCowWolf(this.worldObj);
 		return createChild(parent, child);
+	}
+
+	@Override
+	public boolean interact(EntityPlayer player) {
+		ItemStack itemstack = player.inventory.getCurrentItem();
+
+		if (itemstack != null && itemstack.getItem() == Items.bucket && !player.capabilities.isCreativeMode) {
+			if (itemstack.stackSize-- == 1) {
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(Items.milk_bucket));
+			} else if (!player.inventory.addItemStackToInventory(new ItemStack(Items.milk_bucket))) {
+				player.dropPlayerItemWithRandomChoice(new ItemStack(Items.milk_bucket, 1, 0), false);
+			}
+
+			return true;
+		} else {
+			return super.interact(player);
+		}
 	}
 
 	@Override
