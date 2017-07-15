@@ -81,7 +81,8 @@ public class ModelWolf extends ModelBase {
     public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_) {
         super.render(p_78088_1_, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_);
         this.setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, p_78088_7_, p_78088_1_);
-
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         if (this.isChild) {
             float f6 = 2.0F;
             GL11.glPushMatrix();
@@ -109,6 +110,7 @@ public class ModelWolf extends ModelBase {
             this.wolfTail.renderWithRotation(p_78088_7_);
             this.wolfMane.render(p_78088_7_);
         }
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     /**
