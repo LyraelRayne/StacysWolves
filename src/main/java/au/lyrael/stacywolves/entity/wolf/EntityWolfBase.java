@@ -8,6 +8,7 @@ import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
+import au.lyrael.stacywolves.lighting.WolfLightSource;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.registry.WolfType;
 import net.minecraft.block.Block;
@@ -48,7 +49,6 @@ import static net.minecraft.init.Blocks.*;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable
 {
-
 	private final WolfMetadata metadata;
 
 	private float field_70926_e;
@@ -86,6 +86,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	protected static final List<Block> MESA_FLOOR_BLOCKS = Arrays.asList(sand, hardened_clay, stained_hardened_clay);
 
 	private WolfPeriodicItemDrop periodicDrop;
+	private WolfLightSource lightSource;
+
 	public EntityWolfBase(World world)
 	{
 		super(world);
@@ -321,6 +323,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public void onLivingUpdate()
 	{
 		super.onLivingUpdate();
+		doLightingUpdate();
 
 		if (!this.worldObj.isRemote && this.isShaking && !this.wolfIsReadyToShake && !this.hasPath() && this.onGround)
 		{
@@ -333,6 +336,16 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		if (scaresCreepers())
 			scareCreepers();
 
+	}
+
+	protected void doLightingUpdate() {
+		final WolfLightSource lightSource = getLightSource();
+		if (lightSource != null) {
+			if (!this.isDead)
+				lightSource.addLight();
+			else
+				lightSource.clearLighting();
+		}
 	}
 
 	protected void scareCreepers()
@@ -379,7 +392,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean scaresCreepers()
 	{
-		return isTamed() && true;
+		return isTamed();
 	}
 
 	/**
@@ -428,6 +441,15 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Will get destroyed next tick.
+	 */
+	@Override
+	public void setDead() {
+		super.setDead();
+		doLightingUpdate();
 	}
 
 	protected void doWolfShaking()
@@ -1150,6 +1172,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return false;
 	}
 
+
+
 	@Override
 	public boolean isTemptedBy(ItemStack itemStack)
 	{
@@ -1236,6 +1260,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public WolfType getWolfType()
 	{
 		return metadata.type();
+	}
+
+	public WolfLightSource getLightSource() {
+		return lightSource;
+	}
+
+	public void setLightSource(WolfLightSource lightSource) {
+		this.lightSource = lightSource;
 	}
 
 	public WolfPeriodicItemDrop getPeriodicDrop() {
