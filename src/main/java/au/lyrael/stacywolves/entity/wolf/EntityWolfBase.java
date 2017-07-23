@@ -43,6 +43,7 @@ import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
+import static au.lyrael.stacywolves.config.RuntimeConfiguration.onlyOcelotWolvesScareCreepers;
 import static au.lyrael.stacywolves.registry.ItemRegistry.isClicker;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
@@ -410,7 +411,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean scaresCreepers()
 	{
-		return isTamed();
+		return !onlyOcelotWolvesScareCreepers && isTamed();
 	}
 
 	/**

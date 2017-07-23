@@ -10,4 +10,6 @@ public class RuntimeConfiguration {
     public static boolean allowedInPeaceful = false;
     public static boolean randomDropsEnabled = true;
     public static boolean lightingEnabled = true;
+    public static boolean onlyOcelotWolvesScareCreepers = false;
+    public static boolean silentSlimeWolves = false;
 }

@@ -60,6 +60,10 @@ public class ConfigurationLoader {
         RuntimeConfiguration.lightingEnabled = configuration.getBoolean("lightingEnabled", category, true,
                 "Should lighting be done for wolves which have a light level (e.g. torch wolf). " +
                  "Turn off for improved performance.");
+        RuntimeConfiguration.onlyOcelotWolvesScareCreepers = configuration.getBoolean("onlyOcelotWolvesScareCreepers", category, false,
+                "When this is enabled, only Ocelot wolves will scare creepers. Otherwise all Stacy's Wolves will scare creepers.");
+        RuntimeConfiguration.silentSlimeWolves = configuration.getBoolean("silentSlimeWolves", category, false,
+                "When this is enabled, slime wolves will not make their squishy sound. Turn it on if you find them annoying.");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {

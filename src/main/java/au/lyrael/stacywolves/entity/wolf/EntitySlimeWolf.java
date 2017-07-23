@@ -4,6 +4,7 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
@@ -53,7 +54,9 @@ public class EntitySlimeWolf extends EntityWolfBase implements IRenderableWolf {
 			}
 		}
 
-		this.playSound("mob.slime.small", this.getSoundVolume() * 0.5f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+		if(!RuntimeConfiguration.silentSlimeWolves) {
+			this.playSound("mob.slime.small", this.getSoundVolume() * 0.5f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+		}
 	}
 
 	@Override

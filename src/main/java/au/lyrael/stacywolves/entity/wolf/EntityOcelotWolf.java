@@ -11,6 +11,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.config.RuntimeConfiguration.onlyOcelotWolvesScareCreepers;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
 import static net.minecraftforge.common.BiomeDictionary.Type.JUNGLE;
 
@@ -32,6 +33,12 @@ public class EntityOcelotWolf extends EntityWolfBase implements IRenderableWolf 
 	public EntityWolfBase createChild(EntityAgeable parent) {
 		EntityWolfBase child = new EntityOcelotWolf(this.worldObj);
 		return createChild(parent, child);
+	}
+
+	@Override
+	protected boolean scaresCreepers()
+	{
+		return isTamed();
 	}
 
 	@Override
