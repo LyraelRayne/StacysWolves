@@ -4,6 +4,7 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
+import au.lyrael.stacywolves.item.ItemWolfClicker;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.item.ItemWolfSpawnForcer;
 import au.lyrael.stacywolves.item.ItemWolfTransporter;
@@ -23,6 +24,7 @@ import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
+import static au.lyrael.stacywolves.item.ItemWolfClicker.WOLF_CLICKER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfSpawnForcer.WOLF_SPAWN_FORCER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
@@ -55,6 +57,7 @@ public class CommonProxy {
         ItemRegistry.wolf_food.registerRecipes();
         ItemRegistry.wolfsbane_torch.registerRecipes();
         ItemRegistry.wolf_transporter.registerRecipes();
+        ItemRegistry.wolf_clicker.registerRecipes();
     }
 
 
@@ -63,6 +66,7 @@ public class CommonProxy {
         registerWolfsBaneTorch();
         GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
         GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
+        GameRegistry.registerItem(new ItemWolfClicker(), WOLF_CLICKER_NAME);
     }
 
     private void registerWolfsBaneTorch() {

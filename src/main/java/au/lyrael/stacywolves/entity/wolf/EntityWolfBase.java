@@ -42,6 +42,7 @@ import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
+import static au.lyrael.stacywolves.registry.ItemRegistry.isClicker;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
 import static net.minecraft.init.Blocks.*;
@@ -262,8 +263,17 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	protected String getLivingSound()
 	{
 		return this.isAngry() ? "mob.wolf.growl"
-				: (this.rand.nextInt(3) == 0 ? (this.isTamed() && this.dataWatcher.getWatchableObjectFloat(18) < 10.0F
+				: (this.rand.nextInt(3) == 0 ? (this.isTamed() && getOtherWatchableHealthThing() < 10.0F
 						? "mob.wolf.whine" : "mob.wolf.panting") : "mob.wolf.bark");
+	}
+
+	/**
+	 * There appear to be two watchables for health. 18 is used by a lot of tamed wolf stuff, maybe this is tamed health?
+	 *
+	 * @return Datawatcher item #18
+	 */
+	private float getOtherWatchableHealthThing() {
+		return this.dataWatcher.getWatchableObjectFloat(18);
 	}
 
 	/**
@@ -621,68 +631,96 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * @return
 	 */
 	@Override
-	public boolean interact(EntityPlayer player)
-	{
+	public boolean interact(EntityPlayer player) {
 		ItemStack itemstack = player.inventory.getCurrentItem();
-		if (itemstack != null)
-		{
-			if (this.isTamed())
-			{
-				if (canEat(itemstack))
-				{
-					if (this.dataWatcher.getWatchableObjectFloat(18) < 20.0F)
-					{
-						consumeHeldItem(player, itemstack);
-						this.heal(getHealAmount(itemstack));
-						return true;
-					}
-				}
-				else if (itemstack.getItem() == Items.dye)
-				{
-					int color = BlockColored.func_150032_b(itemstack.getItemDamage());
+		boolean interacted = false;
 
-					if (color != this.getCollarColor())
-					{
-						this.setCollarColor(color);
-
-						if (!player.capabilities.isCreativeMode && --itemstack.stackSize <= 0)
-						{
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-						}
-
-						return true;
-					}
-				}
-				else
-				{
-					if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote && !this.isWolfBreedingItem(itemstack))
-					{
-						toggleSitting();
-					}
-				}
+		if (this.isTamed() && isOwnedBy(player)) {
+			if (!this.isWolfBreedingItem(itemstack)) { // Always use super if it's breeding item because something else handles that.
+				interacted = interactFood(player, itemstack) ||
+						interactDye(player, itemstack) ||
+						interactClicker(player, itemstack) ||
+						interactToggleSit(player);
 			}
-			else if (this.likes(itemstack) && !this.isAngry())
-			{
-				consumeHeldItem(player, itemstack);
-				becomeTamedBy(player);
+		} else {
+			interacted = interactTamingItem(player, itemstack);
+		}
+
+		return interacted || super.interact(player);
+	}
+
+	protected boolean interactTamingItem(EntityPlayer player, ItemStack itemstack) {
+		if (this.likes(itemstack) && !this.isAngry()) {
+			consumeHeldItem(player, itemstack);
+			attemptBecomeTamedBy(player);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean interactToggleSit(EntityPlayer player) {
+		if (!this.worldObj.isRemote && !player.isSneaking()) {
+			toggleSitting();
+			return true;
+		}
+		return false;
+	}
+
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean interactClicker(EntityPlayer player, ItemStack itemstack) {
+		if (isClicker(itemstack) && !this.worldObj.isRemote) {
+			itemstack.getItem();
+			toggleShouldFollowOwner();
+			announceFollowChange(player);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void announceFollowChange(EntityPlayer player) {
+		final String nameTag = this.getCustomNameTag();
+		final String name = !StringUtils.isNullOrEmpty(nameTag) ? nameTag : "wolf";
+		player.addChatMessage(new ChatComponentText(String.format("%s will %s follow %s", name, shouldFollowOwner() ? "now" : "no longer", player.getDisplayName())));
+	}
+
+	protected boolean interactDye(EntityPlayer player, ItemStack itemstack) {
+		if (isDye(itemstack)) {
+			int color = BlockColored.func_150032_b(itemstack.getItemDamage());
+
+			if (color != this.getCollarColor()) {
+				this.setCollarColor(color);
+
+				if (!player.capabilities.isCreativeMode && --itemstack.stackSize <= 0) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+				}
+
 				return true;
 			}
 		}
-		else
-		{
-			if (this.isTamed() && this.func_152114_e(player) && !this.worldObj.isRemote)
-			{
-				if (player.isSneaking()) {
-					toggleShouldFollowOwner();
-					final String name = !StringUtils.isNullOrEmpty(this.getCustomNameTag()) ? this.getCustomNameTag() : "wolf";
-					player.addChatMessage(new ChatComponentText(String.format("%s will %s follow %s", name, shouldFollowOwner() ? "now" : "no longer", player.getDisplayName())));
-				} else
-					toggleSitting();
-			}
+		return false;
+	}
+
+	protected boolean interactFood(EntityPlayer player, ItemStack itemstack) {
+		if (canEat(itemstack) && getOtherWatchableHealthThing() < 20.0F) {
+			consumeHeldItem(player, itemstack);
+			this.heal(getHealAmount(itemstack));
+			return true;
 		}
+		return false;
+	}
 
+	protected boolean isOwnedBy(EntityPlayer player) {
+		return this.func_152114_e(player);
+	}
 
-		return super.interact(player);
+	protected static boolean isDye(ItemStack itemstack) {
+		return itemstack != null && itemstack.getItem() == Items.dye;
 	}
 
 	protected void toggleSitting()
@@ -702,7 +740,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		this.setAttackTarget(null);
 	}
 
-	protected void becomeTamedBy(EntityPlayer player)
+	protected void attemptBecomeTamedBy(EntityPlayer player)
 	{
 		if (!this.worldObj.isRemote)
 		{
@@ -810,7 +848,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public float getTailRotation()
 	{
 		return this.isAngry() ? 1.5393804F
-				: (this.isTamed() ? (0.55F - (20.0F - this.dataWatcher.getWatchableObjectFloat(18)) * 0.02F) * (float) Math.PI
+				: (this.isTamed() ? (0.55F - (20.0F - getOtherWatchableHealthThing()) * 0.02F) * (float) Math.PI
 						: ((float) Math.PI / 5F));
 	}
 
@@ -828,7 +866,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public boolean isWolfBreedingItem(ItemStack itemStack)
 	{
 		// Return false if wolf isn't tamed as that's the only way to prevent untamed wolves from falling in love.
-		return isTamed() && ItemWolfFood.foodsMatch(ItemRegistry.getWolfFood("meaty_bone"), itemStack);
+		return itemStack != null && isTamed() && ItemWolfFood.foodsMatch(ItemRegistry.getWolfFood("meaty_bone"), itemStack);
 	}
 
 
