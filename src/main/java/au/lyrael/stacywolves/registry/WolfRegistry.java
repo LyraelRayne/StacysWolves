@@ -69,6 +69,7 @@ public class WolfRegistry {
         }
 
         switch (entityName) {
+            case "EntityBookshelfWolf":
             case "EntityCakeWolf":
                 registerVillageWolf(entityName);
                 break;

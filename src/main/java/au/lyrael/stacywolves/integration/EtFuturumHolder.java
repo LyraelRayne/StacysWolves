@@ -10,8 +10,13 @@ import net.minecraft.item.ItemStack;
 public class EtFuturumHolder {
     public static final Block prismarine_block = null;
     public static final Item prismarine_crystals = null;
+    public static final Item prismarine_shard = null;
 
     public static ItemStack getPrismarineCrystalItemStack() {
         return prismarine_crystals != null ? new ItemStack(prismarine_crystals) : null;
+    }
+
+    public static ItemStack getPrismarineShardItemStack() {
+        return prismarine_shard != null ? new ItemStack(prismarine_shard) : null;
     }
 }
