@@ -7,6 +7,7 @@ import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.registry.WolfType;
 import net.minecraft.block.Block;
@@ -52,11 +53,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	private float field_70926_e;
 	private float field_70924_f;
-	/**
-	 * true is the wolf is wet else false
-	 */
-	private boolean isShaking;
-	private boolean field_70928_h;
+
+	private boolean isShaking = false;
+	private boolean wolfIsReadyToShake = false;
+	private boolean isShakingToDrySelf = false;
+	private boolean isShakingToDropItem = false;
+	private boolean isDroppingItem = false;
+	private boolean hasDroppedItem = false;
 
 	private boolean shouldFollowOwner = true;
 
@@ -82,6 +85,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			brown_mushroom_block);
 	protected static final List<Block> MESA_FLOOR_BLOCKS = Arrays.asList(sand, hardened_clay, stained_hardened_clay);
 
+	private WolfPeriodicItemDrop periodicDrop;
 	public EntityWolfBase(World world)
 	{
 		super(world);
@@ -318,9 +322,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		super.onLivingUpdate();
 
-		if (!this.worldObj.isRemote && this.isShaking && !this.field_70928_h && !this.hasPath() && this.onGround)
+		if (!this.worldObj.isRemote && this.isShaking && !this.wolfIsReadyToShake && !this.hasPath() && this.onGround)
 		{
-			this.field_70928_h = true;
+			this.wolfIsReadyToShake = true;
 			this.timeWolfIsShaking = 0.0F;
 			this.prevTimeWolfIsShaking = 0.0F;
 			this.worldObj.setEntityState(this, (byte) 8);
@@ -392,6 +396,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 		doBeggingChase();
 
+		if (isTamed() && !isDroppingItem && getPeriodicDrop() != null) {
+			if (getPeriodicDrop().shouldItemDrop(this))
+				this.isDroppingItem = true;
+		}
+
 		doWolfShaking();
 
 		if(isBypassThrottleAndProbability() && this.ticksExisted > 60)
@@ -423,14 +432,22 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected void doWolfShaking()
 	{
+		// NOTE: isWet means "is in water" rather than "has been in water"
 		if (this.isWet())
 		{
+			if (!isShakingToDropItem && this.wolfIsReadyToShake) {
+				this.prevTimeWolfIsShaking = 0.0F;
+				this.timeWolfIsShaking = 0.0F;
+			}
 			this.isShaking = true;
-			this.field_70928_h = false;
-			this.timeWolfIsShaking = 0.0F;
-			this.prevTimeWolfIsShaking = 0.0F;
-		}
-		else if ((this.isShaking || this.field_70928_h) && this.field_70928_h)
+			this.isShakingToDrySelf = true;
+			this.wolfIsReadyToShake = false;
+
+		} else if (this.isDroppingItem && !this.isShakingToDropItem) {
+			this.isShaking = true;
+			this.isShakingToDropItem = true;
+			this.hasDroppedItem = false;
+		} else if ((this.isShaking || this.wolfIsReadyToShake) && this.wolfIsReadyToShake)
 		{
 			if (this.timeWolfIsShaking == 0.0F)
 			{
@@ -444,24 +461,36 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			if (this.prevTimeWolfIsShaking >= 2.0F)
 			{
 				this.isShaking = false;
-				this.field_70928_h = false;
+				this.wolfIsReadyToShake = false;
 				this.prevTimeWolfIsShaking = 0.0F;
 				this.timeWolfIsShaking = 0.0F;
+				this.isShakingToDropItem = false;
+				this.isShakingToDrySelf = false;
+				this.isDroppingItem = false;
 			}
 
 			if (this.timeWolfIsShaking > 0.4F)
 			{
-				float f = (float) this.boundingBox.minY;
-				int i = (int) (MathHelper.sin((this.timeWolfIsShaking - 0.4F) * (float) Math.PI) * 7.0F);
-
-				for (int j = 0; j < i; ++j)
-				{
-					float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-					float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-					this.worldObj.spawnParticle("splash", this.posX + (double) f1, (double) (f + 0.8F), this.posZ + (double) f2,
-							this.motionX, this.motionY, this.motionZ);
+				if (isShakingToDrySelf) {
+					shedWetParticles();
+				}
+				if (isTamed() && isShakingToDropItem && !hasDroppedItem) {
+					getPeriodicDrop().dropItem(this);
+					this.hasDroppedItem = true;
 				}
 			}
+		}
+	}
+
+	private void shedWetParticles() {
+		float f = (float) this.boundingBox.minY;
+		int i = (int) (MathHelper.sin((this.timeWolfIsShaking - 0.4F) * (float) Math.PI) * 7.0F);
+
+		for (int j = 0; j < i; ++j) {
+			float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+			float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+			this.worldObj.spawnParticle("splash", this.posX + (double) f1, (double) (f + 0.8F), this.posZ + (double) f2,
+					this.motionX, this.motionY, this.motionZ);
 		}
 	}
 
@@ -746,7 +775,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		if (updateFlags == 8)
 		{
-			this.field_70928_h = true;
+			this.wolfIsReadyToShake = true;
 			this.timeWolfIsShaking = 0.0F;
 			this.prevTimeWolfIsShaking = 0.0F;
 		}
@@ -1209,6 +1238,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return metadata.type();
 	}
 
+	public WolfPeriodicItemDrop getPeriodicDrop() {
+		return periodicDrop;
+	}
+
+	public void setPeriodicDrop(WolfPeriodicItemDrop periodicDrop) {
+		this.periodicDrop = periodicDrop;
+	}
+	
 	public void setBypassThrottleAndProbability(boolean bypassThrottleAndProbability) {
 		this.bypassThrottleAndProbability = bypassThrottleAndProbability;
 	}

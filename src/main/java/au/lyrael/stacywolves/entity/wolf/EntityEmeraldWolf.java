@@ -4,8 +4,11 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SUPER_RARE;
@@ -24,7 +27,8 @@ public class EntityEmeraldWolf extends EntitySubterraneanWolfBase implements IRe
     public EntityEmeraldWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("emerald_bone"));
-    }
+		setPeriodicDrop(new WolfPeriodicItemDrop(300, 5, new ItemStack(Items.emerald)));
+	}
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {

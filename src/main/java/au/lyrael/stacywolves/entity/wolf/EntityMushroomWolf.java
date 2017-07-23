@@ -4,9 +4,12 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
+import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -29,6 +32,9 @@ public class EntityMushroomWolf extends EntityWolfBase implements IRenderableWol
 	public EntityMushroomWolf(World worldObj) {
 		super(worldObj);
 		addLikedItem(ItemRegistry.getWolfFood("mushroom_bone"));
+		setPeriodicDrop(new WolfPeriodicItemDrop(800, 5,
+				new ItemStack(Blocks.red_mushroom),
+				new ItemStack(Blocks.brown_mushroom)));
 	}
 
 	@Override

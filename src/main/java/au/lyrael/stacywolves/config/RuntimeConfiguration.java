@@ -8,4 +8,5 @@ public class RuntimeConfiguration {
     public static boolean debugEnabled = false;
     public static boolean wolvesAttackAnimals = true;
     public static boolean allowedInPeaceful = false;
+    public static boolean randomDropsEnabled = true;
 }

@@ -55,6 +55,8 @@ public class ConfigurationLoader {
                         "Will not prevent wolves from defending themselves or their masters.");
         RuntimeConfiguration.allowedInPeaceful = configuration.getBoolean("allowedInPeaceful", category, false,
                 "Turn this on to prevent untamed wolves despawning in peaceful mode.");
+        RuntimeConfiguration.randomDropsEnabled = configuration.getBoolean("randomDropsEnabled", category, true,
+                "Turn this off to prevent wolves periodically dropping items (e.g. diamond wolves dropping diamonds)");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {
