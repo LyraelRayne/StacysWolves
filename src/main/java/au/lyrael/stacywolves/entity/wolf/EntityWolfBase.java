@@ -27,6 +27,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
+import net.minecraft.village.Village;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.RandomUtils;
@@ -124,6 +125,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		{
 			this.addEdibleItem(blackberryJellySandwichItemStack);
 		}
+	}
+
+	protected Village scanForVillage(int villageScanRadius) {
+		return getWorldObj().villageCollectionObj.findNearestVillage(
+				MathHelper.floor_double(this.posX),
+				MathHelper.floor_double(this.posY),
+				MathHelper.floor_double(this.posZ), villageScanRadius);
 	}
 
 	protected List<Block> getFloorBlocks()
@@ -778,7 +786,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public int getMaxSpawnedInChunk()
 	{
-		return 8;
+		return 4;
 	}
 
 	/**
@@ -954,8 +962,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		return isSuitableDimension() && canSeeTheSky(getWorldObj(), posX, posY, posZ) && isStandingOnSuitableFloor()
-				&& creatureCanSpawnHere();
+		return getCanSpawnHere(false);
+	}
+
+	/**
+	 * Standard spawn conditions
+	 * @param noSky If true, wolf shouldn't be able to see the sky, otherwise they should.
+	 */
+	protected boolean getCanSpawnHere(boolean noSky) {
+		return isSuitableDimension() &&
+				creatureCanSpawnHere() &&
+				isStandingOnSuitableFloor() &&
+				(canSeeTheSky(getWorldObj(), posX, posY, posZ) ^ noSky);
 	}
 
 	protected boolean isSuitableDimension()
