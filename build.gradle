@@ -44,7 +44,7 @@ curseforge {
         apiKey = new File('apikey.txt').text
         id = '244308'
         changelogType = 'markdown'
-        changelog = new File("changeloginput-" + "$project.version" + ".txt")
+        changelog = new File("changeloginput-" + "$project.version" + ".md")
         releaseType = 'beta'
         addGameVersion '1.7.10'
         mainArtifact(jar) {
