@@ -91,7 +91,7 @@ item.stacywolves.wolf_food_redstone_bone.tooltip=This red bone seems to spark th
 item.stacywolves.wolf_food_savannah_bone.name=Savannah Bone
 item.stacywolves.wolf_food_savannah_bone.tooltip=Savannah Wolves are reminded of the rains down in Africa.
 item.stacywolves.wolf_food_skeleton_bone.name=Skele-Bone
-item.stacywolves.wolf_food_skeleton_bone.tooltip=More bone than your body has room for.;Good thing that Bone Wolves have no body.;Grim wishes he could have such a bony bone ;)
+item.stacywolves.wolf_food_skeleton_bone.tooltip=More bone than your body has room for.;Good thing that Bone Wolves have no body.;Grim wishes he could have such a bony bone \;)
 item.stacywolves.wolf_food_water_bone.name=Wet Bone
 item.stacywolves.wolf_food_water_bone.tooltip=This wet bone is a little soggy.;Only an Ocean Wolf could love it.
 item.stacywolves.wolf_food_zombie_bone.name=Zombone
@@ -133,7 +133,7 @@ item.stacywolves.wolf_food_crafty_bone.tooltip=Welcome in any recipe, this bone 
 item.stacywolves.wolf_food_wheat_bone.name=Wheat Bone
 item.stacywolves.wolf_food_wheat_bone.tooltip=No need to grind this bone to make bread. The Cow Wolf will love it.
 item.stacywolves.wolf_food_torch_bone.name=Torch Bone
-item.stacywolves.wolf_food_torch_bone.tooltip=Once an object of curiosity for a secret team of alien hunters, this bone made of torch wood is now only of use to the Torch Wolf.
+item.stacywolves.wolf_food_torch_bone.tooltip=Once an object of curiosity for a secret team of alien hunters\;;this bone made of torch wood is now only of use to the Torch Wolf.
 item.stacywolves.wolf_food_slime_bone.name=Sticky Bone
 item.stacywolves.wolf_food_slime_bone.tooltip=This bone is covered in green slime. A slime wolf would stick to it like glue.
 

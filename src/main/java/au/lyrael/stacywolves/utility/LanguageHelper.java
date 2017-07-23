@@ -87,9 +87,10 @@ public class LanguageHelper {
             }
         }
 
-        for (String descriptionLine : langTooltip.split(";")) {
-            if (descriptionLine != null && descriptionLine.length() > 0)
-                list.add(descriptionLine);
+        for (String descriptionLine : langTooltip.split("(?<!\\\\);")) {
+            final String unescapedLine = descriptionLine.replaceAll("\\\\;", ";");
+            if (unescapedLine != null && descriptionLine.length() > 0)
+                list.add(unescapedLine);
         }
     }
 
