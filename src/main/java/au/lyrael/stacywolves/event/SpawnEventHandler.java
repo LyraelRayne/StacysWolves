@@ -24,9 +24,7 @@ import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.registry.WolfType.*;
-import static cpw.mods.fml.common.eventhandler.Event.Result.ALLOW;
-import static cpw.mods.fml.common.eventhandler.Event.Result.DEFAULT;
-import static cpw.mods.fml.common.eventhandler.Event.Result.DENY;
+import static cpw.mods.fml.common.eventhandler.Event.Result.*;
 
 public class SpawnEventHandler {
 
@@ -95,6 +93,7 @@ public class SpawnEventHandler {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void onEnderTeleport(EnderTeleportEvent event) {
         if (event.entityLiving instanceof EntityWolfBase) {
             EntityWolfBase wolf = (EntityWolfBase) event.entityLiving;

@@ -5,6 +5,7 @@ import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfFood;
+import au.lyrael.stacywolves.item.ItemWolfSpawnForcer;
 import au.lyrael.stacywolves.item.ItemWolfTransporter;
 import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
@@ -23,6 +24,7 @@ import java.util.*;
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
+import static au.lyrael.stacywolves.item.ItemWolfSpawnForcer.WOLF_SPAWN_FORCER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
 import static au.lyrael.stacywolves.utility.LanguageHelper.setupColors;
 
@@ -60,6 +62,7 @@ public class CommonProxy {
         GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
         registerWolfsBaneTorch();
         GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
+        GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
     }
 
     private void registerWolfsBaneTorch() {

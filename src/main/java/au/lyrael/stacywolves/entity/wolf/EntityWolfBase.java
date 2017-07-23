@@ -58,6 +58,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private boolean field_70928_h;
 
 	private boolean shouldFollowOwner = true;
+
+	private boolean bypassThrottleAndProbability = false;
+
 	/**
 	 * This time increases while wolf is shaking and emitting water particles.
 	 */
@@ -381,6 +384,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		doBeggingChase();
 
 		doWolfShaking();
+
+		if(isBypassThrottleAndProbability() && this.ticksExisted > 60)
+			this.setDead();
 	}
 
 	protected void doBeggingChase()
@@ -1024,13 +1030,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	@Override
 	public boolean testSpawnProbability() {
-		return RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
+		return isBypassThrottleAndProbability() || RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
 	}
 
 	@Override
 	public long getSpawnThrottlePeriod()
 	{
-		return this.metadata.type().getThrottlePeriod();
+		return isBypassThrottleAndProbability() ? 0 : this.metadata.type().getThrottlePeriod();
 	}
 
 	/**
@@ -1182,5 +1188,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public WolfType getWolfType()
 	{
 		return metadata.type();
+	}
+
+	public void setBypassThrottleAndProbability(boolean bypassThrottleAndProbability) {
+		this.bypassThrottleAndProbability = bypassThrottleAndProbability;
+	}
+
+	public boolean isBypassThrottleAndProbability() {
+		return bypassThrottleAndProbability;
 	}
 }
