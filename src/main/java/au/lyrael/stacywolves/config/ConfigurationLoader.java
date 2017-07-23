@@ -53,6 +53,8 @@ public class ConfigurationLoader {
         RuntimeConfiguration.wolvesAttackAnimals = configuration.getBoolean("wolvesAttackAnimals", category, true,
 				"Set to false if you don't want your piggies being devoured by wolves. " +
                         "Will not prevent wolves from defending themselves or their masters.");
+        RuntimeConfiguration.allowedInPeaceful = configuration.getBoolean("allowedInPeaceful", category, false,
+                "Turn this on to prevent untamed wolves despawning in peaceful mode.");
     }
 
     private static void logLoadedConfiguration(final Configuration configuration) {

@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
+import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
 import static net.minecraft.init.Blocks.*;
@@ -397,7 +398,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean doPeacefulDespawn()
 	{
-		if (!this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
+		if (!allowedInPeaceful && !this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
 		{
 			this.setDead();
 			return true;
