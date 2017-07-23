@@ -71,6 +71,7 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         createSubItem("meaty_bone");
     }
 
+    @Override
     public void registerRecipes() {
         registerRecipe("air_bone", new ItemStack(Items.glass_bottle));
         registerRecipe("birch_bone", new ItemStack(Blocks.sapling, 1, 2));
