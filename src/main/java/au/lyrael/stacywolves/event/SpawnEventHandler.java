@@ -135,7 +135,7 @@ public class SpawnEventHandler {
 
     protected void traceSpawnCaps(LivingSpawnEvent.CheckSpawn event) {
         traceSpawnCap(NORMAL.creatureType(), event.world);
-        traceSpawnCap(ORE.creatureType(), event.world);
+        traceSpawnCap(SUBTERRANEAN.creatureType(), event.world);
         traceSpawnCap(MOB.creatureType(), event.world);
     }
 

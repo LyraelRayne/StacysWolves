@@ -10,7 +10,7 @@ import java.util.Map;
 
 public enum WolfType {
     NORMAL("normalStacyWolf", 10, 20 * 2, Material.air, false, false),
-    ORE("oreStacyWolf", 6, 20 * 2, Material.air, false, false),
+    SUBTERRANEAN("oreStacyWolf", 6, 20 * 2, Material.air, false, false),
     WATER("waterStacyWolf", 5, 20 / 2, Material.water, false, false),
     MOB(EnumCreatureType.monster);
 

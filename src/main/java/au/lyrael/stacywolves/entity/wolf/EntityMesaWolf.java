@@ -5,8 +5,11 @@ import au.lyrael.stacywolves.annotation.WolfSpawn;
 import au.lyrael.stacywolves.annotation.WolfSpawnBiome;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.registry.ItemRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
 import static net.minecraftforge.common.BiomeDictionary.Type.MESA;
@@ -36,7 +39,7 @@ public class EntityMesaWolf extends EntityWolfBase implements IRenderableWolf {
     }
 
     @Override
-    protected boolean isStandingOnSuitableFloor() {
-        return true;
+    protected List<Block> getFloorBlocks() {
+        return MESA_FLOOR_BLOCKS;
     }
 }
