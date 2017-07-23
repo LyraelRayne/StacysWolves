@@ -2,6 +2,7 @@ package au.lyrael.stacywolves;
 
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
+import au.lyrael.stacywolves.client.gui.StacysWolvesGuiHandler;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfClicker;
@@ -14,6 +15,7 @@ import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -45,6 +47,7 @@ public class CommonProxy {
 //        ItemRegistry.wolf_food.registerOreDict();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
         EntityRegistry.registerModEntity(EntityWolfTransporter.class, ENTITY_WOLF_TRANSPORTER, ++LAST_MOD_ENTITY_ID, INSTANCE, 128, 5, true);
+        NetworkRegistry.INSTANCE.registerGuiHandler(StacyWolves.INSTANCE, new StacysWolvesGuiHandler());
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -105,11 +108,8 @@ public class CommonProxy {
         return result;
     }
 
-
     private Class<?> getWolfClass(ASMDataTable.ASMData wolfMetadata) throws ClassNotFoundException {
         final String className = wolfMetadata.getClassName();
         return Class.forName(className);
     }
-
-
 }

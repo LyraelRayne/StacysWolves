@@ -6,6 +6,7 @@ import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.entity.ISpawnable;
 import au.lyrael.stacywolves.entity.ai.*;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
+import au.lyrael.stacywolves.inventory.InventoryWolfChest;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.lighting.WolfLightSource;
@@ -88,6 +89,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	private WolfPeriodicItemDrop periodicDrop;
 	private WolfLightSource lightSource;
+	private InventoryWolfChest wolfChest;
 
 	public EntityWolfBase(World world)
 	{
@@ -233,6 +235,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		nbt.setBoolean("Angry", this.isAngry());
 		nbt.setByte("CollarColor", (byte) this.getCollarColor());
 		nbt.setBoolean("FollowingOwner", this.shouldFollowOwner);
+		final InventoryWolfChest wolfChest = this.getWolfChest();
+		if (wolfChest != null)
+			wolfChest.writeEntityToNBT(nbt);
 	}
 
 	@Override
@@ -254,6 +259,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			this.setCollarColor(nbt.getByte("CollarColor"));
 		}
 		this.shouldFollowOwner = nbt.getBoolean("FollowingOwner");
+		final InventoryWolfChest wolfChest = this.getWolfChest();
+		if (wolfChest != null)
+			wolfChest.readEntityFromNBT(nbt);
 	}
 
 	/**
@@ -640,6 +648,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 				interacted = interactFood(player, itemstack) ||
 						interactDye(player, itemstack) ||
 						interactClicker(player, itemstack) ||
+						interactWolfChest(player) ||
 						interactToggleSit(player);
 			}
 		} else {
@@ -667,6 +676,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return false;
 	}
 
+	protected boolean interactWolfChest(EntityPlayer player) {
+		if (player.isSneaking() && this.getWolfChest() != null) {
+			this.getWolfChest().openGUI(this.worldObj, player, this.getCommandSenderName());
+			return true;
 		} else {
 			return false;
 		}
@@ -1081,6 +1094,29 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		}
 	}
 
+	/**
+	 * Called when the mob's health reaches 0.
+	 */
+	@Override
+	public void onDeath(DamageSource p_70645_1_) {
+		super.onDeath(p_70645_1_);
+
+		if (!this.worldObj.isRemote) {
+			this.dropItemsInChest();
+		}
+	}
+
+	private void dropItemsInChest() {
+		final InventoryWolfChest wolfChest = getWolfChest();
+		if (wolfChest != null) {
+			for (ItemStack itemStack : wolfChest.getContents()) {
+				if (itemStack != null) {
+					this.entityDropItem(itemStack, 0.0F);
+				}
+			}
+		}
+	}
+
 	protected boolean isStandingOnSuitableFloor()
 	{
 		return isStandingOn(getFloorBlocks().toArray(new Block[0]));
@@ -1322,5 +1358,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	public boolean isBypassThrottleAndProbability() {
 		return bypassThrottleAndProbability;
+	}
+
+	public InventoryWolfChest getWolfChest() {
+		return wolfChest;
+	}
+
+	public void setWolfChest(InventoryWolfChest wolfChest) {
+		this.wolfChest = wolfChest;
 	}
 }
