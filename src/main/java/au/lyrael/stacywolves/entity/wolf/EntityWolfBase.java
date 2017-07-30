@@ -414,6 +414,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return !onlyOcelotWolvesScareCreepers && isTamed();
 	}
 
+	@Override
+	protected void despawnEntity() {
+		super.despawnEntity();
+		if (this.isDead) LOGGER.trace("[{}] despawned", this);
+
+	}
+
 	/**
 	 * Called to update the entity's position/logic.
 	 */
@@ -1051,7 +1058,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	protected boolean canDespawn()
 	{
-		return !this.isTamed() && this.ticksExisted > 2400;
+		if (metadata.type().creatureType() == EnumCreatureType.monster) {
+			return !this.isTamed();
+		} else {
+			return !this.isTamed() && this.ticksExisted > 2400;
+		}
 	}
 
 	protected boolean isStandingOn(Block... blockTypes)
