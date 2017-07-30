@@ -7,6 +7,10 @@
   * Some new wolves have special abilities.
   * Added a wolf clicker which is now required in order to tell wolves to stay or follow. This was require to enable certain new wolf abilities.
   * Some text fixes.
+  * Removed 2 minute delay before despawning from monster wolves.
+  * Added onlyOcelotWolvesScareCreepers option
+  * You can turn off sound for slime wolves using silentSlimeWolves
+  * Added a bunch of debug stuff
 
 # Here's a list of the new wolves!
   * Bookworm Wolf - This wolf loves books and can be found having a read in **Village Libraries*.
