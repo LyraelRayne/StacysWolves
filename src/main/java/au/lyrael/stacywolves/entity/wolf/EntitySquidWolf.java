@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
+import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
 @WolfMetadata(name = "EntitySquidWolf", primaryColour = 0x000000, secondaryColour = 0x2222AA, type = WolfType.WATER,
@@ -62,4 +63,18 @@ public class EntitySquidWolf extends EntityWolfBase implements IRenderableWolf {
 	public boolean alwaysAvoidsWater() {
 		return false;
 	}
+
+	/**
+	 * Standard spawn conditions
+	 *
+	 * @param noSky If true, wolf shouldn't be able to see the sky, otherwise they should.
+	 */
+	@Override
+	protected boolean getCanSpawnHere(boolean noSky) {
+		return isSuitableDimension() &&
+				this.posY > 45.0D &&
+				this.posY < 63.0D &&
+				this.worldObj.checkNoEntityCollision(this.boundingBox);
+	}
+
 }
