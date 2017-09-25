@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -652,7 +653,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		boolean interacted = false;
 
 		if (this.isTamed() && isOwnedBy(player)) {
-			if (!this.isWolfBreedingItem(itemstack)) { // Always use super if it's breeding item because something else handles that.
+			if (!this.isWolfBreedingItem(itemstack) && !isANameTag(itemstack)) { // Always use super if it's breeding item because something else handles that.
 				interacted = interactFood(player, itemstack) ||
 						interactDye(player, itemstack) ||
 						interactClicker(player, itemstack) ||
@@ -664,6 +665,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		}
 
 		return interacted || super.interact(player);
+	}
+
+	protected boolean isANameTag(ItemStack itemstack) {
+		return itemstack != null && itemstack.getItem() != null && ItemNameTag.class.isAssignableFrom(itemstack.getItem().getClass());
 	}
 
 	protected boolean interactTamingItem(EntityPlayer player, ItemStack itemstack) {
