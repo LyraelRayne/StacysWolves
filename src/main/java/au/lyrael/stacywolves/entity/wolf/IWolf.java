@@ -49,4 +49,6 @@ public interface IWolf extends ITemptable {
     boolean isWolfTamed();
 
     WolfType getWolfType();
+
+    long getSpawnThrottlePeriod();
 }

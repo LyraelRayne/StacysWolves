@@ -75,6 +75,12 @@ public class EntityBookshelfWolf extends EntityWolfBase implements IRenderableWo
 	}
 
 	@Override
+	public long getSpawnThrottlePeriod()
+	{
+		return 0;
+	}
+
+	@Override
 	public String getTextureFolderName() {
 		return "bookshelf";
 	}

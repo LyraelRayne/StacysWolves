@@ -34,4 +34,10 @@ public class EntityCakeWolf extends EntityWolfBase implements IRenderableWolf, I
     public String getTextureFolderName() {
         return "cake";
     }
+
+    @Override
+    public long getSpawnThrottlePeriod()
+    {
+        return 0;
+    }
 }
