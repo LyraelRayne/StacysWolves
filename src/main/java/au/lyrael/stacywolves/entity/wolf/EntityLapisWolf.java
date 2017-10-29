@@ -11,12 +11,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_RARE;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_PROBABILITY_SUPER_RARE;
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_SUPER_RARE;
 import static au.lyrael.stacywolves.registry.WolfType.SUBTERRANEAN;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntityLapisWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x102CB5, type = SUBTERRANEAN, probability = SPAWN_PROBABILITY_SUPER_RARE,
+@WolfMetadata(name = "EntityLapisWolf", primaryColour = 0x7F7F7F, secondaryColour = 0x102CB5, type = SUBTERRANEAN, probability = SPAWN_PROBABILITY_RARE,
 		spawns = {
 				@WolfSpawn(spawnBiomes = {
 						@WolfSpawnBiome(requireBiomeTypes = {PLAINS}),
@@ -54,6 +55,6 @@ public class EntityLapisWolf extends EntitySubterraneanWolfBase implements IRend
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return getCanSpawnHere(15);
+		return getCanSpawnHere(17);
 	}
 }
