@@ -1072,11 +1072,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean isStandingOn(Block... blockTypes)
 	{
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.boundingBox.minY);
-		int k = MathHelper.floor_double(this.posZ);
+		int x = MathHelper.floor_double(this.posX);
+		int y = MathHelper.floor_double(this.boundingBox.minY);
+		int z = MathHelper.floor_double(this.posZ);
 
-		return Arrays.asList(blockTypes).contains(this.worldObj.getBlock(i, j - 1, k));
+		return Arrays.asList(blockTypes).contains(this.worldObj.getBlock(x, y - 1, z)) || Arrays.asList(blockTypes).contains(this.worldObj.getBlock(x, y, z));
 	}
 
 	@Override
