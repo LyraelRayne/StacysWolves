@@ -41,7 +41,7 @@ public class ItemWolfWhistle extends ItemStacyWolves implements IRegisterMyOwnRe
 
 	@Override
 	public void registerRecipes() {
-		GameRegistry.addRecipe(new ItemStack(this), new Object[]{" B ", "BRB", "BBB", 'R', Items.redstone, 'B', Items.bone});
+		GameRegistry.addRecipe(new ItemStack(this), new Object[]{" B ", "BEB", "BBB", 'E', Items.ender_pearl, 'B', Items.bone});
 	}
 
 	/**

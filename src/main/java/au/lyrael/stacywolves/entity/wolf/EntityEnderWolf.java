@@ -138,90 +138,23 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
         return this.teleportTo(d0, d1, d2);
     }
 
-    /**
-     * Teleport the enderman to another entity
-     */
-    protected boolean teleportToEntity(Entity p_70816_1_) {
-        final double myYHeight = this.boundingBox.minY + (double) (this.height / 2.0F);
-        final double targetYHeight = p_70816_1_.posY + (double) p_70816_1_.getEyeHeight();
-        Vec3 targetVector = Vec3.createVectorHelper(p_70816_1_.posX - this.posX, targetYHeight - myYHeight, p_70816_1_.posZ - this.posZ);
-        targetVector = targetVector.normalize();
-
-        double d0 = this.getDistanceToEntity(p_70816_1_) - 1;
-
-        double targetX = this.posX + targetVector.xCoord * d0;
-        double targetY = this.posY + targetVector.yCoord * d0;
-        double targetZ = this.posZ + targetVector.zCoord * d0;
-        return this.teleportTo(targetX, targetY, targetZ);
-    }
 
     /**
-     * Teleport the enderman
+     * Teleport the wolf
+     *
+     * @param p_70825_1_
+     * @param p_70825_3_
+     * @param p_70825_5_
      */
+    @Override
     protected boolean teleportTo(double p_70825_1_, double p_70825_3_, double p_70825_5_) {
-        EnderTeleportEvent event = new EnderTeleportEvent(this, p_70825_1_, p_70825_3_, p_70825_5_, 0);
-        if (MinecraftForge.EVENT_BUS.post(event)) {
+        final boolean teleported = super.teleportTo(p_70825_1_, p_70825_3_, p_70825_5_);
+        if(!teleported) {
             this.teleportDelay = 90 * 20;
-            return false;
-        }
-        double origPosX = this.posX;
-        double origPosY = this.posY;
-        double origPosZ = this.posZ;
-        this.posX = event.targetX;
-        this.posY = event.targetY;
-        this.posZ = event.targetZ;
-        boolean success = false;
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.posY);
-        int k = MathHelper.floor_double(this.posZ);
-
-        if (this.worldObj.blockExists(i, j, k)) {
-            boolean flag1 = false;
-
-            while (!flag1 && j > 0) {
-                Block block = this.worldObj.getBlock(i, j - 1, k);
-
-                if (block.getMaterial().blocksMovement()) {
-                    flag1 = true;
-                } else {
-                    --this.posY;
-                    --j;
-                }
-            }
-
-            if (flag1) {
-                this.setPosition(this.posX, this.posY, this.posZ);
-
-                if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox)) {
-                    success = true;
-                }
-            }
         }
 
-        if (!success) {
-            this.setPosition(origPosX, origPosY, origPosZ);
-            return false;
-        } else {
-            short short1 = 128;
-
-            for (int l = 0; l < short1; ++l) {
-                double d6 = (double) l / ((double) short1 - 1.0D);
-                float f = (this.rand.nextFloat() - 0.5F) * 0.2F;
-                float f1 = (this.rand.nextFloat() - 0.5F) * 0.2F;
-                float f2 = (this.rand.nextFloat() - 0.5F) * 0.2F;
-                double d7 = origPosX + (this.posX - origPosX) * d6 + (this.rand.nextDouble() - 0.5D) * (double) this.width * 2.0D;
-                double d8 = origPosY + (this.posY - origPosY) * d6 + this.rand.nextDouble() * (double) this.height;
-                double d9 = origPosZ + (this.posZ - origPosZ) * d6 + (this.rand.nextDouble() - 0.5D) * (double) this.width * 2.0D;
-                this.worldObj.spawnParticle("portal", d7, d8, d9, (double) f, (double) f1, (double) f2);
-            }
-
-            this.worldObj.playSoundEffect(origPosX, origPosY, origPosZ, "mob.endermen.portal", 1.0F, 1.0F);
-            this.playSound("mob.endermen.portal", 1.0F, 1.0F);
-
-            return true;
-        }
+        return teleported;
     }
-
 
     @Override
     public boolean canSpawnNow(World world, float x, float y, float z) {

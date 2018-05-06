@@ -27,13 +27,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StringUtils;
+import net.minecraft.util.*;
 import net.minecraft.village.Village;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,6 +77,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private final List<ItemStack> edibleItems = new ArrayList<>();
 	private final List<ItemStack> likedItems = new ArrayList<>();
 	private EntityAIWolfTempt aiTempt;
+	private final EntityAIWolfFollowOwner aiWolfFollowOwner;
 
 	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	private static final Logger SPAWNLOGGER = LogManager.getLogger(MOD_ID + ".spawn");
@@ -104,7 +104,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		this.setAiTempt(new EntityAIWolfTempt(this, 0.5D, false));
 		this.tasks.addTask(3, this.getAiTempt());
 		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
-		this.tasks.addTask(5, new EntityAIWolfFollowOwner(this, 1.0D, 10.0F, 5.0F));
+		aiWolfFollowOwner = new EntityAIWolfFollowOwner(this, 1.0D, 10.0F, 5.0F);
+		this.tasks.addTask(5, aiWolfFollowOwner);
 		this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
 		this.tasks.addTask(8, new WolfAIBeg(this, 8.0F));
 		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -777,9 +778,110 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	public void respondToWhistle(EntityPlayer player) {
-		LOGGER.trace("Wolf [{}] is responding to whistle from player [{}]", this, player);
-		this.setPosition(player.posX, player.posY, player.posZ);
-		this.setSittingStateAndReset(false);
+		if (this.isOwnedBy(player)) {
+			LOGGER.trace("Wolf [{}] is responding to whistle from player [{}]", this, player);
+			this.setSittingStateAndReset(false);
+			if (!this.shouldFollowOwner()) {
+				this.toggleShouldFollowOwner();
+				this.announceFollowChange(player);
+			}
+			this.teleportToEntity(player, false);
+		} else {
+			LOGGER.trace("Wolf [{}] is heard whistle from player [{}] but is owned by [{}]", this, player, this.getOwner());
+		}
+	}
+
+	protected boolean teleportToEntity(Entity p_70816_1_) {
+		return this.teleportToEntity(p_70816_1_, true);
+	}
+
+	protected boolean teleportTo(double xTarget, double yTarget, double zTarget) {
+		return this.teleportTo(xTarget, yTarget, zTarget, true);
+	}
+
+		/**
+		 * Teleport the wolf to another entity
+		 */
+	protected boolean teleportToEntity(Entity p_70816_1_, final boolean playFx) {
+		final double myYHeight = this.boundingBox.minY + (double) (this.height / 2.0F);
+		final double targetYHeight = p_70816_1_.posY + (double) p_70816_1_.getEyeHeight();
+		Vec3 targetVector = Vec3.createVectorHelper(p_70816_1_.posX - this.posX, targetYHeight - myYHeight, p_70816_1_.posZ - this.posZ);
+		targetVector = targetVector.normalize();
+
+		double d0 = this.getDistanceToEntity(p_70816_1_) - 1;
+
+		double targetX = this.posX + targetVector.xCoord * d0;
+		double targetY = this.posY + targetVector.yCoord * d0;
+		double targetZ = this.posZ + targetVector.zCoord * d0;
+		return this.teleportTo(targetX, targetY, targetZ, playFx);
+	}
+
+	/**
+	 * Teleport the wolf
+	 */
+	protected boolean teleportTo(double xTarget, double yTarget, double zTarget, final boolean playFx) {
+		EnderTeleportEvent event = new EnderTeleportEvent(this, xTarget, yTarget, zTarget, 0);
+		if (MinecraftForge.EVENT_BUS.post(event)) {
+			return false;
+		}
+		double origPosX = this.posX;
+		double origPosY = this.posY;
+		double origPosZ = this.posZ;
+		this.posX = event.targetX;
+		this.posY = event.targetY;
+		this.posZ = event.targetZ;
+		boolean success = false;
+		int i = MathHelper.floor_double(this.posX);
+		int j = MathHelper.floor_double(this.posY);
+		int k = MathHelper.floor_double(this.posZ);
+
+		if (this.worldObj.blockExists(i, j, k)) {
+			boolean flag1 = false;
+
+			while (!flag1 && j > 0) {
+				Block block = this.worldObj.getBlock(i, j - 1, k);
+
+				if (block.getMaterial().blocksMovement()) {
+					flag1 = true;
+				} else {
+					--this.posY;
+					--j;
+				}
+			}
+
+			if (flag1) {
+				this.setPosition(this.posX, this.posY, this.posZ);
+
+				if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && !this.worldObj.isAnyLiquid(this.boundingBox)) {
+					success = true;
+				}
+			}
+		}
+
+		if (!success) {
+			this.setPosition(origPosX, origPosY, origPosZ);
+			return false;
+		} else {
+			short short1 = 128;
+
+			if (playFx) {
+				for (int l = 0; l < short1; ++l) {
+					double d6 = (double) l / ((double) short1 - 1.0D);
+					float f = (this.rand.nextFloat() - 0.5F) * 0.2F;
+					float f1 = (this.rand.nextFloat() - 0.5F) * 0.2F;
+					float f2 = (this.rand.nextFloat() - 0.5F) * 0.2F;
+					double d7 = origPosX + (this.posX - origPosX) * d6 + (this.rand.nextDouble() - 0.5D) * (double) this.width * 2.0D;
+					double d8 = origPosY + (this.posY - origPosY) * d6 + this.rand.nextDouble() * (double) this.height;
+					double d9 = origPosZ + (this.posZ - origPosZ) * d6 + (this.rand.nextDouble() - 0.5D) * (double) this.width * 2.0D;
+					this.worldObj.spawnParticle("portal", d7, d8, d9, (double) f, (double) f1, (double) f2);
+				}
+
+				this.worldObj.playSoundEffect(origPosX, origPosY, origPosZ, "mob.endermen.portal", 1.0F, 1.0F);
+				this.playSound("mob.endermen.portal", 1.0F, 1.0F);
+			}
+
+			return true;
+		}
 	}
 
 	protected void toggleShouldFollowOwner()
