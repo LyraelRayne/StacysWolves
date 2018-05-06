@@ -763,13 +763,23 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return itemstack != null && itemstack.getItem() == Items.dye;
 	}
 
-	protected void toggleSitting()
-	{
-		this.aiSit.setSitting(!this.isSitting());
+	protected void setSittingStateAndReset(boolean state) {
+		this.aiSit.setSitting(state);
 		this.isJumping = false;
 		this.setPathToEntity(null);
 		this.setTarget(null);
 		this.setAttackTarget(null);
+	}
+
+	protected void toggleSitting()
+	{
+		this.setSittingStateAndReset(!this.isSitting());
+	}
+
+	public void respondToWhistle(EntityPlayer player) {
+		LOGGER.trace("Wolf [{}] is responding to whistle from player [{}]", this, player);
+		this.setPosition(player.posX, player.posY, player.posZ);
+		this.setSittingStateAndReset(false);
 	}
 
 	protected void toggleShouldFollowOwner()

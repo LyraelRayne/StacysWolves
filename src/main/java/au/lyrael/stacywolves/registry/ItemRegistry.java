@@ -1,10 +1,7 @@
 package au.lyrael.stacywolves.registry;
 
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
-import au.lyrael.stacywolves.item.ItemEmergencyWolfRemover;
-import au.lyrael.stacywolves.item.ItemWolfClicker;
-import au.lyrael.stacywolves.item.ItemWolfFood;
-import au.lyrael.stacywolves.item.ItemWolfTransporter;
+import au.lyrael.stacywolves.item.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +13,7 @@ import static au.lyrael.stacywolves.item.ItemEmergencyWolfRemover.WOLF_REMOVER_N
 import static au.lyrael.stacywolves.item.ItemWolfClicker.WOLF_CLICKER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
+import static au.lyrael.stacywolves.item.ItemWolfWhistle.WOLF_WHISTLE_NAME;
 
 public class ItemRegistry {
 
@@ -33,6 +31,9 @@ public class ItemRegistry {
 
     @GameRegistry.ObjectHolder(MOD_ID + ":" + WOLF_REMOVER_NAME)
     public static final ItemEmergencyWolfRemover wolf_remover = null;
+
+    @GameRegistry.ObjectHolder(MOD_ID + ":" + WOLF_WHISTLE_NAME)
+    public static final ItemWolfWhistle wolf_whistle = null;
 
     public static ItemStack getWolfFood(final String id) {
         return wolf_food.getFood(id);

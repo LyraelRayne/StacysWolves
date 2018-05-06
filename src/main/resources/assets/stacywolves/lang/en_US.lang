@@ -106,6 +106,8 @@ item.stacywolves.wolf_clicker.name=Wolf Training Clicker
 item.stacywolves.wolf_clicker.tooltip=Allows you to give basic commands to your lupine pals;Right click: Toggle wolf follow
 item.stacywolves.wolf_remover.name=Emergency Wolf Remover
 item.stacywolves.wolf_remover.tooltip=Right click a wolf to remove it. Use at your own risk.; Primarily for use if something goes wrong when tamedWolvesNeverDie is enabled.
+item.stacywolves.wolf_whistle.name=Wolf Whistle
+item.stacywolves.wolf_whistle.tooltip=One quick toot on this bony creation will have all tamed Wolves running to you.;Works even if the wolf is sitting.
 
 item.stacywolves.wolf_food_inky_bone.name=Inky Bone
 item.stacywolves.wolf_food_inky_bone.tooltip=Sometimes a squid wolf will cover a bone in ink as a tasty snack.

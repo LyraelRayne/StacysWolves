@@ -29,6 +29,7 @@ import static au.lyrael.stacywolves.item.ItemWolfClicker.WOLF_CLICKER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfSpawnForcer.WOLF_SPAWN_FORCER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
+import static au.lyrael.stacywolves.item.ItemWolfWhistle.WOLF_WHISTLE_NAME;
 import static au.lyrael.stacywolves.utility.LanguageHelper.setupColors;
 
 public class CommonProxy {
@@ -62,6 +63,7 @@ public class CommonProxy {
         ItemRegistry.wolfsbane_torch.registerRecipes();
         ItemRegistry.wolf_transporter.registerRecipes();
         ItemRegistry.wolf_clicker.registerRecipes();
+        ItemRegistry.wolf_whistle.registerRecipes();
     }
 
 
@@ -72,6 +74,7 @@ public class CommonProxy {
         GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
         GameRegistry.registerItem(new ItemWolfClicker(), WOLF_CLICKER_NAME);
         GameRegistry.registerItem(new ItemEmergencyWolfRemover(), WOLF_REMOVER_NAME);
+        GameRegistry.registerItem(new ItemWolfWhistle(), WOLF_WHISTLE_NAME);
     }
 
     private void registerWolfsBaneTorch() {
