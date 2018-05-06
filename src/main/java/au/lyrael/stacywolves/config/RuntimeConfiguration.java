@@ -12,4 +12,6 @@ public class RuntimeConfiguration {
     public static boolean lightingEnabled = true;
     public static boolean onlyOcelotWolvesScareCreepers = false;
     public static boolean silentSlimeWolves = false;
+    public static boolean wolfSpawnDisabled = false;
+    public static boolean tamedWolvesNeverDie = false;
 }

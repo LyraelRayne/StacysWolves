@@ -46,6 +46,7 @@ import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.onlyOcelotWolvesScareCreepers;
 import static au.lyrael.stacywolves.registry.ItemRegistry.isClicker;
+import static au.lyrael.stacywolves.registry.ItemRegistry.isRemover;
 import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static au.lyrael.stacywolves.utility.WorldHelper.getFullBlockLightValue;
 import static net.minecraft.init.Blocks.*;
@@ -475,6 +476,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 */
 	@Override
 	public void setDead() {
+		if (this.isTamed() && RuntimeConfiguration.tamedWolvesNeverDie) {
+			LOGGER.warn("Warning: A wolf died.", new Exception("This is not really an exception. Just printing stacktrace"));
+			LOGGER.warn("Unwated death happened to [{}]", this);
+		}
 		super.setDead();
 		doLightingUpdate();
 	}
@@ -657,6 +662,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 				interacted = interactFood(player, itemstack) ||
 						interactDye(player, itemstack) ||
 						interactClicker(player, itemstack) ||
+						interactRemover(player, itemstack) ||
 						interactWolfChest(player) ||
 						interactToggleSit(player);
 			}
@@ -700,9 +706,17 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean interactClicker(EntityPlayer player, ItemStack itemstack) {
 		if (isClicker(itemstack) && !this.worldObj.isRemote) {
-			itemstack.getItem();
 			toggleShouldFollowOwner();
 			announceFollowChange(player);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean interactRemover(EntityPlayer player, ItemStack itemstack) {
+		if (isRemover(itemstack) && !this.worldObj.isRemote) {
+			this.setDead();
 			return true;
 		} else {
 			return false;
@@ -787,6 +801,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 				this.worldObj.setEntityState(this, (byte) 6);
 			}
 		}
+	}
+
+	@Override
+	public void setHealth(float newHealth) {
+		if (this.isTamed() && RuntimeConfiguration.tamedWolvesNeverDie) {
+			newHealth = newHealth < 1.0f ? 1.0f : newHealth;
+		}
+		super.setHealth(newHealth);
 	}
 
 	protected void consumeHeldItem(EntityPlayer player, ItemStack itemstack)
@@ -1120,6 +1142,10 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 		if (!this.worldObj.isRemote) {
 			this.dropItemsInChest();
+			if (this.isTamed()  && RuntimeConfiguration.tamedWolvesNeverDie) {
+				LOGGER.warn("Warning: A wolf died.", new Exception("This is not really an exception. Just printing stacktrace"));
+				LOGGER.warn("Unwated death happened to [{}]", this);
+			}
 		}
 	}
 

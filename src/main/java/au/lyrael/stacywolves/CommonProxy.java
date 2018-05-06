@@ -3,12 +3,10 @@ package au.lyrael.stacywolves;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.client.gui.StacysWolvesGuiHandler;
+import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
-import au.lyrael.stacywolves.item.ItemWolfClicker;
-import au.lyrael.stacywolves.item.ItemWolfFood;
-import au.lyrael.stacywolves.item.ItemWolfSpawnForcer;
-import au.lyrael.stacywolves.item.ItemWolfTransporter;
+import au.lyrael.stacywolves.item.*;
 import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
@@ -26,6 +24,7 @@ import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
+import static au.lyrael.stacywolves.item.ItemEmergencyWolfRemover.WOLF_REMOVER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfClicker.WOLF_CLICKER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfSpawnForcer.WOLF_SPAWN_FORCER_NAME;
@@ -51,8 +50,10 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        for (String wolfName : WOLF_REGISTRY.getRegisteredEntityNames()) {
-            WOLF_REGISTRY.registerForSpawning(wolfName);
+        if(!RuntimeConfiguration.wolfSpawnDisabled) {
+            for (String wolfName : WOLF_REGISTRY.getRegisteredEntityNames()) {
+                WOLF_REGISTRY.registerForSpawning(wolfName);
+            }
         }
     }
 
@@ -70,6 +71,7 @@ public class CommonProxy {
         GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
         GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
         GameRegistry.registerItem(new ItemWolfClicker(), WOLF_CLICKER_NAME);
+        GameRegistry.registerItem(new ItemEmergencyWolfRemover(), WOLF_REMOVER_NAME);
     }
 
     private void registerWolfsBaneTorch() {
