@@ -26,7 +26,7 @@ public class EntityAirWolf extends EntityWolfBase implements IRenderableWolf {
 
     @Override
     public EntityWolfBase createChild(EntityAgeable parent) {
-        EntityWolfBase child = new EntityAirWolf(this.worldObj);
+        EntityWolfBase child = new EntityAirWolf(this.getWorldObj());
         return createChild(parent, child);
     }
 

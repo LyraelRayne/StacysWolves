@@ -2,8 +2,8 @@ package au.lyrael.stacywolves.client.render;
 
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.item.ItemStacyWolves;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

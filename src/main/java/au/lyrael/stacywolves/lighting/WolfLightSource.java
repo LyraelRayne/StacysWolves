@@ -1,7 +1,8 @@
 package au.lyrael.stacywolves.lighting;
 
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
@@ -22,22 +23,23 @@ public class WolfLightSource {
 	// Adapted from http://www.minecraftforge.net/forum/topic/28699-making-an-entity-as-a-light-source/
 	public void addLight() {
 		if (lightingEnabled) {
-			final Vec3 position = Vec3.createVectorHelper(wolf.posX, wolf.posY, wolf.posZ);
-			int myX = (int) position.xCoord;
-			int myY = (int) position.yCoord;
-			int myZ = (int) position.zCoord;
+			final Vec3d position = new Vec3d(wolf.posX, wolf.posY, wolf.posZ);
+			int myX = (int) position.x;
+			int myY = (int) position.y;
+			int myZ = (int) position.z;
 
 			updateLightForPreviousBlock();
 
-			this.worldObj.setLightValue(EnumSkyBlock.Block, myX, myY, myZ, getLightLevel());
+			final BlockPos pos = new BlockPos(myX, myY, myZ);
+			this.worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, getLightLevel());
 			this.worldObj.markBlockRangeForRenderUpdate(myX, myY, myZ, 12, 12, 12);
-			this.worldObj.markBlockForUpdate(myX, myY, myZ);
+			this.worldObj.notifyLightSet(pos);
 			int scanRadius = 1;
 			for (int x = myX - scanRadius; x < myX + scanRadius; x++) {
 				for (int y = myY - scanRadius; y < myY + scanRadius; y++) {
 					for (int z = myZ - scanRadius; z < myZ + scanRadius; z++) {
 						if (!(x == myX && y == myY && z == myZ))
-							this.worldObj.updateLightByType(EnumSkyBlock.Block, x, y, z);
+							this.worldObj.checkLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z));
 					}
 				}
 			}
@@ -51,20 +53,20 @@ public class WolfLightSource {
 	protected void updateLightForPreviousBlock() {
 		if (lightingEnabled) {
 			if (hasMovedSinceLastTick()) {
-				this.worldObj.updateLightByType(EnumSkyBlock.Block, lightingPreviousX, lightingPreviousY, lightingPreviousZ);
+				this.worldObj.checkLightFor(EnumSkyBlock.BLOCK, new BlockPos(lightingPreviousX, lightingPreviousY, lightingPreviousZ));
 			}
-			final Vec3 position = Vec3.createVectorHelper(wolf.posX, wolf.posY, wolf.posZ);
-			this.lightingPreviousX = (int) position.xCoord;
-			this.lightingPreviousY = (int) position.yCoord;
-			this.lightingPreviousZ = (int) position.zCoord;
+			final Vec3d position = new Vec3d(wolf.posX, wolf.posY, wolf.posZ);
+			this.lightingPreviousX = (int) position.x;
+			this.lightingPreviousY = (int) position.y;
+			this.lightingPreviousZ = (int) position.z;
 		}
 	}
 
 	private boolean hasMovedSinceLastTick() {
-		final Vec3 position = Vec3.createVectorHelper(wolf.posX, wolf.posY, wolf.posZ);
-		int myX = (int) position.xCoord;
-		int myY = (int) position.yCoord;
-		int myZ = (int) position.zCoord;
+		final Vec3d position = new Vec3d(wolf.posX, wolf.posY, wolf.posZ);
+		int myX = (int) position.x;
+		int myY = (int) position.y;
+		int myZ = (int) position.z;
 
 		return (lightingPreviousX != null && lightingPreviousY != null && lightingPreviousZ != null) &&
 				(lightingPreviousX != myX || lightingPreviousY != myY || lightingPreviousZ != myZ);
@@ -72,11 +74,11 @@ public class WolfLightSource {
 
 	public void clearLighting() {
 		if (lightingEnabled) {
-			final Vec3 position = Vec3.createVectorHelper(wolf.posX, wolf.posY, wolf.posZ);
-			int myX = (int) position.xCoord;
-			int myY = (int) position.yCoord;
-			int myZ = (int) position.zCoord;
-			this.worldObj.updateLightByType(EnumSkyBlock.Block, myX, myY, myZ);
+			final Vec3d position = new Vec3d(wolf.posX, wolf.posY, wolf.posZ);
+			int myX = (int) position.x;
+			int myY = (int) position.y;
+			int myZ = (int) position.z;
+			this.worldObj.checkLightFor(EnumSkyBlock.BLOCK, new BlockPos(myX, myY, myZ));
 			updateLightForPreviousBlock();
 		}
 	}

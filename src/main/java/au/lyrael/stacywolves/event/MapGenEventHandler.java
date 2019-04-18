@@ -1,7 +1,7 @@
 package au.lyrael.stacywolves.event;
 
 import au.lyrael.stacywolves.entity.wolf.EntityFireWolf;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenNetherBridge;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;

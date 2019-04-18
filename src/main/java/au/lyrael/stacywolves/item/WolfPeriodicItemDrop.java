@@ -4,7 +4,7 @@ import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -56,14 +56,14 @@ public class WolfPeriodicItemDrop {
 		if(RuntimeConfiguration.randomDropsEnabled) {
 			final ItemStack stack = selectRandomItem(wolf.getRNG()).copy();
 			final World worldObj = wolf.getWorldObj();
-			final Vec3 position = Vec3.createVectorHelper(wolf.posX, wolf.posY, wolf.posZ);
-			double posX = position.xCoord, posY = position.yCoord, posZ = position.zCoord;
+			final Vec3d position = new Vec3d(wolf.posX, wolf.posY, wolf.posZ);
+			double posX = position.x, posY = position.y, posZ = position.z;
 
 			if (!worldObj.isRemote && stack != null) {
 				LOGGER.debug("[{}] is dropping [{}] at [{}]", wolf, stack, position);
 				EntityItem itemDrop = new EntityItem(worldObj, posX, posY, posZ, stack);
-				itemDrop.delayBeforeCanPickup = 40;
-				worldObj.spawnEntityInWorld(itemDrop);
+				itemDrop.setPickupDelay(40);
+				worldObj.spawnEntity(itemDrop);
 			}
 		} else {
 			LOGGER.warn("[{}] attempted to drop [{}] but random drops are disabled", wolf, getDropList());

@@ -2,8 +2,8 @@ package au.lyrael.stacywolves.entity.wolf;
 
 import au.lyrael.stacywolves.integration.EtFuturumHolder;
 import net.minecraft.block.Block;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class EntityPrismarineWolfBase extends EntityWolfBase {
@@ -20,15 +20,15 @@ public abstract class EntityPrismarineWolfBase extends EntityWolfBase {
 	@Override
 	public boolean getCanSpawnHere() {
 		// Naming this variable "down" will cause the vector to have some weird value. No, really. It's insane.
-		final Vec3 downwards = Vec3.createVectorHelper(0D, -5.0D, 0D);
-		final Vec3 up = Vec3.createVectorHelper(0D, 5D, 0D);
+		final Vec3d downwards = new Vec3d(0D, -5.0D, 0D);
+		final Vec3d up = new Vec3d(0D, 5D, 0D);
 		return isSuitableDimension()
-				&& this.worldObj.checkNoEntityCollision(this.boundingBox)
+				&& getWorldObj().checkNoEntityCollision(getEntityBoundingBox())
 				&& isBlockInDirectionPrismarine(downwards)
 				&& isBlockInDirectionPrismarine(up);
 	}
 
-	protected boolean isBlockInDirectionPrismarine(Vec3 direction) {
+	protected boolean isBlockInDirectionPrismarine(Vec3d direction) {
 		final Block prismarine_block = EtFuturumHolder.prismarine_block;
 		if (prismarine_block != null) {
 			final Block blockBelow = getBlockInDirection(direction);
@@ -37,12 +37,12 @@ public abstract class EntityPrismarineWolfBase extends EntityWolfBase {
 		return false;
 	}
 
-	private Block getBlockInDirection(Vec3 direction) {
-		final Vec3 location = Vec3.createVectorHelper(posX, posY, posZ);
-		final Vec3 target = location.addVector(direction.xCoord, direction.yCoord, direction.zCoord);
-		final MovingObjectPosition blockPosition = getWorldObj().rayTraceBlocks(location, target);
+	private Block getBlockInDirection(Vec3d direction) {
+		final Vec3d location = new Vec3d(posX, posY, posZ);
+		final Vec3d target = location.addVector(direction.x, direction.y, direction.z);
+		final BlockPos blockPosition = getWorldObj().rayTraceBlocks(location, target).getBlockPos();
 		return blockPosition != null
-				? getWorldObj().getBlock(blockPosition.blockX, blockPosition.blockY, blockPosition.blockZ)
+				? getWorldObj().getBlockState(blockPosition).getBlock()
 				: null;
 	}
 
@@ -62,7 +62,7 @@ public abstract class EntityPrismarineWolfBase extends EntityWolfBase {
 
 	@Override
 	public boolean shouldSwimToSurface() {
-		final Block blockInDirection = getBlockInDirection(Vec3.createVectorHelper(0D, 30D, 0D));
+		final Block blockInDirection = getBlockInDirection(new Vec3d(0D, 30D, 0D));
 		return blockInDirection == null;
 	}
 

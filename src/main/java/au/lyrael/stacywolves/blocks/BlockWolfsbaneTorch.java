@@ -2,34 +2,37 @@ package au.lyrael.stacywolves.blocks;
 
 import au.lyrael.stacywolves.item.IRegisterMyOwnRecipes;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
-import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntityProvider, IRegisterMyOwnRecipes {
 
     public static final String WOLFSBANE_TORCH_NAME = "wolfsbane_torch";
+    public static final PropertyDirection FACING =
+            PropertyDirection.create("facing", (@Nullable EnumFacing facing) -> facing != EnumFacing.DOWN);
 
     public BlockWolfsbaneTorch() {
-        super(Material.circuits);
+        super(Material.CIRCUITS);
         this.setTickRandomly(false);
-        this.setBlockName(WOLFSBANE_TORCH_NAME);
-        this.setBlockTextureName(WOLFSBANE_TORCH_NAME);
+        this.setUnlocalizedName(WOLFSBANE_TORCH_NAME);
         this.setCreativeTab(CREATIVE_TAB);
         this.setLightLevel(1.0F);
     }
@@ -39,30 +42,33 @@ public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntity
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(World world, int x, int y, int z, Random randomGen) {
-        int l = world.getBlockMetadata(x, y, z);
-        double d0 = (double) ((float) x + 0.5F);
-        double d1 = (double) ((float) y + 0.7F);
-        double d2 = (double) ((float) z + 0.5F);
-        double d3 = 0.2199999988079071D;
-        double d4 = 0.27000001072883606D;
+//    public void randomDisplayTick(World world, int x, int y, int z, Random randomGen) {
+    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+        EnumFacing enumfacing = stateIn.getValue(FACING);
+        double d0 = (double) pos.getX() + 0.5D;
+        double d1 = (double) pos.getY() + 0.7D;
+        double d2 = (double) pos.getZ() + 0.5D;
+        double d3 = 0.22D;
+        double d4 = 0.27D;
 
-        final int effectRand = randomGen.nextInt(20);
-        if (effectRand < 3)
-            world.spawnParticle("witchMagic", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        else
-            world.spawnParticle("mobSpellAmbient", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        final int effectRand = rand.nextInt(20);
 
-        world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        world.spawnParticle("flame", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-    }
-
-    /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-     * cleared to be reused)
-     */
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_) {
-        return null;
+        if (enumfacing.getAxis().isHorizontal()) {
+            EnumFacing enumfacing1 = enumfacing.getOpposite();
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.27D * (double) enumfacing1.getFrontOffsetX(), d1 + 0.22D, d2 + 0.27D * (double) enumfacing1.getFrontOffsetZ(), 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(EnumParticleTypes.FLAME, d0 + 0.27D * (double) enumfacing1.getFrontOffsetX(), d1 + 0.22D, d2 + 0.27D * (double) enumfacing1.getFrontOffsetZ(), 0.0D, 0.0D, 0.0D);
+            if (effectRand < 3)
+                world.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0 + 0.27D * (double) enumfacing1.getFrontOffsetX(), d1 + 0.22D, d2 + 0.27D * (double) enumfacing1.getFrontOffsetZ(), 0.0D, 0.0D, 0.0D);
+            else
+                world.spawnParticle(EnumParticleTypes.SPELL_MOB_AMBIENT, d0 + 0.27D * (double) enumfacing1.getFrontOffsetX(), d1 + 0.22D, d2 + 0.27D * (double) enumfacing1.getFrontOffsetZ(), 0.0D, 0.0D, 0.0D);
+        } else {
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            if (effectRand < 3)
+                world.spawnParticle(EnumParticleTypes.SPELL_WITCH, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            else
+                world.spawnParticle(EnumParticleTypes.SPELL_MOB_AMBIENT, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     /**
@@ -87,180 +93,103 @@ public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntity
         return 2;
     }
 
-    private boolean func_150107_m(World p_150107_1_, int p_150107_2_, int p_150107_3_, int p_150107_4_) {
-        if (World.doesBlockHaveSolidTopSurface(p_150107_1_, p_150107_2_, p_150107_3_, p_150107_4_)) {
+    private boolean canPlaceAt(World worldIn, BlockPos pos, EnumFacing facing) {
+        BlockPos blockpos = pos.offset(facing.getOpposite());
+        IBlockState iblockstate = worldIn.getBlockState(blockpos);
+        Block block = iblockstate.getBlock();
+        BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, blockpos, facing);
+
+        if (facing.equals(EnumFacing.UP) && this.canPlaceOn(worldIn, blockpos)) {
+            return true;
+        } else if (facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
+            return !isExceptBlockForAttachWithPiston(block) && blockfaceshape == BlockFaceShape.SOLID;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if this block can be placed exactly at the given position.
+     */
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        for (EnumFacing enumfacing : FACING.getAllowedValues()) {
+            if (this.canPlaceAt(worldIn, pos, enumfacing)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean canPlaceOn(World worldIn, BlockPos pos) {
+        IBlockState state = worldIn.getBlockState(pos);
+        return state.getBlock().canPlaceTorchOnTop(state, worldIn, pos);
+    }
+
+    /**
+     * Called after the block is set in the Chunk data, but before the Tile Entity is set
+     */
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        this.checkForDrop(worldIn, pos, state);
+    }
+
+    /**
+     * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor
+     * change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid
+     * block, etc.
+     */
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        this.onNeighborChangeInternal(worldIn, pos, state);
+    }
+
+    protected boolean onNeighborChangeInternal(World worldIn, BlockPos pos, IBlockState state) {
+        if (!this.checkForDrop(worldIn, pos, state)) {
             return true;
         } else {
-            Block block = p_150107_1_.getBlock(p_150107_2_, p_150107_3_, p_150107_4_);
-            return block.canPlaceTorchOnTop(p_150107_1_, p_150107_2_, p_150107_3_, p_150107_4_);
-        }
-    }
-
-    /**
-     * Checks to see if its valid to put this block at the specified coordinates. Args: world, x, y, z
-     */
-    public boolean canPlaceBlockAt(World p_149742_1_, int p_149742_2_, int p_149742_3_, int p_149742_4_) {
-        return p_149742_1_.isSideSolid(p_149742_2_ - 1, p_149742_3_, p_149742_4_, EAST, true) ||
-                p_149742_1_.isSideSolid(p_149742_2_ + 1, p_149742_3_, p_149742_4_, WEST, true) ||
-                p_149742_1_.isSideSolid(p_149742_2_, p_149742_3_, p_149742_4_ - 1, SOUTH, true) ||
-                p_149742_1_.isSideSolid(p_149742_2_, p_149742_3_, p_149742_4_ + 1, NORTH, true) ||
-                func_150107_m(p_149742_1_, p_149742_2_, p_149742_3_ - 1, p_149742_4_);
-    }
-
-    /**
-     * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
-     */
-    public int onBlockPlaced(World p_149660_1_, int p_149660_2_, int p_149660_3_, int p_149660_4_, int p_149660_5_, float p_149660_6_, float p_149660_7_, float p_149660_8_, int p_149660_9_) {
-        int j1 = p_149660_9_;
-
-        if (p_149660_5_ == 1 && this.func_150107_m(p_149660_1_, p_149660_2_, p_149660_3_ - 1, p_149660_4_)) {
-            j1 = 5;
-        }
-
-        if (p_149660_5_ == 2 && p_149660_1_.isSideSolid(p_149660_2_, p_149660_3_, p_149660_4_ + 1, NORTH, true)) {
-            j1 = 4;
-        }
-
-        if (p_149660_5_ == 3 && p_149660_1_.isSideSolid(p_149660_2_, p_149660_3_, p_149660_4_ - 1, SOUTH, true)) {
-            j1 = 3;
-        }
-
-        if (p_149660_5_ == 4 && p_149660_1_.isSideSolid(p_149660_2_ + 1, p_149660_3_, p_149660_4_, WEST, true)) {
-            j1 = 2;
-        }
-
-        if (p_149660_5_ == 5 && p_149660_1_.isSideSolid(p_149660_2_ - 1, p_149660_3_, p_149660_4_, EAST, true)) {
-            j1 = 1;
-        }
-
-        return j1;
-    }
-
-    /**
-     * Ticks the block if it's been scheduled
-     */
-    public void updateTick(World p_149674_1_, int p_149674_2_, int p_149674_3_, int p_149674_4_, Random p_149674_5_) {
-        super.updateTick(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_, p_149674_5_);
-
-        if (p_149674_1_.getBlockMetadata(p_149674_2_, p_149674_3_, p_149674_4_) == 0) {
-            this.onBlockAdded(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_);
-        }
-    }
-
-    /**
-     * Called whenever the block is added into the world. Args: world, x, y, z
-     */
-    public void onBlockAdded(World p_149726_1_, int p_149726_2_, int p_149726_3_, int p_149726_4_) {
-        if (p_149726_1_.getBlockMetadata(p_149726_2_, p_149726_3_, p_149726_4_) == 0) {
-            if (p_149726_1_.isSideSolid(p_149726_2_ - 1, p_149726_3_, p_149726_4_, EAST, true)) {
-                p_149726_1_.setBlockMetadataWithNotify(p_149726_2_, p_149726_3_, p_149726_4_, 1, 2);
-            } else if (p_149726_1_.isSideSolid(p_149726_2_ + 1, p_149726_3_, p_149726_4_, WEST, true)) {
-                p_149726_1_.setBlockMetadataWithNotify(p_149726_2_, p_149726_3_, p_149726_4_, 2, 2);
-            } else if (p_149726_1_.isSideSolid(p_149726_2_, p_149726_3_, p_149726_4_ - 1, SOUTH, true)) {
-                p_149726_1_.setBlockMetadataWithNotify(p_149726_2_, p_149726_3_, p_149726_4_, 3, 2);
-            } else if (p_149726_1_.isSideSolid(p_149726_2_, p_149726_3_, p_149726_4_ + 1, NORTH, true)) {
-                p_149726_1_.setBlockMetadataWithNotify(p_149726_2_, p_149726_3_, p_149726_4_, 4, 2);
-            } else if (this.func_150107_m(p_149726_1_, p_149726_2_, p_149726_3_ - 1, p_149726_4_)) {
-                p_149726_1_.setBlockMetadataWithNotify(p_149726_2_, p_149726_3_, p_149726_4_, 5, 2);
-            }
-        }
-
-        this.func_150109_e(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
-    }
-
-    /**
-     * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
-     * their own) Args: x, y, z, neighbor Block
-     */
-    public void onNeighborBlockChange(World p_149695_1_, int p_149695_2_, int p_149695_3_, int p_149695_4_, Block p_149695_5_) {
-        this.func_150108_b(p_149695_1_, p_149695_2_, p_149695_3_, p_149695_4_, p_149695_5_);
-    }
-
-    protected boolean func_150108_b(World p_150108_1_, int p_150108_2_, int p_150108_3_, int p_150108_4_, Block p_150108_5_) {
-        if (this.func_150109_e(p_150108_1_, p_150108_2_, p_150108_3_, p_150108_4_)) {
-            int l = p_150108_1_.getBlockMetadata(p_150108_2_, p_150108_3_, p_150108_4_);
+            EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
+            EnumFacing.Axis enumfacing$axis = enumfacing.getAxis();
+            EnumFacing enumfacing1 = enumfacing.getOpposite();
+            BlockPos blockpos = pos.offset(enumfacing1);
             boolean flag = false;
 
-            if (!p_150108_1_.isSideSolid(p_150108_2_ - 1, p_150108_3_, p_150108_4_, EAST, true) && l == 1) {
+            if (enumfacing$axis.isHorizontal() && worldIn.getBlockState(blockpos).getBlockFaceShape(worldIn, blockpos, enumfacing) != BlockFaceShape.SOLID) {
                 flag = true;
-            }
-
-            if (!p_150108_1_.isSideSolid(p_150108_2_ + 1, p_150108_3_, p_150108_4_, WEST, true) && l == 2) {
-                flag = true;
-            }
-
-            if (!p_150108_1_.isSideSolid(p_150108_2_, p_150108_3_, p_150108_4_ - 1, SOUTH, true) && l == 3) {
-                flag = true;
-            }
-
-            if (!p_150108_1_.isSideSolid(p_150108_2_, p_150108_3_, p_150108_4_ + 1, NORTH, true) && l == 4) {
-                flag = true;
-            }
-
-            if (!this.func_150107_m(p_150108_1_, p_150108_2_, p_150108_3_ - 1, p_150108_4_) && l == 5) {
+            } else if (enumfacing$axis.isVertical() && !this.canPlaceOn(worldIn, blockpos)) {
                 flag = true;
             }
 
             if (flag) {
-                this.dropBlockAsItem(p_150108_1_, p_150108_2_, p_150108_3_, p_150108_4_, p_150108_1_.getBlockMetadata(p_150108_2_, p_150108_3_, p_150108_4_), 0);
-                p_150108_1_.setBlockToAir(p_150108_2_, p_150108_3_, p_150108_4_);
+                this.dropBlockAsItem(worldIn, pos, state, 0);
+                worldIn.setBlockToAir(pos);
                 return true;
             } else {
                 return false;
             }
-        } else {
-            return true;
         }
     }
 
-    protected boolean func_150109_e(World p_150109_1_, int p_150109_2_, int p_150109_3_, int p_150109_4_) {
-        if (!this.canPlaceBlockAt(p_150109_1_, p_150109_2_, p_150109_3_, p_150109_4_)) {
-            if (p_150109_1_.getBlock(p_150109_2_, p_150109_3_, p_150109_4_) == this) {
-                this.dropBlockAsItem(p_150109_1_, p_150109_2_, p_150109_3_, p_150109_4_, p_150109_1_.getBlockMetadata(p_150109_2_, p_150109_3_, p_150109_4_), 0);
-                p_150109_1_.setBlockToAir(p_150109_2_, p_150109_3_, p_150109_4_);
+    protected boolean checkForDrop(World worldIn, BlockPos pos, IBlockState state) {
+        if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing) state.getValue(FACING))) {
+            return true;
+        } else {
+            if (worldIn.getBlockState(pos).getBlock() == this) {
+                this.dropBlockAsItem(worldIn, pos, state, 0);
+                worldIn.setBlockToAir(pos);
             }
 
             return false;
-        } else {
-            return true;
         }
     }
 
-    /**
-     * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit. Args: world,
-     * x, y, z, startVec, endVec
-     */
-    public MovingObjectPosition collisionRayTrace(World p_149731_1_, int p_149731_2_, int p_149731_3_, int p_149731_4_, Vec3 p_149731_5_, Vec3 p_149731_6_) {
-        int l = p_149731_1_.getBlockMetadata(p_149731_2_, p_149731_3_, p_149731_4_) & 7;
-        float f = 0.15F;
-
-        if (l == 1) {
-            this.setBlockBounds(0.0F, 0.2F, 0.5F - f, f * 2.0F, 0.8F, 0.5F + f);
-        } else if (l == 2) {
-            this.setBlockBounds(1.0F - f * 2.0F, 0.2F, 0.5F - f, 1.0F, 0.8F, 0.5F + f);
-        } else if (l == 3) {
-            this.setBlockBounds(0.5F - f, 0.2F, 0.0F, 0.5F + f, 0.8F, f * 2.0F);
-        } else if (l == 4) {
-            this.setBlockBounds(0.5F - f, 0.2F, 1.0F - f * 2.0F, 0.5F + f, 0.8F, 1.0F);
-        } else {
-            f = 0.1F;
-            this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.6F, 0.5F + f);
-        }
-
-        return super.collisionRayTrace(p_149731_1_, p_149731_2_, p_149731_3_, p_149731_4_, p_149731_5_, p_149731_6_);
+    @Nullable
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return NULL_AABB;
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-        super.breakBlock(world, x, y, z, block, metadata);
-        world.removeTileEntity(x, y, z);
-    }
-
-    @Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int eventNumber, int eventArgument) {
-        return super.onBlockEventReceived(world, x, y, z, eventNumber, eventArgument);
-//        TileEntity tileentity = world.getTileEntity( x, y, z);
-//        return tileentity == null ? false : tileentity.receiveClientEvent(eventNumber, eventArgument);
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        world.removeTileEntity(pos);
+        super.breakBlock(world, pos, state);
     }
 
     /**
@@ -277,8 +206,11 @@ public class BlockWolfsbaneTorch extends BlockStacyWolves implements ITileEntity
     @Override
     public void registerRecipes() {
         // Wolfsbane is a purple flower. Lilac is the closest thing in Vanilla. Allium also works.
-        GameRegistry.addRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.double_plant, 1, 1), 'T', Blocks.torch});
-        GameRegistry.addRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.red_flower, 1, 2), 'T', Blocks.torch});
+        // TODO Make a JSON recipe
+//        GameRegistry.addShapedRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.DOUBLE_PLANT, 1, 1), 'T', Blocks.TORCH});
+//        GameRegistry.addShapedRecipe(new ItemStack(this), new Object[] {" F ", "FTF", " F ", 'F', new ItemStack(Blocks.RED_FLOWER, 1, 2), 'T', Blocks.TORCH});
 
     }
+
+    // TODO Make a json for icon
 }

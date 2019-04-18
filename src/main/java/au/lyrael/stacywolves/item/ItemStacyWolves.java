@@ -2,12 +2,16 @@ package au.lyrael.stacywolves.item;
 
 import au.lyrael.stacywolves.utility.LanguageHelper;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
@@ -30,11 +34,6 @@ public class ItemStacyWolves extends Item {
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
         return String.format("item.%s:%s", MOD_ID, unwrapUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        itemIcon = iconRegister.registerIcon(String.format("%s", unwrapUnlocalizedName(this.getUnlocalizedName())));
     }
 
     protected String unwrapUnlocalizedName(String unlocalizedName) {
@@ -61,9 +60,10 @@ public class ItemStacyWolves extends Item {
      * Just a call to formatTooltip(). If you are overriding this function, call
      * formatTooltip() directly and DO NOT call super.addInformation().
      */
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean whatDoesThisEvenDo) {
-        this.formatTooltip(null, stack, list);
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    {
+        this.formatTooltip(null, stack, tooltip);
     }
 
     @Override

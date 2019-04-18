@@ -3,8 +3,6 @@ package au.lyrael.stacywolves.utility;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 
 import java.util.HashMap;
 import java.util.List;

@@ -5,8 +5,8 @@ import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.registry.WolfType;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
 import static au.lyrael.stacywolves.registry.WolfType.*;
-import static cpw.mods.fml.common.eventhandler.Event.Result.*;
+import static net.minecraftforge.fml.common.eventhandler.Event.Result.*;
 
 public class SpawnEventHandler {
 

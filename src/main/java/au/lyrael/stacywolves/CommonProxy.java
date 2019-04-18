@@ -3,21 +3,19 @@ package au.lyrael.stacywolves;
 import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.blocks.BlockWolfsbaneTorch;
 import au.lyrael.stacywolves.client.gui.StacysWolvesGuiHandler;
-import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.item.ItemWolfClicker;
 import au.lyrael.stacywolves.item.ItemWolfFood;
 import au.lyrael.stacywolves.item.ItemWolfSpawnForcer;
-import au.lyrael.stacywolves.item.ItemWolfTransporter;
 import au.lyrael.stacywolves.item.block.ItemBlockStacyWolves;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.tileentity.TileEntityWolfsbane;
-import cpw.mods.fml.common.discovery.ASMDataTable;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,11 +23,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.*;
-import static au.lyrael.stacywolves.entity.EntityWolfTransporter.ENTITY_WOLF_TRANSPORTER;
 import static au.lyrael.stacywolves.item.ItemWolfClicker.WOLF_CLICKER_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfFood.WOLF_FOOD_NAME;
 import static au.lyrael.stacywolves.item.ItemWolfSpawnForcer.WOLF_SPAWN_FORCER_NAME;
-import static au.lyrael.stacywolves.item.ItemWolfTransporter.WOLF_TRANSPORTER_NAME;
 import static au.lyrael.stacywolves.utility.LanguageHelper.setupColors;
 
 public class CommonProxy {
@@ -46,7 +42,6 @@ public class CommonProxy {
         registerRecipes();
 //        ItemRegistry.wolf_food.registerOreDict();
         GameRegistry.registerTileEntity(TileEntityWolfsbane.class, "Wolfsbane");
-        EntityRegistry.registerModEntity(EntityWolfTransporter.class, ENTITY_WOLF_TRANSPORTER, ++LAST_MOD_ENTITY_ID, INSTANCE, 128, 5, true);
         NetworkRegistry.INSTANCE.registerGuiHandler(StacyWolves.INSTANCE, new StacysWolvesGuiHandler());
     }
 
@@ -59,22 +54,23 @@ public class CommonProxy {
     protected void registerRecipes() {
         ItemRegistry.wolf_food.registerRecipes();
         ItemRegistry.wolfsbane_torch.registerRecipes();
-        ItemRegistry.wolf_transporter.registerRecipes();
         ItemRegistry.wolf_clicker.registerRecipes();
     }
 
 
     protected void registerItemsAndBlocks() {
-        GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
+        // TODO Item registering must be JSON too?
+//        GameRegistry.registerItem(new ItemWolfFood(), WOLF_FOOD_NAME);
         registerWolfsBaneTorch();
-        GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
-        GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
-        GameRegistry.registerItem(new ItemWolfClicker(), WOLF_CLICKER_NAME);
+//        GameRegistry.registerItem(new ItemWolfTransporter(), WOLF_TRANSPORTER_NAME);
+//        GameRegistry.registerItem(new ItemWolfSpawnForcer(), WOLF_SPAWN_FORCER_NAME);
+//        GameRegistry.registerItem(new ItemWolfClicker(), WOLF_CLICKER_NAME);
     }
 
     private void registerWolfsBaneTorch() {
         final Block blockWolfsbaneTorch = new BlockWolfsbaneTorch();
-        GameRegistry.registerBlock(blockWolfsbaneTorch, ItemBlockStacyWolves.class, blockWolfsbaneTorch.getUnlocalizedName());
+        // TODO Block registering must be JSON too?
+//        GameRegistry.registerBlock(blockWolfsbaneTorch, ItemBlockStacyWolves.class, blockWolfsbaneTorch.getUnlocalizedName());
     }
 
     private void registerWolfEntities(FMLPreInitializationEvent event) {

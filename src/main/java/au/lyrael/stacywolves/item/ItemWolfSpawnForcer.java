@@ -1,27 +1,22 @@
 package au.lyrael.stacywolves.item;
 
 
+import au.lyrael.stacywolves.StacyWolves;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import au.lyrael.stacywolves.registry.WolfType;
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +24,7 @@ import java.util.HashMap;
 
 import static au.lyrael.stacywolves.StacyWolves.CREATIVE_TAB;
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
-import static net.minecraft.world.SpawnerAnimals.canCreatureTypeSpawnAtLocation;
+
 
 public class ItemWolfSpawnForcer extends ItemStacyWolves {
 	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
@@ -53,6 +48,7 @@ public class ItemWolfSpawnForcer extends ItemStacyWolves {
 		if (world.isRemote || !player.capabilities.isCreativeMode || !WorldServer.class.isAssignableFrom(world.getClass())) {
 			return stack;
 		} else {
+			StacyWolves.WOLF_REGISTRY.dumpRegistry();
 			try {
 				final WorldServer worldServer = (WorldServer) world;
 //				final SpawnerAnimals animalSpawner = ReflectionHelper.getPrivateValue(WorldServer.class, worldServer, "animalSpawner", "field_135059_Q");
@@ -96,7 +92,7 @@ public class ItemWolfSpawnForcer extends ItemStacyWolves {
 
 				if ((!enumcreaturetype.getPeacefulCreature() || passive) && (enumcreaturetype.getPeacefulCreature() || hostile) && (!enumcreaturetype.getAnimal() || isTimeForPassive)) {
 
-					final Vec3 playerPosition = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+					final Vec3d playerPosition = Vec3d.createVectorHelper(player.posX, player.posY, player.posZ);
 					ChunkPosition spawnPosition = selectRandomPositionInChunk(worldServer, playerChunkCoords.chunkXPos, playerChunkCoords.chunkZPos);
 //					ChunkPosition spawnPosition = new ChunkPosition((int) playerPosition.xCoord,(int) playerPosition.yCoord,(int) playerPosition.zCoord);
 					int blockBelowPlayer = findYBelow(playerPosition, worldServer);
@@ -198,7 +194,7 @@ public class ItemWolfSpawnForcer extends ItemStacyWolves {
 		}
 	}
 
-	private int findYBelow(Vec3 playerPosition, WorldServer worldServer) {
+	private int findYBelow(Vec3d playerPosition, WorldServer worldServer) {
 		final int x = (int) playerPosition.xCoord;
 
 		final int z = (int) playerPosition.zCoord;

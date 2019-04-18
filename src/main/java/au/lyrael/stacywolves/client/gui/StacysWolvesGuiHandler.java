@@ -1,7 +1,7 @@
 package au.lyrael.stacywolves.client.gui;
 
 import au.lyrael.stacywolves.inventory.ContainerWolfWorkbench;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

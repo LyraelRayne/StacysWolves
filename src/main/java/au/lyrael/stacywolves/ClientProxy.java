@@ -6,8 +6,8 @@ import au.lyrael.stacywolves.client.render.RenderWolfTransporter;
 import au.lyrael.stacywolves.entity.EntityWolfTransporter;
 import au.lyrael.stacywolves.entity.wolf.EntityWolfBase;
 import au.lyrael.stacywolves.registry.ItemRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 

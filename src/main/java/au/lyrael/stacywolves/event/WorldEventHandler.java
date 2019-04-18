@@ -1,7 +1,7 @@
 package au.lyrael.stacywolves.event;
 
 import au.lyrael.stacywolves.StacyWolves;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

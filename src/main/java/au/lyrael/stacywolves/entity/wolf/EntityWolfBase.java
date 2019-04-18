@@ -4,7 +4,9 @@ import au.lyrael.stacywolves.annotation.WolfMetadata;
 import au.lyrael.stacywolves.client.render.IRenderableWolf;
 import au.lyrael.stacywolves.config.RuntimeConfiguration;
 import au.lyrael.stacywolves.entity.ISpawnable;
-import au.lyrael.stacywolves.entity.ai.*;
+import au.lyrael.stacywolves.entity.ai.EntityAIAvoidEntityIfEntityIsTamed;
+import au.lyrael.stacywolves.entity.ai.EntityAIWolfTempt;
+import au.lyrael.stacywolves.entity.ai.WolfAIBeg;
 import au.lyrael.stacywolves.integration.PamsHarvestcraftHolder;
 import au.lyrael.stacywolves.inventory.InventoryWolfChest;
 import au.lyrael.stacywolves.item.ItemWolfFood;
@@ -12,25 +14,32 @@ import au.lyrael.stacywolves.item.WolfPeriodicItemDrop;
 import au.lyrael.stacywolves.lighting.WolfLightSource;
 import au.lyrael.stacywolves.registry.ItemRegistry;
 import au.lyrael.stacywolves.registry.WolfType;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockColored;
-import net.minecraft.command.IEntitySelector;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StringUtils;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.village.Village;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -38,9 +47,8 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.*;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
@@ -53,6 +61,16 @@ import static net.minecraft.init.Blocks.*;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable
 {
+
+	private static final DataParameter<Float> DATA_HEALTH_ID = EntityDataManager.<Float>createKey(EntityWolf.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> BEGGING = EntityDataManager.<Boolean>createKey(EntityWolf.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> COLLAR_COLOR = EntityDataManager.<Integer>createKey(EntityWolf.class, DataSerializers.VARINT);
+
+	/**
+	 * Float used to smooth the rotation of the wolf head
+	 */
+	private float headRotationCourse;
+
 	private final WolfMetadata metadata;
 
 	private float field_70926_e;
@@ -81,13 +99,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	private static final Logger SPAWNLOGGER = LogManager.getLogger(MOD_ID + ".spawn");
 
-	protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(grass, dirt, gravel, sand, sandstone);
-	protected static final List<Block> SUBTERRANEAN_FLOOR_BLOCKS = Arrays.asList(stone, gravel, cobblestone, obsidian);
-	protected static final List<Block> INDOOR_FLOOR_BLOCKS = Arrays.asList(stone, cobblestone, planks, wooden_slab, stone_slab, double_stone_slab, double_wooden_slab);
-	protected static final List<Block> ICE_FLOOR_BLOCKS = Arrays.asList(ice, snow, packed_ice, snow_layer);
-	protected static final List<Block> SHROOM_FLOOR_BLOCKS = Arrays.asList((Block) mycelium, red_mushroom_block,
-			brown_mushroom_block);
-	protected static final List<Block> MESA_FLOOR_BLOCKS = Arrays.asList(sand, hardened_clay, stained_hardened_clay);
+	protected static final List<Block> NORMAL_FLOOR_BLOCKS = Arrays.asList(GRASS, DIRT, GRAVEL, SAND, SANDSTONE);
+	protected static final List<Block> SUBTERRANEAN_FLOOR_BLOCKS = Arrays.asList(STONE, GRAVEL, COBBLESTONE, OBSIDIAN);
+	protected static final List<Block> INDOOR_FLOOR_BLOCKS = Arrays.asList(STONE, COBBLESTONE, PLANKS, WOODEN_SLAB, STONE_SLAB, DOUBLE_STONE_SLAB, DOUBLE_WOODEN_SLAB);
+	protected static final List<Block> ICE_FLOOR_BLOCKS = Arrays.asList(ICE, SNOW, PACKED_ICE, SNOW_LAYER);
+	protected static final List<Block> SHROOM_FLOOR_BLOCKS = Arrays.asList((Block) MYCELIUM, RED_MUSHROOM_BLOCK,
+			BROWN_MUSHROOM_BLOCK);
+	protected static final List<Block> MESA_FLOOR_BLOCKS = Arrays.asList(SAND, HARDENED_CLAY, STAINED_HARDENED_CLAY);
 
 	private WolfPeriodicItemDrop periodicDrop;
 	private WolfLightSource lightSource;
@@ -97,29 +115,35 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		super(world);
 		this.setSize(0.6F, 0.8F);
-		this.getNavigator().setAvoidsWater(this.normallyAvoidsWater() || this.alwaysAvoidsWater());
-		this.tasks.addTask(1, new EntityAIWolfSwimming(this));
+		this.getNavigator().getNodeProcessor().setCanSwim(!(this.normallyAvoidsWater() || this.alwaysAvoidsWater()));
+
+		this.aiSit = new EntityAISit(this);
+		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, this.aiSit);
 		this.setAiTempt(new EntityAIWolfTempt(this, 0.5D, false));
 		this.tasks.addTask(3, this.getAiTempt());
-		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
-		this.tasks.addTask(5, new EntityAIWolfFollowOwner(this, 1.0D, 10.0F, 5.0F));
-		this.tasks.addTask(7, new EntityAILeapAtTarget(this, 0.4F));
-		this.tasks.addTask(8, new WolfAIBeg(this, 8.0F));
-		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(9, new EntityAIWolfMate(this, 1.0D));
-		this.tasks.addTask(9, new EntityAILookIdle(this));
-		this.tasks.addTask(10, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(11, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
+//		this.tasks.addTask(3, new EntityWolf.AIAvoidEntity(this, EntityLlama.class, 24.0F, 1.5D, 1.5D));
+		this.tasks.addTask(4, new EntityAILeapAtTarget(this, 0.4F));
+		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1.0D, true));
+		this.tasks.addTask(6, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
+		this.tasks.addTask(7, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(8, new EntityAIWanderAvoidWater(this, 1.0D));
+		this.tasks.addTask(9, new WolfAIBeg(this, 8.0F));
+		this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(10, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-		if (RuntimeConfiguration.wolvesAttackAnimals)
-		{
-			this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 400, false));
-			this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityCow.class, 400, false));
-			this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityChicken.class, 400, false));
+		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
+
+		if (RuntimeConfiguration.wolvesAttackAnimals) {
+			this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityAnimal.class, false, new Predicate<Entity>() {
+				public boolean apply(@Nullable Entity p_apply_1_) {
+					return p_apply_1_ instanceof EntitySheep || p_apply_1_ instanceof EntityRabbit;
+				}
+			}));
 		}
+
+		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, AbstractSkeleton.class, false));
 
 		this.setTamed(false);
 
@@ -128,10 +152,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		this.setupEdibleItems();
 	}
 
-	private void setupEdibleItems()
-	{
-		this.addEdibleItem(new ItemStack(Items.beef));
-		this.addEdibleItem(new ItemStack(Items.chicken));
+	private void setupEdibleItems() {
+		this.addEdibleItem(new ItemStack(Items.BEEF));
+		this.addEdibleItem(new ItemStack(Items.CHICKEN));
 		final ItemStack blackberryJellySandwichItemStack = PamsHarvestcraftHolder.getBlackberryJellySandwichItemStack();
 		if (blackberryJellySandwichItemStack != null)
 		{
@@ -140,10 +163,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	protected Village scanForVillage(int villageScanRadius) {
-		return getWorldObj().villageCollectionObj.findNearestVillage(
-				MathHelper.floor_double(this.posX),
-				MathHelper.floor_double(this.posY),
-				MathHelper.floor_double(this.posZ), villageScanRadius);
+		return getWorldObj().getVillageCollection().getNearestVillage(this.getPosition(), villageScanRadius);
 	}
 
 	protected List<Block> getFloorBlocks()
@@ -156,25 +176,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 
-		if (this.isTamed())
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0D);
+		if (this.isTamed()) {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+		} else {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		}
-		else
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
-		}
-	}
-
-	/**
-	 * Returns true if the newer Entity AI code should be run
-	 */
-	@Override
-	public boolean isAIEnabled()
-	{
-		return true;
 	}
 
 	/**
@@ -204,27 +212,24 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * main AI tick function, replaces updateEntityActionState
 	 */
 	@Override
-	protected void updateAITick()
-	{
-		this.dataWatcher.updateObject(18, Float.valueOf(this.getHealth()));
+	protected void updateAITasks() {
+		this.getDataManager().set(DATA_HEALTH_ID, Float.valueOf(this.getHealth()));
 	}
 
 	@Override
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataWatcher.addObject(18, new Float(this.getHealth()));
-		this.dataWatcher.addObject(19, new Byte((byte) 0));
-		this.dataWatcher.addObject(20, new Byte((byte) BlockColored.func_150032_b(1)));
+		this.dataManager.register(DATA_HEALTH_ID, Float.valueOf(this.getHealth()));
+		this.dataManager.register(BEGGING, Boolean.valueOf(false));
+		this.dataManager.register(COLLAR_COLOR, Integer.valueOf(EnumDyeColor.RED.getDyeDamage()));
 	}
 
 	/**
 	 * Fired whenever the entity moves
 	 */
-	@Override
-	protected void func_145780_a(int x, int y, int z, Block surface)
-	{
-		this.playSound("mob.wolf.step", 0.15F, 1.0F);
+	protected void playStepSound(BlockPos pos, Block blockIn) {
+		this.playSound(SoundEvents.ENTITY_WOLF_STEP, 0.15F, 1.0F);
 	}
 
 	/**
@@ -235,7 +240,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("Angry", this.isAngry());
-		nbt.setByte("CollarColor", (byte) this.getCollarColor());
+		nbt.setByte("CollarColor", (byte) this.getCollarColor().getDyeDamage());
 		nbt.setBoolean("FollowingOwner", this.shouldFollowOwner);
 		final InventoryWolfChest wolfChest = this.getWolfChest();
 		if (wolfChest != null)
@@ -243,9 +248,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	@Override
-	public float getWolfBrightness(float maybeTime)
-	{
-		return isOffsetPositionInLiquid(posX, posY, posZ) ? 1F : getBrightness(maybeTime);
+	public float getWolfBrightness(float maybeTime) {
+		return isOffsetPositionInLiquid(posX, posY, posZ) ? 1F : getBrightness();
 	}
 
 	/**
@@ -256,9 +260,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		super.readEntityFromNBT(nbt);
 		this.setAngry(nbt.getBoolean("Angry"));
-		if (nbt.hasKey("CollarColor", 99))
-		{
-			this.setCollarColor(nbt.getByte("CollarColor"));
+		if (nbt.hasKey("CollarColor", 99)) {
+			this.setCollarColor(EnumDyeColor.byDyeDamage(nbt.getByte("CollarColor")));
 		}
 		this.shouldFollowOwner = nbt.getBoolean("FollowingOwner");
 		final InventoryWolfChest wolfChest = this.getWolfChest();
@@ -270,11 +273,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * Returns the sound this mob makes while it's alive.
 	 */
 	@Override
-	protected String getLivingSound()
-	{
-		return this.isAngry() ? "mob.wolf.growl"
-				: (this.rand.nextInt(3) == 0 ? (this.isTamed() && getOtherWatchableHealthThing() < 10.0F
-						? "mob.wolf.whine" : "mob.wolf.panting") : "mob.wolf.bark");
+	protected SoundEvent getAmbientSound() {
+		if (this.isAngry()) {
+			return SoundEvents.ENTITY_WOLF_GROWL;
+		} else if (this.rand.nextInt(3) == 0) {
+			return this.isTamed() && ((Float) this.dataManager.get(DATA_HEALTH_ID)).floatValue() < 10.0F ? SoundEvents.ENTITY_WOLF_WHINE : SoundEvents.ENTITY_WOLF_PANT;
+		} else {
+			return SoundEvents.ENTITY_WOLF_AMBIENT;
+		}
 	}
 
 	/**
@@ -283,25 +289,23 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * @return Datawatcher item #18
 	 */
 	private float getOtherWatchableHealthThing() {
-		return this.dataWatcher.getWatchableObjectFloat(18);
+		return this.getDataManager().get(DATA_HEALTH_ID);
 	}
 
 	/**
 	 * Returns the sound this mob makes when it is hurt.
 	 */
 	@Override
-	protected String getHurtSound()
-	{
-		return "mob.wolf.hurt";
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_WOLF_HURT;
 	}
 
 	/**
 	 * Returns the sound this mob makes on death.
 	 */
 	@Override
-	protected String getDeathSound()
-	{
-		return "mob.wolf.death";
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_WOLF_DEATH;
 	}
 
 	/**
@@ -322,17 +326,15 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	/**
 	 * Return this wolf's collar color.
 	 */
-	public int getCollarColor()
-	{
-		return this.dataWatcher.getWatchableObjectByte(20) & 15;
+	public EnumDyeColor getCollarColor() {
+		return EnumDyeColor.byDyeDamage(((Integer) this.dataManager.get(COLLAR_COLOR)).intValue() & 15);
 	}
 
 	/**
 	 * Set this wolf's collar color.
 	 */
-	public void setCollarColor(int p_82185_1_)
-	{
-		this.dataWatcher.updateObject(20, Byte.valueOf((byte) (p_82185_1_ & 15)));
+	public void setCollarColor(EnumDyeColor collarcolor) {
+		this.dataManager.set(COLLAR_COLOR, Integer.valueOf(collarcolor.getDyeDamage()));
 	}
 
 	/**
@@ -345,12 +347,12 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		super.onLivingUpdate();
 		doLightingUpdate();
 
-		if (!this.worldObj.isRemote && this.isShaking && !this.wolfIsReadyToShake && !this.hasPath() && this.onGround)
+		if (!this.getWorldObj().isRemote && this.isShaking && !this.wolfIsReadyToShake && !this.hasPath() && this.onGround)
 		{
 			this.wolfIsReadyToShake = true;
 			this.timeWolfIsShaking = 0.0F;
 			this.prevTimeWolfIsShaking = 0.0F;
-			this.worldObj.setEntityState(this, (byte) 8);
+			this.getWorldObj().setEntityState(this, (byte) 8);
 		}
 
 		if (scaresCreepers())
@@ -372,20 +374,12 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		final float scareRange = 30F;
 
-		final IEntitySelector targetSelector = new IEntitySelector()
-		{
-			/**
-			 * Return whether the specified entity is applicable to this filter.
-			 */
-			public boolean isEntityApplicable(Entity subject)
-			{
-				return EntityCreeper.class.isAssignableFrom(subject.getClass()) && subject.isEntityAlive()
-						&& getEntitySenses().canSee(subject);
-			}
-		};
-
-		List<EntityCreature> creepersInRange = getWorldObj().selectEntitiesWithinAABB(EntityCreeper.class,
-				boundingBox.expand(scareRange, 3.0D, scareRange), targetSelector);
+		List<EntityCreature> creepersInRange = getWorldObj().getEntitiesWithinAABB(EntityCreeper.class,
+				getEntityBoundingBox().expand(scareRange, 3.0D, scareRange), Predicates.and(
+						EntitySelectors.CAN_AI_TARGET,
+						(Entity subject) -> EntityCreeper.class.isAssignableFrom(subject.getClass()) && subject.isEntityAlive()
+								&& getEntitySenses().canSee(subject))
+		);
 
 		for (EntityCreature entityCreature : creepersInRange)
 		{
@@ -397,9 +391,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		}
 	}
 
-	protected boolean isAlreadyScared(EntityCreature entityCreature)
-	{
-		final List<EntityAITasks.EntityAITaskEntry> taskEntries = entityCreature.tasks.taskEntries;
+	protected boolean isAlreadyScared(EntityCreature entityCreature) {
+		final Set<EntityAITasks.EntityAITaskEntry> taskEntries = entityCreature.tasks.taskEntries;
 		for (EntityAITasks.EntityAITaskEntry taskEntry : taskEntries)
 		{
 			if (taskEntry.action instanceof EntityAIAvoidEntityIfEntityIsTamed)
@@ -447,22 +440,16 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			this.setDead();
 	}
 
-	protected void doBeggingChase()
-	{
-		if (this.isBegging())
-		{
-			this.field_70926_e += (1.0F - this.field_70926_e) * 0.4F;
-			this.numTicksToChaseTarget = 10;
-		}
-		else
-		{
-			this.field_70926_e += (0.0F - this.field_70926_e) * 0.4F;
+	protected void doBeggingChase() {
+		if (this.isBegging()) {
+			this.headRotationCourse += (1.0F - this.headRotationCourse) * 0.4F;
+		} else {
+			this.headRotationCourse += (0.0F - this.headRotationCourse) * 0.4F;
 		}
 	}
 
-	protected boolean doPeacefulDespawn()
-	{
-		if (!allowedInPeaceful && !this.worldObj.isRemote && !isWolfTamed() && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
+	protected boolean doPeacefulDespawn() {
+		if (!allowedInPeaceful && !this.getWorldObj().isRemote && !isWolfTamed() && this.getWorldObj().getDifficulty() == EnumDifficulty.PEACEFUL)
 		{
 			this.setDead();
 			return true;
@@ -496,12 +483,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			this.isShaking = true;
 			this.isShakingToDropItem = true;
 			this.hasDroppedItem = false;
-		} else if ((this.isShaking || this.wolfIsReadyToShake) && this.wolfIsReadyToShake)
-		{
-			if (this.timeWolfIsShaking == 0.0F)
-			{
-				this.playSound("mob.wolf.shake", this.getSoundVolume(),
-						(this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+		} else if ((this.isShaking || this.wolfIsReadyToShake) && this.wolfIsReadyToShake) {
+			if (this.timeWolfIsShaking == 0.0F) {
+				this.playSound(SoundEvents.ENTITY_WOLF_SHAKE, this.getSoundVolume(), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 			}
 
 			this.prevTimeWolfIsShaking = this.timeWolfIsShaking;
@@ -532,14 +516,14 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	private void shedWetParticles() {
-		float f = (float) this.boundingBox.minY;
+		float f = (float) this.getEntityBoundingBox().minY;
 		int i = (int) (MathHelper.sin((this.timeWolfIsShaking - 0.4F) * (float) Math.PI) * 7.0F);
 
-		for (int j = 0; j < i; ++j) {
+		for (int j = 0; j < i; ++j)
+		{
 			float f1 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
 			float f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-			this.worldObj.spawnParticle("splash", this.posX + (double) f1, (double) (f + 0.8F), this.posZ + (double) f2,
-					this.motionX, this.motionY, this.motionZ);
+			this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX + (double) f1, (double) (f + 0.8F), this.posZ + (double) f2, this.motionX, this.motionY, this.motionZ);
 		}
 	}
 
@@ -599,23 +583,23 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * Called when the entity is attacked.
 	 */
 	@Override
-	public boolean attackEntityFrom(DamageSource damageSource, float amount)
-	{
-		if (this.isEntityInvulnerable())
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (this.isEntityInvulnerable(source))
 		{
 			return false;
-		}
-		else
-		{
-			Entity entity = damageSource.getEntity();
-			this.aiSit.setSitting(false);
+		} else {
+			Entity entity = source.getTrueSource();
+
+			if (this.aiSit != null) {
+				this.aiSit.setSitting(false);
+			}
 
 			if (entity != null && !(entity instanceof EntityPlayer) && !(entity instanceof EntityArrow))
 			{
 				amount = (amount + 1.0F) / 2.0F;
 			}
 
-			return super.attackEntityFrom(damageSource, amount);
+			return super.attackEntityFrom(source, amount);
 		}
 	}
 
@@ -631,14 +615,11 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	{
 		super.setTamed(tamed);
 
-		if (tamed)
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
-			this.getNavigator().setAvoidsWater(this.normallyAvoidsWater() || this.alwaysAvoidsWater());
-		}
-		else
-		{
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
+		if (tamed) {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+			this.getNavigator().getNodeProcessor().setCanSwim(!(this.normallyAvoidsWater() || this.alwaysAvoidsWater()));
+		} else {
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
 		}
 	}
 
@@ -648,7 +629,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * @return
 	 */
 	@Override
-	public boolean interact(EntityPlayer player) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.inventory.getCurrentItem();
 		boolean interacted = false;
 
@@ -664,7 +645,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			interacted = interactTamingItem(player, itemstack);
 		}
 
-		return interacted || super.interact(player);
+		return interacted || super.processInteract(player, hand);
 	}
 
 	protected boolean isANameTag(ItemStack itemstack) {
@@ -682,7 +663,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	protected boolean interactToggleSit(EntityPlayer player) {
-		if (!this.worldObj.isRemote && !player.isSneaking()) {
+		if (!this.getWorldObj().isRemote && !player.isSneaking()) {
 			toggleSitting();
 			return true;
 		}
@@ -691,7 +672,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected boolean interactWolfChest(EntityPlayer player) {
 		if (player.isSneaking() && this.getWolfChest() != null) {
-			this.getWolfChest().openGUI(this.worldObj, player, this.getCommandSenderName());
+			this.getWolfChest().openGUI(this.getWorldObj(), player, this.getCommandSenderEntity().getName());
 			return true;
 		} else {
 			return false;
@@ -699,7 +680,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	protected boolean interactClicker(EntityPlayer player, ItemStack itemstack) {
-		if (isClicker(itemstack) && !this.worldObj.isRemote) {
+		if (isClicker(itemstack) && !this.getWorldObj().isRemote) {
 			itemstack.getItem();
 			toggleShouldFollowOwner();
 			announceFollowChange(player);
@@ -712,20 +693,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	private void announceFollowChange(EntityPlayer player) {
 		final String nameTag = this.getCustomNameTag();
 		final String name = !StringUtils.isNullOrEmpty(nameTag) ? nameTag : "wolf";
-		player.addChatMessage(new ChatComponentText(String.format("%s will %s follow %s", name, shouldFollowOwner() ? "now" : "no longer", player.getDisplayName())));
+		player.sendStatusMessage(new TextComponentString(String.format("%s will %s follow %s", name, shouldFollowOwner() ? "now" : "no longer", player.getDisplayName())), false);
 	}
 
 	protected boolean interactDye(EntityPlayer player, ItemStack itemstack) {
 		if (isDye(itemstack)) {
-			int color = BlockColored.func_150032_b(itemstack.getItemDamage());
+			EnumDyeColor enumdyecolor = EnumDyeColor.byDyeDamage(itemstack.getMetadata());
 
-			if (color != this.getCollarColor()) {
-				this.setCollarColor(color);
-
-				if (!player.capabilities.isCreativeMode && --itemstack.stackSize <= 0) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+			if (enumdyecolor != this.getCollarColor()) {
+				this.setCollarColor(enumdyecolor);
+				if (!player.capabilities.isCreativeMode) {
+					itemstack.shrink(1);
 				}
-
 				return true;
 			}
 		}
@@ -742,64 +721,56 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	protected boolean isOwnedBy(EntityPlayer player) {
-		return this.func_152114_e(player);
+		return this.isOwner(player);
 	}
 
 	protected static boolean isDye(ItemStack itemstack) {
-		return itemstack != null && itemstack.getItem() == Items.dye;
+		return itemstack != null && itemstack.getItem() == Items.DYE;
 	}
 
 	protected void toggleSitting()
 	{
 		this.aiSit.setSitting(!this.isSitting());
 		this.isJumping = false;
-		this.setPathToEntity(null);
-		this.setTarget(null);
+		this.navigator.clearPath();
 		this.setAttackTarget(null);
 	}
 
 	protected void toggleShouldFollowOwner()
 	{
 		this.shouldFollowOwner = !this.shouldFollowOwner;
-		this.setPathToEntity(null);
-		this.setTarget(null);
+		this.navigator.clearPath();
 		this.setAttackTarget(null);
 	}
 
-	protected void attemptBecomeTamedBy(EntityPlayer player)
-	{
-		if (!this.worldObj.isRemote)
-		{
-			if (this.rand.nextInt(3) == 0)
-			{
-				this.setTamed(true);
-				this.setPathToEntity(null);
+	protected void attemptBecomeTamedBy(EntityPlayer player) {
+		if (!this.world.isRemote) {
+			if (this.rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+				this.setTamedBy(player);
+				this.navigator.clearPath();
 				this.setAttackTarget(null);
 				this.aiSit.setSitting(true);
 				this.setHealth(20.0F);
-				this.func_152115_b(player.getUniqueID().toString());
 				this.playTameEffect(true);
-				this.worldObj.setEntityState(this, (byte) 7);
+				this.world.setEntityState(this, (byte)7);
 			}
 			else
 			{
 				this.playTameEffect(false);
-				this.worldObj.setEntityState(this, (byte) 6);
+				this.world.setEntityState(this, (byte)6);
 			}
 		}
 	}
 
 	protected void consumeHeldItem(EntityPlayer player, ItemStack itemstack)
 	{
-		if (!player.capabilities.isCreativeMode)
-		{
-			--itemstack.stackSize;
+		if (!player.capabilities.isCreativeMode) {
+			itemstack.shrink(1);
 		}
-
-		if (itemstack.stackSize <= 0)
-		{
-			player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-		}
+//		if (itemstack.isEmpty())
+//		{
+//			player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+//		}
 	}
 
 	/**
@@ -857,7 +828,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	@Override
-	public void handleHealthUpdate(byte updateFlags)
+	public void handleStatusUpdate(byte updateFlags)
 	{
 		if (updateFlags == 8)
 		{
@@ -865,9 +836,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 			this.timeWolfIsShaking = 0.0F;
 			this.prevTimeWolfIsShaking = 0.0F;
 		}
-		else
-		{
-			super.handleHealthUpdate(updateFlags);
+		else {
+			super.handleStatusUpdate(updateFlags);
 		}
 	}
 
@@ -908,62 +878,48 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	/**
 	 * Determines whether this wolf is angry or not.
 	 */
-	public boolean isAngry()
-	{
-		return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
+	public boolean isAngry() {
+		return (this.dataManager.get(TAMED).byteValue() & 2) != 0;
 	}
 
 	/**
 	 * Sets whether this wolf is angry or not.
 	 */
-	public void setAngry(boolean angry)
-	{
-		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
+	public void setAngry(boolean angry) {
+		byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
 
-		if (angry)
-		{
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | 2)));
+		if (angry) {
+			this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 2)));
 		}
-		else
-		{
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -3)));
+		else {
+			this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -3)));
 		}
 	}
 
 	@Override
 	public abstract EntityWolfBase createChild(EntityAgeable parent);
 
-	protected EntityWolfBase createChild(EntityAgeable parent, EntityWolfBase child)
-	{
-		String owner = this.func_152113_b();
+	protected EntityWolfBase createChild(EntityAgeable parent, EntityWolfBase child) {
+		UUID uuid = this.getOwnerId();
 
 		parent.getRNG();
 
-		if (owner != null && owner.trim().length() > 0)
-		{
-			child.func_152115_b(owner);
+		if (uuid != null) {
+			child.setOwnerId(uuid);
 			child.setTamed(true);
 		}
 
 		return child;
 	}
 
-	public void setBegging(boolean isBegging)
-	{
-		if (isBegging)
-		{
-			this.dataWatcher.updateObject(19, Byte.valueOf((byte) 1));
-		}
-		else
-		{
-			this.dataWatcher.updateObject(19, Byte.valueOf((byte) 0));
-		}
+	public void setBegging(boolean beg) {
+		this.dataManager.set(BEGGING, Boolean.valueOf(beg));
 	}
 
-	public boolean isBegging()
-	{
-		return this.dataWatcher.getWatchableObjectByte(19) == 1;
+	public boolean isBegging() {
+		return this.dataManager.get(BEGGING).booleanValue();
 	}
+
 
 	/**
 	 * Another method that's here because I want a non-obfuscated name for my method.
@@ -1036,11 +992,9 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		return EntityWolfBase.class.isAssignableFrom(potentialMate.getClass());
 	}
 
-	protected void burnIfInSunlight()
-	{
-		if (!this.isWolfTamed() && this.worldObj.isDaytime() && !this.isChild())
-		{
-			float f = this.getBrightness(1.0F);
+	protected void burnIfInSunlight() {
+		if (!this.isWolfTamed() && this.getWorldObj().isDaytime() && !this.isChild()) {
+			float f = this.getBrightness();
 
 			if (f > 0.5F && this.getRNG().nextFloat() * 30.0F < (f - 0.4F) * 2.0F && canSeeTheSky(getWorldObj(), posX, posY, posZ))
 			{
@@ -1051,9 +1005,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	protected void hurtIfWet()
 	{
-		if (!this.isWolfTamed() && this.isWet())
-		{
-			this.attackEntityFrom(DamageSource.drown, 1.0F);
+		if (!this.isWolfTamed() && this.isWet()) {
+			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
 	}
 
@@ -1061,22 +1014,20 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	 * Determines if an entity can be despawned, used on idle far away entities
 	 */
 	@Override
-	protected boolean canDespawn()
-	{
-		if (metadata.type().creatureType() == EnumCreatureType.monster) {
+	protected boolean canDespawn() {
+		if (metadata.type().creatureType() == EnumCreatureType.MONSTER) {
 			return !this.isTamed();
 		} else {
 			return !this.isTamed() && this.ticksExisted > 2400;
 		}
 	}
 
-	protected boolean isStandingOn(Block... blockTypes)
-	{
-		int x = MathHelper.floor_double(this.posX);
-		int y = MathHelper.floor_double(this.boundingBox.minY);
-		int z = MathHelper.floor_double(this.posZ);
+	protected boolean isStandingOn(Block... blockTypes) {
+		int x = MathHelper.floor(this.posX);
+		int y = MathHelper.floor(this.getEntityBoundingBox().minY);
+		int z = MathHelper.floor(this.posZ);
 
-		return Arrays.asList(blockTypes).contains(this.worldObj.getBlock(x, y - 1, z)) || Arrays.asList(blockTypes).contains(this.worldObj.getBlock(x, y, z));
+		return Arrays.asList(blockTypes).contains(this.getWorldObj().getBlockState(new BlockPos(x, y - 1, z))) || Arrays.asList(blockTypes).contains(this.getWorldObj().getBlockState(new BlockPos(x, y, z)));
 	}
 
 	@Override
@@ -1096,9 +1047,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 				(canSeeTheSky(getWorldObj(), posX, posY, posZ) ^ noSky);
 	}
 
-	protected boolean isSuitableDimension()
-	{
-		int dimensionId = getWorldObj().provider.dimensionId;
+	protected boolean isSuitableDimension() {
+		int dimensionId = getWorldObj().provider.getDimension();
 		if (RuntimeConfiguration.dimensionSpawnBlackList != null
 				&& RuntimeConfiguration.dimensionSpawnBlackList.contains(dimensionId))
 		{
@@ -1118,7 +1068,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	public void onDeath(DamageSource p_70645_1_) {
 		super.onDeath(p_70645_1_);
 
-		if (!this.worldObj.isRemote) {
+		if (!this.getWorldObj().isRemote) {
 			this.dropItemsInChest();
 		}
 	}
@@ -1140,31 +1090,21 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	@SuppressWarnings("unused")
-	protected boolean animalCanSpawnHere()
-	{
-		return isStandingOn(grass) && getFullBlockLightValue(getWorldObj(), posX, posY - 1, posZ) > 8 && creatureCanSpawnHere();
+	protected boolean animalCanSpawnHere() {
+		return isStandingOn(GRASS) && getFullBlockLightValue(getWorldObj(), posX, posY - 1, posZ) > 8 && creatureCanSpawnHere();
 	}
 
-	protected boolean creatureCanSpawnHere()
-	{
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.boundingBox.minY);
-		int k = MathHelper.floor_double(this.posZ);
-		return livingCanSpawnHere() && this.getBlockPathWeight(i, j, k) >= 0.0F;
+	protected boolean creatureCanSpawnHere() {
+		return livingCanSpawnHere() && this.getBlockPathWeight(new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ)) >= 0.0F;
 	}
 
-	protected boolean livingCanSpawnHere()
-	{
-		return this.worldObj.checkNoEntityCollision(this.boundingBox)
-				&& this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty()
-				&& !this.worldObj.isAnyLiquid(this.boundingBox);
+	protected boolean livingCanSpawnHere() {
+		IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
+		return iblockstate.canEntitySpawn(this);
 	}
 
-	@Override
-	public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
-	{
-		return this.worldObj.getBlock(p_70783_1_, p_70783_2_ - 1, p_70783_3_) != air ? 10.0F
-				: this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_) - 0.5F;
+	public float getBlockPathWeight(BlockPos pos) {
+		return this.world.getBlockState(pos.down()).getBlock() == this.spawnableBlock ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
 	}
 
 	@Override
@@ -1203,30 +1143,29 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	/**
 	 * Used by the owner hurt by target AI in determining whether the wolf should attack their owner's attacker.
 	 *
-	 * @param ownerAttacker
+	 * @param target
 	 *           The entity which attacked the owner.
-	 * @param attackedOwner
+	 * @param owner
 	 *           The owner who was attacked
 	 * @return True if the tamable thing should attack?
 	 */
 	@Override
-	public boolean func_142018_a(EntityLivingBase ownerAttacker, EntityLivingBase attackedOwner)
-	{
-		if (!(ownerAttacker instanceof EntityCreeper) && !(ownerAttacker instanceof EntityGhast))
-		{
-			if (ownerAttacker instanceof EntityWolfBase)
-			{
-				EntityWolfBase entitywolf = (EntityWolfBase) ownerAttacker;
+	public boolean shouldAttackEntity(EntityLivingBase target, EntityLivingBase owner) {
+		if (!(target instanceof EntityCreeper) && !(target instanceof EntityGhast)) {
+			if (target instanceof EntityWolf) {
+				EntityWolf entitywolf = (EntityWolf) target;
 
-				if (entitywolf.isTamed() && entitywolf.getOwner() == attackedOwner)
+				if (entitywolf.isTamed() && entitywolf.getOwner() == owner)
 				{
 					return false;
 				}
 			}
 
-			return ownerAttacker instanceof EntityPlayer && attackedOwner instanceof EntityPlayer
-					&& !((EntityPlayer) attackedOwner).canAttackPlayer((EntityPlayer) ownerAttacker) ? false
-							: !(ownerAttacker instanceof EntityHorse) || !((EntityHorse) ownerAttacker).isTame();
+			if (target instanceof EntityPlayer && owner instanceof EntityPlayer && !((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target)) {
+				return false;
+			} else {
+				return !(target instanceof AbstractHorse) || !((AbstractHorse) target).isTame();
+			}
 		}
 		else
 		{
@@ -1290,9 +1229,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	}
 
 	@Override
-	public World getWorldObj()
-	{
-		return this.worldObj;
+	public World getWorldObj() {
+		return this.world;
 	}
 
 	public void setIsInWater(boolean value)

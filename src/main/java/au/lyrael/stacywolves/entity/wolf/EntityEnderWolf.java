@@ -14,8 +14,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -54,7 +54,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     public EntityEnderWolf(World worldObj) {
         super(worldObj);
         addLikedItem(ItemRegistry.getWolfFood("ender_bone"));
-		setPeriodicDrop(new WolfPeriodicItemDrop(300, 5, new ItemStack(Items.ender_pearl)));
+		setPeriodicDrop(new WolfPeriodicItemDrop(300, 5, new ItemStack(Items.ENDER_PEARL)));
 	}
 
     @Override
@@ -144,7 +144,7 @@ public class EntityEnderWolf extends EntityWolfBase implements IRenderableWolf {
     protected boolean teleportToEntity(Entity p_70816_1_) {
         final double myYHeight = this.boundingBox.minY + (double) (this.height / 2.0F);
         final double targetYHeight = p_70816_1_.posY + (double) p_70816_1_.getEyeHeight();
-        Vec3 targetVector = Vec3.createVectorHelper(p_70816_1_.posX - this.posX, targetYHeight - myYHeight, p_70816_1_.posZ - this.posZ);
+        Vec3d targetVector = Vec3d.createVectorHelper(p_70816_1_.posX - this.posX, targetYHeight - myYHeight, p_70816_1_.posZ - this.posZ);
         targetVector = targetVector.normalize();
 
         double d0 = this.getDistanceToEntity(p_70816_1_) - 1;

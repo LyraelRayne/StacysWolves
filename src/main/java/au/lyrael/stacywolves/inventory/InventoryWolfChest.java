@@ -1,7 +1,7 @@
 package au.lyrael.stacywolves.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.AnimalChest;
+import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class InventoryWolfChest {
 
-	private AnimalChest horseChest;
+	private ContainerHorseChest horseChest;
 	private final int size;
 
 	public InventoryWolfChest(int size) {
@@ -22,7 +22,7 @@ public class InventoryWolfChest {
 
 	public void openGUI(World worldObj, EntityPlayer player, String name) {
 		if (!worldObj.isRemote) {
-			this.horseChest.func_110133_a(name); // Set custom inventory name.
+			this.horseChest.setCustomName(name); // Set custom inventory name.
 			player.displayGUIChest(this.horseChest);
 		}
 	}
@@ -31,16 +31,16 @@ public class InventoryWolfChest {
 	 * Init horse horseChest
 	 */
 	private void initChest() {
-		AnimalChest animalchest = this.horseChest;
-		this.horseChest = new AnimalChest("HorseChest", this.getSize());
-		this.horseChest.func_110133_a("HorseChest"); // Set name
+		ContainerHorseChest ContainerHorseChest = this.horseChest;
+		this.horseChest = new ContainerHorseChest("HorseChest", this.getSize());
+		this.horseChest.setCustomName("HorseChest"); // Set name
 
-		if (animalchest != null) {
-			//animalchest.func_110132_b(this); // Remove change listener from animal chest
-			int i = Math.min(animalchest.getSizeInventory(), this.horseChest.getSizeInventory());
+		if (ContainerHorseChest != null) {
+			//ContainerHorseChest.func_110132_b(this); // Remove change listener from animal chest
+			int i = Math.min(ContainerHorseChest.getSizeInventory(), this.horseChest.getSizeInventory());
 
 			for (int j = 0; j < i; ++j) {
-				ItemStack itemstack = animalchest.getStackInSlot(j);
+				ItemStack itemstack = ContainerHorseChest.getStackInSlot(j);
 
 				if (itemstack != null) {
 					this.horseChest.setInventorySlotContents(j, itemstack.copy());
@@ -62,7 +62,7 @@ public class InventoryWolfChest {
 			int j = nbttagcompound1.getByte("Slot") & 255;
 
 			if (j >= 0 && j < this.horseChest.getSizeInventory()) {
-				this.horseChest.setInventorySlotContents(j, ItemStack.loadItemStackFromNBT(nbttagcompound1));
+				this.horseChest.setInventorySlotContents(j, new ItemStack(nbttagcompound1));
 			}
 		}
 	}
@@ -86,7 +86,7 @@ public class InventoryWolfChest {
 
 	public List<ItemStack> getContents() {
 		List<ItemStack> result = new ArrayList<>();
-		final AnimalChest chest = this.horseChest;
+		final ContainerHorseChest chest = this.horseChest;
 		for (int i = 0; i < chest.getSizeInventory(); ++i)
 		{
 			ItemStack itemstack = chest.getStackInSlot(i);

@@ -2,11 +2,8 @@ package au.lyrael.stacywolves.blocks;
 
 import au.lyrael.stacywolves.StacyWolves;
 import au.lyrael.stacywolves.utility.LanguageHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
@@ -26,9 +23,4 @@ public class BlockStacyWolves extends Block {
         return LanguageHelper.unwrapUnlocalizedName(unlocalizedName);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        blockIcon = iconRegister.registerIcon(String.format("%s:%s", MOD_ID ,getTextureName()));
-    }
 }

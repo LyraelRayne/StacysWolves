@@ -1,8 +1,7 @@
 package au.lyrael.stacywolves.item;
 
 import au.lyrael.stacywolves.integration.EtFuturumHolder;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -10,7 +9,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +28,6 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
     public static final String ID_TAG = "wolf_food_id";
 
     private final Map<String, ItemStack> foods = new HashMap<>();
-    private final Map<String, IIcon> icons = new HashMap<>();
 
     public ItemWolfFood() {
         super();
@@ -88,96 +85,63 @@ public class ItemWolfFood extends ItemStacyWolves implements IRegisterMyOwnRecip
         createSubItem("slime_bone");
     }
 
+    // TODO Figure out how to JSON this
     @Override
     public void registerRecipes() {
-        registerRecipe("air_bone", new ItemStack(Items.glass_bottle));
-        registerRecipe("birch_bone", new ItemStack(Blocks.sapling, 1, 2));
-        registerRecipe("cake_bone", new ItemStack(Items.cake));
-        registerRecipe("desert_bone", new ItemStack(Blocks.cactus));
-        registerRecipe("diamond_bone", new ItemStack(Items.diamond));
-        registerRecipe("earth_bone", new ItemStack(Items.wooden_shovel));
-        registerRecipe("emerald_bone", new ItemStack(Items.emerald));
-        registerRecipe("end_bone", new ItemStack(Items.ender_eye));
-        registerRecipe("ender_bone", new ItemStack(Items.ender_pearl));
-        registerRecipe("fire_bone", new ItemStack(Items.blaze_powder));
-        registerRecipe("flower_bone", new ItemStack(Blocks.double_plant, 1, 5));
-        registerRecipe("gold_bone", new ItemStack(Items.gold_ingot));
-        registerRecipe("ice_bone", new ItemStack(Items.snowball));
-        registerRecipe("iron_bone", new ItemStack(Items.iron_ingot));
-        registerRecipe("mesa_bone", new ItemStack(Blocks.deadbush));
-        registerRecipe("mushroom_bone", new ItemStack(Blocks.red_mushroom));
-        registerRecipe("nether_bone", new ItemStack(Items.magma_cream));
+        registerRecipe("air_bone", new ItemStack(Items.GLASS_BOTTLE));
+        registerRecipe("birch_bone", new ItemStack(Blocks.SAPLING, 1, 2));
+        registerRecipe("cake_bone", new ItemStack(Items.CAKE));
+        registerRecipe("desert_bone", new ItemStack(Blocks.CACTUS));
+        registerRecipe("diamond_bone", new ItemStack(Items.DIAMOND));
+        registerRecipe("earth_bone", new ItemStack(Items.WOODEN_SHOVEL));
+        registerRecipe("emerald_bone", new ItemStack(Items.EMERALD));
+        registerRecipe("end_bone", new ItemStack(Items.ENDER_EYE));
+        registerRecipe("ender_bone", new ItemStack(Items.ENDER_PEARL));
+        registerRecipe("fire_bone", new ItemStack(Items.BLAZE_POWDER));
+        registerRecipe("flower_bone", new ItemStack(Blocks.DOUBLE_PLANT, 1, 5));
+        registerRecipe("gold_bone", new ItemStack(Items.GOLD_INGOT));
+        registerRecipe("ice_bone", new ItemStack(Items.SNOWBALL));
+        registerRecipe("iron_bone", new ItemStack(Items.IRON_INGOT));
+        registerRecipe("mesa_bone", new ItemStack(Blocks.DEADBUSH));
+        registerRecipe("mushroom_bone", new ItemStack(Blocks.RED_MUSHROOM));
+        registerRecipe("nether_bone", new ItemStack(Items.MAGMA_CREAM));
         registerRecipe("prismarine_bone", EtFuturumHolder.getPrismarineCrystalItemStack());
-        registerRecipe("redstone_bone", new ItemStack(Items.redstone));
-        registerRecipe("savannah_bone", new ItemStack(Blocks.tallgrass, 1, 1));
-        registerRecipe("skeleton_bone", new ItemStack(Items.dye, 1, 15));
-        registerRecipe("water_bone", new ItemStack(Items.water_bucket));
-        registerRecipe("zombie_bone", new ItemStack(Items.rotten_flesh));
-        registerRecipe("meaty_bone", new ItemStack(Items.beef));
+        registerRecipe("redstone_bone", new ItemStack(Items.REDSTONE));
+        registerRecipe("savannah_bone", new ItemStack(Blocks.TALLGRASS, 1, 1));
+        registerRecipe("skeleton_bone", new ItemStack(Items.DYE, 1, 15));
+        registerRecipe("water_bone", new ItemStack(Items.WATER_BUCKET));
+        registerRecipe("zombie_bone", new ItemStack(Items.ROTTEN_FLESH));
+        registerRecipe("meaty_bone", new ItemStack(Items.BEEF));
 
-        registerRecipe("inky_bone", new ItemStack(Items.dye));
+        registerRecipe("inky_bone", new ItemStack(Items.DYE));
         registerRecipe("solid_prismarine_bone", EtFuturumHolder.getPrismarineShardItemStack());
-        registerRecipe("glow_bone", new ItemStack(Items.glowstone_dust));
-        registerRecipe("book_bone", new ItemStack(Items.book));
-        registerRecipe("sunflower_bone", new ItemStack(Blocks.double_plant,1,0));
-        registerRecipe("cookie_bone", new ItemStack(Items.cookie));
-        registerRecipe("melon_bone", new ItemStack(Items.melon));
-        registerRecipe("lapis_bone", new ItemStack(Items.dye,1,4));
-        registerRecipe("coal_bone", new ItemStack(Items.coal));
-        registerRecipe("red_sand_bone", new ItemStack(Blocks.sand, 1, 1));
-        registerRecipe("fish_bone", new ItemStack(Items.fish));
-        registerRecipe("apple_bone", new ItemStack(Items.apple));
-        registerRecipe("crafty_bone", new ItemStack(Blocks.crafting_table));
-        registerRecipe("wheat_bone", new ItemStack(Items.wheat));
-        registerRecipe("torch_bone", new ItemStack(Blocks.torch));
-        registerRecipe("slime_bone", new ItemStack(Items.slime_ball));
+        registerRecipe("glow_bone", new ItemStack(Items.GLOWSTONE_DUST));
+        registerRecipe("book_bone", new ItemStack(Items.BOOK));
+        registerRecipe("sunflower_bone", new ItemStack(Blocks.DOUBLE_PLANT,1,0));
+        registerRecipe("cookie_bone", new ItemStack(Items.COOKIE));
+        registerRecipe("melon_bone", new ItemStack(Items.MELON));
+        registerRecipe("lapis_bone", new ItemStack(Items.DYE,1,4));
+        registerRecipe("coal_bone", new ItemStack(Items.COAL));
+        registerRecipe("red_sand_bone", new ItemStack(Blocks.SAND, 1, 1));
+        registerRecipe("fish_bone", new ItemStack(Items.FISH));
+        registerRecipe("apple_bone", new ItemStack(Items.APPLE));
+        registerRecipe("crafty_bone", new ItemStack(Blocks.CRAFTING_TABLE));
+        registerRecipe("wheat_bone", new ItemStack(Items.WHEAT));
+        registerRecipe("torch_bone", new ItemStack(Blocks.TORCH));
+        registerRecipe("slime_bone", new ItemStack(Items.SLIME_BALL));
     }
 
     private void registerRecipe(String id, ItemStack craftedWith) {
         final ItemStack food = getFood(id);
 
-        if (craftedWith != null && food != null) {
-            GameRegistry.addShapelessRecipe(food, Items.bone, craftedWith);
-            if (id.endsWith("_bone"))
-                GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 5, 15), food);
-        }
+//        if (craftedWith != null && food != null) {
+//            GameRegistry.addShapelessRecipe(food, Items.BONE, craftedWith);
+//            if (id.endsWith("_bone"))
+//                GameRegistry.addShapelessRecipe(new ItemStack(Items.DYE, 5, 15), food);
+//        }
+        // TODO JSONIFY
     }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister) {
-        for (Map.Entry<String, ItemStack> entry : foods.entrySet()) {
-            IIcon itemIcon = iconRegister.registerIcon(String.format("%s/%s", unwrapUnlocalizedName(getUnlocalizedName()), entry.getKey()));
-            icons.put(entry.getKey(), itemIcon);
-        }
-    }
-
-    @Override
-    public IIcon getIconIndex(ItemStack stack) {
-        return getIconForStack(stack);
-    }
-
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        return getIconForStack(stack);
-    }
-
-    protected IIcon getIconForStack(ItemStack stack) {
-        if (stack.hasTagCompound()) {
-            String id = stack.getTagCompound().getString(ID_TAG);
-
-            // Load the first item if the id no longer exists.
-            if (!foods.containsKey(id))
-                id = foods.keySet().iterator().next();
-
-            return icons.get(id);
-        } else {
-            // Fallback to default, because what else are we going to do?
-            return icons.values().iterator().next();
-        }
-    }
-
-    @Override
+//    @Override
     public void getSubItems(final Item item, final CreativeTabs tab, final List list) {
         for (Map.Entry<String, ItemStack> entry : foods.entrySet()) {
             list.add(entry.getValue());

@@ -7,7 +7,7 @@ import java.util.Map;
 import au.lyrael.stacywolves.entity.wolf.EntityEnderWolf;
 import au.lyrael.stacywolves.entity.wolf.IWolf;
 import au.lyrael.stacywolves.registry.WolfType;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
