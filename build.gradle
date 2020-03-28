@@ -23,8 +23,8 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.7.10-1.1.2"
-group = "au.lyrael.stacywolves" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "1.7.10-1.1.3"
+group = "au.lyrael.stacymerwolf" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Stacy'sWolvesMod"
 
 sourceCompatibility = 1.7
