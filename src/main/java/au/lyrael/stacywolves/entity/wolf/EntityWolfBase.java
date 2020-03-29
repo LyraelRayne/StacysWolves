@@ -128,6 +128,8 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		this.metadata = this.getClass().getAnnotation(WolfMetadata.class);
 
 		this.setupEdibleItems();
+
+		this.renderDistanceWeight = 10.0D;
 	}
 
 	private void setupEdibleItems()

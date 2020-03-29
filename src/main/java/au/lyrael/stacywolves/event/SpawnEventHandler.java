@@ -39,7 +39,6 @@ public class SpawnEventHandler {
         final WolfType wolfType = wolf.getWolfType();
         if(lastSpawnTime == null && (throttlePeriod == 0 || (worldTime % throttlePeriod == 0L)))
         {
-            lastSpawnOfType.put(wolfType, worldTime);
             return true;
         } else if(lastSpawnTime != null){
             final long timeSinceLastSpawn = worldTime - lastSpawnTime;
@@ -74,10 +73,11 @@ public class SpawnEventHandler {
                     return;
                 } else if (entity instanceof IWolf) {
                     final IWolf wolf = (IWolf) entity;
-                    if (hasThrottlePeriodExpired(wolf, event.world) && entity.getCanSpawnHere()) {
+                    if (entity.getCanSpawnHere() && hasThrottlePeriodExpired(wolf, event.world)) {
                         if (!isNearWolfsBane(event)) {
                             LOGGER.debug("Can spawn here and now: {}", entity);
                             traceSpawnCaps(event);
+                            this.lastSpawnOfType.put(wolf.getWolfType(), event.world.getWorldInfo().getWorldTime());
                             event.setResult(ALLOW);
                         } else {
                             event.setResult(DENY);
