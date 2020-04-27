@@ -10,10 +10,9 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.world.World;
 
 import static au.lyrael.stacywolves.entity.SpawnWeights.SPAWN_WEIGHT_COMMON;
-import static au.lyrael.stacywolves.utility.WorldHelper.canSeeTheSky;
 import static net.minecraftforge.common.BiomeDictionary.Type.*;
 
-@WolfMetadata(name = "EntitySquidWolf", primaryColour = 0x000000, secondaryColour = 0x2222AA, type = WolfType.WATER,
+@WolfMetadata(name = "EntitySquidWolf", primaryColour = 0x000000, secondaryColour = 0x2222AA, type = WolfType.VANILLA_WATER,
 		spawns = {
 				@WolfSpawn(spawnBiomes = {
 						@WolfSpawnBiome(requireBiomeTypes = {OCEAN}),

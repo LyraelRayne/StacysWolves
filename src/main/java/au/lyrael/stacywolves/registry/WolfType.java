@@ -12,6 +12,7 @@ public enum WolfType {
     NORMAL("normalStacyWolf", 10, 20 * 2, Material.air, false, false),
     SUBTERRANEAN("oreStacyWolf", 6, 20 * 2, Material.air, false, false),
     WATER("waterStacyWolf", 5, 20 / 2, Material.water, false, false),
+    VANILLA_WATER(EnumCreatureType.waterCreature),
     MOB(EnumCreatureType.monster);
 
     private final EnumCreatureType creatureType;
