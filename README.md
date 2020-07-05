@@ -103,4 +103,6 @@ The mod is fully open source and can be found on GitHub [here](https://github.co
 * [Jaspanda and Nathan_Oneday from Walschaerts Build Team | Artists](https://www.youtube.com/user/WalschaertsBuilds)
 * [StacyPlays | Contributor & Creator of Ideas ](https://youtube.com/user/stacyplays)
 
-**Stacy's Wolves © 2016 SnowShock35 - All Rights Reserved**
+**Stacy's Wolves Mod Code © Lyrael Rayne 2016-2020 - All Rights Reserved**
+**All other aspect of Stacy's Wolves Mod concept, artwork, etc. © StacyPlays 2016-2020 - All Rights Reserved**
+
