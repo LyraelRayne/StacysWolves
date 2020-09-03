@@ -33,13 +33,13 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static au.lyrael.stacywolves.StacyWolves.MOD_ID;
 import static au.lyrael.stacywolves.config.RuntimeConfiguration.allowedInPeaceful;
@@ -53,7 +53,9 @@ import static net.minecraft.init.Blocks.*;
 
 public abstract class EntityWolfBase extends EntityTameable implements IWolf, IRenderableWolf, ISpawnable
 {
-	private final WolfMetadata metadata;
+	private static final Random RANDOM = new Random();
+
+	private WolfMetadata metadata;
 
 	private float field_70926_e;
 	private float field_70924_f;
@@ -130,6 +132,18 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 		this.setupEdibleItems();
 
 		this.renderDistanceWeight = 10.0D;
+	}
+
+	protected WolfMetadata getMetadata()
+	{
+		if (this.metadata == null) {
+			this.metadata = this.getClass().getAnnotation(WolfMetadata.class);
+			if (this.metadata == null) {
+				throw new RuntimeException("Wolf metadata is not able to be retrieved. This should be impossible.");
+			}
+
+		}
+		return this.metadata;
 	}
 
 	private void setupEdibleItems()
@@ -1199,7 +1213,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	protected boolean canDespawn()
 	{
-		if (metadata.type().creatureType() == EnumCreatureType.monster) {
+		if (getMetadata().type().creatureType() == EnumCreatureType.monster) {
 			return !this.isTamed();
 		} else {
 			return !this.isTamed() && this.ticksExisted > 2400;
@@ -1310,7 +1324,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 	@Override
 	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount)
 	{
-		final EnumCreatureType myType = metadata.type().creatureType();
+		final EnumCreatureType myType = getMetadata().type().creatureType();
 
 		if (myType == null) {
 			LOGGER.warn("Stacy's wolf with no type! [{}]", this);
@@ -1331,13 +1345,13 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	@Override
 	public boolean testSpawnProbability() {
-		return isBypassThrottleAndProbability() || RandomUtils.nextInt(0, WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.metadata.probability();
+		return isBypassThrottleAndProbability() || RANDOM.nextInt(WolfMetadata.MAX_SPAWN_PROBABILITY) <= this.getMetadata().probability();
 	}
 
 	@Override
 	public long getSpawnThrottlePeriod()
 	{
-		return isBypassThrottleAndProbability() ? 0 : this.metadata.type().getThrottlePeriod();
+		return isBypassThrottleAndProbability() ? 0 : this.getMetadata().type().getThrottlePeriod();
 	}
 
 	/**
@@ -1490,7 +1504,7 @@ public abstract class EntityWolfBase extends EntityTameable implements IWolf, IR
 
 	public WolfType getWolfType()
 	{
-		return metadata.type();
+		return getMetadata().type();
 	}
 
 	public WolfLightSource getLightSource() {
